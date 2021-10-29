@@ -76,7 +76,7 @@ static int getfilename(uchar *ps, uchar *fnm)
 	killcompletions();
 	if (c == '\007')
 		return ABORT;
-	return (c == '\r' || c == '\n');
+	return c == '\r' || c == '\n';
 }
 
 static void lineinsert(uchar *q, int nnb)				/* gets called via frdapply()   */
@@ -88,7 +88,9 @@ static void lineinsert(uchar *q, int nnb)				/* gets called via frdapply()   */
 		ntotal += nnb + 2;
 		lnn++;
 	} else
+	{
 		evalu = -39;
+	}
 	if (valu)
 		evalu = (int)valu;
 }
@@ -106,7 +108,7 @@ static int readin(uchar *name, LINE *lp)
 	{
 		lp = bp->b_linep;
 		if ((s = bclear(bp)) != TRUE)
-			return (s);					/* Might be old. */
+			return s;					/* Might be old. */
 		strcpy(bp->b_fname, name);
 		bp->b_flag &= ~(BFTEMP | BFCHG);
 	} else
@@ -127,7 +129,7 @@ static int readin(uchar *name, LINE *lp)
 			wp->w_flag |= WFMODE | WFHARD;
 		}
 	}
-	return (s != FIOERR);
+	return s != FIOERR;
 }
 
 /* Visit file named f; called from ue.c, misc.c also */
@@ -181,7 +183,7 @@ int flvisit(uchar *f)
 			break;						/*pm */
 		s = mlreply("A namesake buffer exists; give another name: ", bname, NBUFN);
 		if (s == '\007')
-			return (ABORT);
+			return ABORT;
 		if (bname[0] == '\0')			/* clobber it     */
 		{
 			makename(bname, fname);
@@ -232,8 +234,8 @@ int fileinsert(int f, int n)
 	register int s;
 	uchar name[NFILEN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if ((s = getfilename("Insert file: ", name)) != TRUE)
 		return s;
 	fullname(name);
@@ -249,10 +251,10 @@ int fileread(int f, int n)
 	register int s;
 	uchar name[NFILEN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if ((s = getfilename("Read file: ", name)) != TRUE)
-		return (s);
+		return s;
 	fullname(name);
 	isetmark();
 	return readin(name, NULL);
@@ -268,10 +270,10 @@ int filevisit(int f, int n)
 	register int s;
 	uchar name[NFILEN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	s = getfilename("Visit file: ", name);
-	return (s != TRUE ? s : flvisit(name));
+	return s != TRUE ? s : flvisit(name);
 }
 
 /* This function performs the details of file writing.  Uses the file
@@ -328,16 +330,16 @@ int filewrite(int f, int n)
 	register int s;
 	uchar name[NFILEN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
   getfnm:
 	if ((s = getfilename("Write the buffer to file: ", name)) != TRUE)
-		return (s);
+		return s;
 	if (fullname(name) > 1 || ptometach(name))
 		goto getfnm;
 	if ((s = writeout(curbp, name)) == TRUE)
 		strcpy(curbp->b_fname, name);
-	return (s);
+	return s;
 }
 
 int flsave(BUFFER *bp)
@@ -359,8 +361,8 @@ Error if there is no remembered file name for the buffer.  Bound to
 
 int filesave(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	return flsave(curbp);
 }
 
@@ -375,10 +377,10 @@ int filename(int f, int n)
 	register int s;
 	uchar name[NFILEN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if ((s = getfilename("Change associated file name to: ", name)) == ABORT)
-		return (s);
+		return s;
 	strcpy(curbp->b_fname, s ? name : ES);
 	wupdatemodeline(curbp);
 	return TRUE;

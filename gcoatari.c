@@ -96,7 +96,7 @@ static int szrsbuf;
 #define	SZrsbuf		16*1024
 
 static char *tesmallocp;					/* ptr to mem occ by te screen      */
-static short *lineAvars;					/* address of line A interface vars */
+static int screen_n = 0;					/* index into scrn[]    */
 
 static int speed = -1;					/* baud rate of rs232 */
 static int flowctl = 1,
@@ -182,28 +182,30 @@ void setrs232speed(void)
 
 static void switchscreens(void)
 {
-	static int n = 0;					/* index into scrn[]    */
+	short *lineAvars;					/* address of line A interface vars */
 
 	register char *p;
 
 	if (!varnum("no_te_scr"))
 	{									/* conditional added AKP */
-		scrn[n].x = lineAvars[-14];		/* save cursor position */
-		scrn[n].y = lineAvars[-13];
+		lineAvars = lineA();
 
-		n++;
-		n &= 1;							/* n = (n == 0? 1 : 0); */
-		if ((p = scrn[n].logbasep) != NULL)
+		scrn[screen_n].x = lineAvars[-14];		/* save cursor position */
+		scrn[screen_n].y = lineAvars[-13];
+
+		screen_n++;
+		screen_n &= 1;							/* n = (n == 0? 1 : 0); */
+		if ((p = scrn[screen_n].logbasep) != NULL)
 			Setscreen(p, p, -1);
 		/* p should never be NULL here, but ... */
 
 #if 0
 		/* don't know if these are really nec */
+		/* they're not... AKP */
 	    Vsync();
 	    Vsync();
 #endif
-		/* they're not... AKP */
-		mvcursor(scrn[n].y, scrn[n].x);
+		mvcursor(scrn[screen_n].y, scrn[screen_n].x);
 	}
 }
 
@@ -329,6 +331,7 @@ static void terminit(void)
 {
 	register char *p;
 	long SZscreen;
+	short *lineAvars;					/* address of line A interface vars */
 
 	if (!varnum("no_te_scr"))
 	{
@@ -348,10 +351,13 @@ static void terminit(void)
 			scrn[0].logbasep = (char *) Logbase();
 
 			/* this was gmalloc, but screens can be >32K! */
-			tesmallocp = p = (char *) Malloc(SZscreen);
+			p = (char *) Mxalloc(SZscreen, 0);
+			if ((long)p < 0)
+				p = (char *) Malloc(SZscreen);
+			tesmallocp = p;
 
-			scrn[1].logbasep = (p == NULL ? scrn[0].logbasep	/* align the screen mem */
-								: (char *) ((((long) p) + 255L) & ~255L));
+			scrn[1].logbasep = p == NULL ? scrn[0].logbasep	/* align the screen mem */
+								: (char *) ((((long) p) + 255L) & ~255L);
 			scrn[1].x = 0;
 			scrn[1].y = 0;
 		}
@@ -385,6 +391,11 @@ void teexit(uchar *arg)
 	firstentry = 1;
 	/* should we set speed = -1; ? let's use old speed... */
 
+	if (screen_n == 1)
+	{
+		Setscreen(scrn[0].logbasep, scrn[0].logbasep, -1);
+		screen_n = 0;
+	}
 	/* this was gfree() but screens are allocated with Malloc now */
 	if (tesmallocp)
 		Mfree(tesmallocp);
@@ -405,8 +416,8 @@ int temul(int f, int n)
 	int rzstate = 0;
 	uchar *rzcmd;
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (stoprecursion)
 		return TRUE;
 	stoprecursion = 1;

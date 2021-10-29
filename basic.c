@@ -13,8 +13,8 @@ int curgoal;							/* Goal column                  */
 */
 int gotobol(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	curwp->w_doto = 0;
 	return TRUE;
 }
@@ -30,7 +30,7 @@ int backchar(int f, int n)
 	register LINE *lp;
 
 	if (n < 0)
-		return (forwchar(f, -n));
+		return forwchar(f, -n);
 	while (n--)
 	{
 		if (curwp->w_doto == 0)
@@ -51,8 +51,8 @@ int backchar(int f, int n)
 */
 int gotoeol(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	curwp->w_doto = llength(curwp->w_dotp);
 	return TRUE;
 }
@@ -68,7 +68,7 @@ int forwchar(int f, int n)
 	register LINE *lp;
 
 	if (n < 0)
-		return (backchar(f, -n));
+		return backchar(f, -n);
 	while (n--)
 	{
 		lp = curwp->w_dotp;
@@ -80,7 +80,9 @@ int forwchar(int f, int n)
 			curwp->w_doto = 0;
 			curwp->w_flag |= WFMOVE;
 		} else
+		{
 			curwp->w_doto++;
+		}
 	}
 	return TRUE;
 }
@@ -129,7 +131,7 @@ int forwline(int f, int n)
 	register LINE *dlp;
 
 	if (n < 0)
-		return (backline(f, -n));
+		return backline(f, -n);
 	if ((lastflag & CFCPCN) == 0)		/* Reset goal if last   */
 		curgoal = curcol;				/* not C-P or C-N       */
 	thisflag |= CFCPCN;
@@ -153,7 +155,7 @@ int backline(int f, int n)
 	register LINE *dlp;
 
 	if (n < 0)
-		return (forwline(f, -n));
+		return forwline(f, -n);
 	if ((lastflag & CFCPCN) == 0)
 		curgoal = curcol;
 	thisflag |= CFCPCN;
@@ -213,9 +215,12 @@ int forwpage(int f, int n)
 		if (n <= 0)						/* Forget the overlap   */
 			n = 1;						/* if tiny window.      */
 	} else if (n < 0)
-		return (backpage(f, -n));
-	else								/* Convert from pages   */
+	{
+		return backpage(f, -n);
+	} else								/* Convert from pages   */
+	{
 		n *= curwp->w_ntrows;			/* to lines.            */
+	}
 	lp = curwp->w_linep;
 	while (n-- && lp != curbp->b_linep)
 		lp = lforw(lp);
@@ -242,9 +247,12 @@ int backpage(int f, int n)
 		if (n <= 0)						/* Don't blow up if the */
 			n = 1;						/* window is tiny.      */
 	} else if (n < 0)
-		return (forwpage(f, -n));
-	else								/* Convert from pages   */
+	{
+		return forwpage(f, -n);
+	} else								/* Convert from pages   */
+	{
 		n *= curwp->w_ntrows;			/* to lines.            */
+	}
 	lp = curwp->w_linep;
 	while (n-- && lback(lp) != curbp->b_linep)
 		lp = lback(lp);
@@ -267,8 +275,8 @@ void isetmark(void)
  */
 int setmark(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	isetmark();
 	mlwrite("[Mark set]");
 	return TRUE;
@@ -285,8 +293,8 @@ int swapmark(int f, int n)
 	register LINE *odotp;
 	register int odoto;
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (curwp->w_markp == NULL)
 	{
 		mlwrite("No mark in this window");

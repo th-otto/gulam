@@ -223,7 +223,7 @@ uchar *getalias(char *p)
 	register TBLE *a;
 
 	a = tblfind(alip, p);
-	return (a ? a->elm : p);
+	return a ? a->elm : p;
 }
 
 /* eof alias.c	*/
@@ -238,7 +238,7 @@ uchar *ggetenv(uchar *p)
 	register TBLE *a;
 
 	a = tblfind(envp, p);
-	return (a ? a->elm : NULL);
+	return a ? a->elm : NULL;
 }
 
 /* insert name p with string value q    */
@@ -372,7 +372,7 @@ uchar *varstr(uchar *p)
 	register TBLE *a;
 
 	a = tblfind(varp, p);
-	return (a ? a->elm : ES);
+	return a ? a->elm : ES;
 }
 
 int varnum(uchar *p)
@@ -508,5 +508,5 @@ uchar *findname(int x, int k)
 
 	kp = itoar(0x1000L + (long) k, 16) + 1;	/* skip the leading '1' */
 	t = tblfind(atbl[x], kp);
-	return (t ? t->elm : ES);
+	return t ? t->elm : ES;
 }

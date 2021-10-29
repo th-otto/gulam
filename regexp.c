@@ -124,7 +124,7 @@ static char *regnode(char op)
 	if (ret == &regdummy)
 	{
 		regsize += 3;
-		return (ret);
+		return ret;
 	}
 
 	ptr = ret;
@@ -133,7 +133,7 @@ static char *regnode(char op)
 	*ptr++ = '\0';
 	regcode = ptr;
 
-	return (ret);
+	return ret;
 }
 
 
@@ -209,7 +209,7 @@ static char *regatom(int *flagp)
 	case '(':
 		ret = reg(1, &flags);
 		if (ret == NULL)
-			return (NULL);
+			return NULL;
 		*flagp |= flags & (HASWIDTH | SPSTART);
 		break;
 	case '\0':
@@ -254,7 +254,7 @@ static char *regatom(int *flagp)
 		break;
 	}
 
-	return (ret);
+	return ret;
 }
 
 
@@ -296,7 +296,7 @@ static char *regnext(char *p)
 	int offset;
 
 	if (p == &regdummy)
-		return (NULL);
+		return NULL;
 
 /**	#define	NEXT(p)	(((*((p)+1)&0377)<<8) + *((p)+2)&0377)	*/
 /**
@@ -305,12 +305,12 @@ static char *regnext(char *p)
 	q[1] = p[2];
 **/ offset = NEXT(p);
 	if (offset == 0)
-		return (NULL);
+		return NULL;
 
 	if (OP(p) == BACK)
-		return (p - offset);
+		return p - offset;
 	else
-		return (p + offset);
+		return p + offset;
 }
 
 
@@ -375,13 +375,13 @@ static char *regpiece(int *flagp)
 
 	ret = regatom(&flags);
 	if (ret == NULL)
-		return (NULL);
+		return NULL;
 
 	op = *regparse;
 	if (!ISMULT(op))
 	{
 		*flagp = flags;
-		return (ret);
+		return ret;
 	}
 
 	if (!(flags & HASWIDTH) && op != '?')
@@ -421,7 +421,7 @@ static char *regpiece(int *flagp)
 	if (ISMULT(*regparse))
 		FAIL("nested *?+");
 
-	return (ret);
+	return ret;
 }
 
 
@@ -445,7 +445,7 @@ static char *regbranch(int *flagp)
 	{
 		latest = regpiece(&flags);
 		if (latest == NULL)
-			return (NULL);
+			return NULL;
 		*flagp |= flags & HASWIDTH;
 		if (chain == NULL)				/* First piece. */
 			*flagp |= flags & SPSTART;
@@ -454,9 +454,9 @@ static char *regbranch(int *flagp)
 		chain = latest;
 	}
 	if (chain == NULL)					/* Loop ran zero times. */
-		(void) regnode(NOTHING);
+		regnode(NOTHING);
 
-	return (ret);
+	return ret;
 }
 
 
@@ -496,7 +496,7 @@ static char *reg(int paren, int *flagp)
 	/* Pick up the branches, linking them together. */
 	br = regbranch(&flags);
 	if (br == NULL)
-		return (NULL);
+		return NULL;
 	if (ret != NULL)
 		regtail(ret, br);				/* OPEN -> first. */
 	else
@@ -509,7 +509,7 @@ static char *reg(int paren, int *flagp)
 		regparse++;
 		br = regbranch(&flags);
 		if (br == NULL)
-			return (NULL);
+			return NULL;
 		regtail(ret, br);				/* BRANCH -> BRANCH. */
 		if (!(flags & HASWIDTH))
 			*flagp &= ~HASWIDTH;
@@ -534,11 +534,12 @@ static char *reg(int paren, int *flagp)
 		{
 			FAIL("unmatched ()");
 		} else
+		{
 			FAIL("junk on end");		/* "Can't happen". */
-		/* NOTREACHED */
+		}
 	}
 
-	return (ret);
+	return ret;
 }
 
 
@@ -575,7 +576,7 @@ regexp *regcomp(char *exp)
 	regcode = &regdummy;
 	regc(MAGIC);
 	if (reg(0, &flags) == NULL)
-		return (NULL);
+		return NULL;
 
 	/* Small enough for pointer-storage convention? */
 	if (regsize >= 32767L)				/* Probably could be 65535L. */
@@ -592,7 +593,7 @@ regexp *regcomp(char *exp)
 	regcode = r->program;
 	regc(MAGIC);
 	if (reg(0, &flags) == NULL)
-		return (NULL);
+		return NULL;
 
 	/* Dig out information for optimizations. */
 	r->regstart = '\0';					/* Worst-case defaults. */
@@ -633,7 +634,7 @@ regexp *regcomp(char *exp)
 		}
 	}
 
-	return (r);
+	return r;
 }
 
 
@@ -699,7 +700,7 @@ static int regrepeat(char *p)
 	}
 	reginput = scan;
 
-	return (count);
+	return count;
 }
 
 
@@ -736,15 +737,15 @@ static int regmatch(char *prog)
 		{
 		case BOL:
 			if (reginput != regbol)
-				return (0);
+				return 0;
 			break;
 		case EOL:
 			if (*reginput != '\0')
-				return (0);
+				return 0;
 			break;
 		case ANY:
 			if (*reginput == '\0')
-				return (0);
+				return 0;
 			reginput++;
 			break;
 		case EXACTLY:
@@ -755,21 +756,21 @@ static int regmatch(char *prog)
 				opnd = OPERAND(scan);
 				/* Inline the first character, for speed. */
 				if (*opnd != *reginput)
-					return (0);
+					return 0;
 				len = (int)strlen(opnd);
 				if (len > 1 && strncmp(opnd, reginput, ((size_t) len)) != 0)
-					return (0);
+					return 0;
 				reginput += len;
 			}
 			break;
 		case ANYOF:
 			if (*reginput == '\0' || strchr(OPERAND(scan), *reginput) == NULL)
-				return (0);
+				return 0;
 			reginput++;
 			break;
 		case ANYBUT:
 			if (*reginput == '\0' || strchr(OPERAND(scan), *reginput) != NULL)
-				return (0);
+				return 0;
 			reginput++;
 			break;
 		case NOTHING:
@@ -801,9 +802,9 @@ static int regmatch(char *prog)
 					 */
 					if (regstartp[no] == NULL)
 						regstartp[no] = save;
-					return (1);
+					return 1;
 				} else
-					return (0);
+					return 0;
 			}
 		case CLOSE + 1:
 		case CLOSE + 2:
@@ -830,9 +831,9 @@ static int regmatch(char *prog)
 					 */
 					if (regendp[no] == NULL)
 						regendp[no] = save;
-					return (1);
+					return 1;
 				} else
-					return (0);
+					return 0;
 			}
 		case BRANCH:
 			{
@@ -846,12 +847,11 @@ static int regmatch(char *prog)
 					{
 						save = reginput;
 						if (regmatch(OPERAND(scan)))
-							return (1);
+							return 1;
 						reginput = save;
 						scan = regnext(scan);
 					} while (scan != NULL && OP(scan) == BRANCH);
-					return (0);
-					/* NOTREACHED */
+					return 0;
 				}
 			}
 			break;
@@ -878,18 +878,18 @@ static int regmatch(char *prog)
 					/* If it could work, try it. */
 					if (nextch == '\0' || *reginput == nextch)
 						if (regmatch(next))
-							return (1);
+							return 1;
 					/* Couldn't or didn't -- back up. */
 					no--;
 					reginput = save + no;
 				}
-				return (0);
+				return 0;
 			}
 		case END:
-			return (1);					/* Success! */
+			return 1;					/* Success! */
 		default:
 			regerror("memory corruption");
-			return (0);
+			return 0;
 		}
 
 		scan = next;
@@ -900,7 +900,7 @@ static int regmatch(char *prog)
 	 * the terminating point.
 	 */
 	regerror("corrupted pointers");
-	return (0);
+	return 0;
 }
 
 
@@ -929,9 +929,9 @@ static int regtry(regexp *prog, char *string)
 	{
 		prog->startp[0] = string;
 		prog->endp[0] = reginput;
-		return (1);
-	} else
-		return (0);
+		return 1;
+	}
+	return 0;
 }
 
 
@@ -946,14 +946,14 @@ int regexec(regexp *prog, char *string)
 	if (prog == NULL || string == NULL)
 	{
 		regerror("NULL parameter");
-		return (0);
+		return 0;
 	}
 
 	/* Check validity of program. */
 	if (UCHARAT(prog->program) != MAGIC)
 	{
 		regerror("corrupted program");
-		return (0);
+		return 0;
 	}
 
 	/* If there is a "must appear" string, look for it. */
@@ -967,7 +967,7 @@ int regexec(regexp *prog, char *string)
 			s++;
 		}
 		if (s == NULL)					/* Not present. */
-			return (0);
+			return 0;
 	}
 
 	/* Mark beginning of line for ^ . */
@@ -984,18 +984,18 @@ int regexec(regexp *prog, char *string)
 		while ((s = strchr(s, prog->regstart)) != NULL)
 		{
 			if (regtry(prog, s))
-				return (1);
+				return 1;
 			s++;
 	} else
 		/* We don't -- general case. */
 		do
 		{
 			if (regtry(prog, s))
-				return (1);
+				return 1;
 		} while (*s++ != '\0');
 
 	/* Failure. */
-	return (0);
+	return 0;
 }
 
 
@@ -1009,7 +1009,7 @@ static char *regprop(char *op)
 	register char *p;
 	static char buf[50];
 
-	(void) strcpy(buf, ":");
+	strcpy(buf, ":");
 
 	switch (OP(op))
 	{
@@ -1078,8 +1078,8 @@ static char *regprop(char *op)
 		break;
 	}
 	if (p != NULL)
-		(void) strcat(buf, p);
-	return (buf);
+		strcat(buf, p);
+	return buf;
 }
 
 /*

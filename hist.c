@@ -126,7 +126,7 @@ static uchar *numhist(uchar *p, uchar *q)
 	r--;
 	if (minus)
 		n = hcount - n;
-	return (wnumhist(n, p, r));
+	return wnumhist(n, p, r);
 }
 
 /* Get a previous command from history.  The prev cmd is one older than what

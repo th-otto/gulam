@@ -10,8 +10,8 @@ int errfwd(int f, int n)
 	int line;
 	uchar buf[80];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if ((errbp = bfind("errorbuf", FALSE, 0, REGKB, 0)) == NULL)
 		mlwrite("no errorbuf");
 	else

@@ -282,7 +282,7 @@ static void bexit(uchar *arg)
 
 int asktodoop(uchar *op, uchar *p)
 {
-	return (negopts['i'] ? mlyesno(sprintp("%s %s?", op, p)) : 1);
+	return negopts['i'] ? mlyesno(sprintp("%s %s?", op, p)) : 1;
 }
 
 

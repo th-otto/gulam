@@ -35,7 +35,7 @@ int getregion(REGION *rp)
 			rp->r_offset = curwp->w_marko;
 			rp->r_size = curwp->w_doto - curwp->w_marko;
 		}
-		return (TRUE);
+		return TRUE;
 	}
 	flp = blp = curwp->w_dotp;
 	lastp = curbp->b_linep;

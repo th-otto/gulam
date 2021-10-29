@@ -105,7 +105,7 @@ static int balance(int k)
 		{								/* beginning of line    */
 			clp = lback(clp);
 			if (clp == curbp->b_linep)
-				return (FALSE);
+				return FALSE;
 			cbo = llength(clp) + 1;
 		}
 		c = (--cbo == llength(clp) ? '\n' : lgetc(clp, cbo));
@@ -119,7 +119,7 @@ static int balance(int k)
 			if (depth == 0)
 			{
 				displaymatch(clp, cbo);
-				return (TRUE);
+				return TRUE;
 			} else
 				depth--;
 		}
@@ -147,9 +147,9 @@ int selfinsert(int f, int n)
 	
 	UNUSED(f);
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	if (n == 0)
-		return (TRUE);
+		return TRUE;
 	c = k & KCHAR;
 	if ((k & CTRL) != 0 && c >= '@' && c <= '_')	/* ASCII-ify.       */
 		c -= '@';
@@ -169,7 +169,7 @@ int showmatch(int f, int n)
 	for (i = 0; i < n; i++)
 	{
 		if ((s = selfinsert(f, 1)) != TRUE)
-			return (s);
+			return s;
 		if (balance(lastkey) != TRUE)
 			mlwrite("beep...");
 	}
@@ -197,7 +197,7 @@ int getccol(int bflg)
 			++col;
 		++col;
 	}
-	return (col);
+	return col;
 }
 
 
@@ -255,7 +255,7 @@ int showcpos(int f, int n)
 	/* nchar can't be zero (because of the "bonus" \n at end of file) */
 	ratio = (int)((100L * cchar) / nchar);
 	mlwrite("Char=0%o  point=%D(%d%%)  line=%d  row=%d col=%d", cbyte, cchar, ratio, cline, row, getccol(0));
-	return (TRUE);
+	return TRUE;
 }
 
 /* Twiddle the two characters on either side of dot.  If dot is at the
@@ -278,17 +278,17 @@ int twiddle(int f, int n)
 	dotp = curwp->w_dotp;
 	odoto = doto = curwp->w_doto;
 	if (doto == llength(dotp) && --doto < 0)
-		return (FALSE);
+		return FALSE;
 	cr = lgetc(dotp, doto);
 	if (--doto < 0)
-		return (FALSE);
+		return FALSE;
 	cl = lgetc(dotp, doto);
 	lputc(dotp, doto + 0, cr);
 	lputc(dotp, doto + 1, cl);
 	if (odoto != llength(dotp))
 		++(curwp->w_doto);
 	lchange(WFEDIT);
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -306,16 +306,16 @@ int quote(int f, int n)
 	UNUSED(f);
 	c = inkey();						/*      c = (*term.t_getchar)();    */
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	if (n == 0)
-		return (TRUE);
+		return TRUE;
 	if (c == '\n')
 	{
 		do
 		{
 			s = lnewline();
 		} while (s == TRUE && --n);
-		return (s);
+		return s;
 	}
 	return linsert(n, c);
 }
@@ -331,15 +331,15 @@ int tab(int f, int n)
 {
 	UNUSED(f);
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	if (n == 0 || n > 1)
 	{
 		tabsize = n;
-		return (TRUE);
+		return TRUE;
 	}
 	if (!tabsize)
-		return (linsert(1, '\t'));
-	return (linsert(tabsize - (getccol(FALSE) % tabsize), ' '));
+		return linsert(1, '\t');
+	return linsert(tabsize - (getccol(FALSE) % tabsize), ' ');
 }
 
 /*
@@ -353,9 +353,9 @@ int openline(int f, int n)
 	register int s;
 
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	if (n == 0)
-		return (TRUE);
+		return TRUE;
 	i = n;								/* Insert newlines.     */
 	do
 	{
@@ -363,7 +363,7 @@ int openline(int f, int n)
 	} while (s == TRUE && --i);
 	if (s == TRUE)
 		s = backchar(f, n);
-	return (s);							/* Then back up overtop of them all. */
+	return s;							/* Then back up overtop of them all. */
 }
 
 /*
@@ -380,18 +380,18 @@ int newline(int f, int n)
 
 	UNUSED(f);
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	while (n--)
 	{
 		lp = curwp->w_dotp;
 		if (llength(lp) == curwp->w_doto && lp != curbp->b_linep && llength(lforw(lp)) == 0)
 		{
 			if ((s = forwchar(FALSE, 1)) != TRUE)
-				return (s);
+				return s;
 		} else if ((s = lnewline()) != TRUE)
-			return (s);
+			return s;
 	}
-	return (TRUE);
+	return TRUE;
 }
 
 /* Delete any whitespace around dot (on that line), then insert a space. */
@@ -453,10 +453,10 @@ int deblank(int f, int n)
 	while ((lp2 = lforw(lp2)) != curbp->b_linep && llength(lp2) == 0)
 		++nld;
 	if (nld == 0)
-		return (TRUE);
+		return TRUE;
 	curwp->w_dotp = lforw(lp1);
 	curwp->w_doto = 0;
-	return (ldelete(nld, 0));
+	return ldelete(nld, 0);
 }
 
 /*
@@ -475,7 +475,7 @@ int indent(int f, int n)
 
 	UNUSED(f);
 	if (n < 0)
-		return (FALSE);
+		return FALSE;
 	while (n--)
 	{
 		nicol = 0;
@@ -491,9 +491,9 @@ int indent(int f, int n)
 		if (lnewline() == FALSE
 			|| ((i = nicol / 8) != 0 && linsert((RSIZE) i, '\t') == FALSE)
 			|| ((i = nicol % 8) != 0 && linsert((RSIZE) i, ' ') == FALSE))
-			return (FALSE);
+			return FALSE;
 	}
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -505,14 +505,14 @@ int indent(int f, int n)
 int forwdel(int f, int n)
 {
 	if (n < 0)
-		return (backdel(f, -n));
+		return backdel(f, -n);
 	if (f != FALSE)
 	{									/* Really a kill.       */
 		if ((lastflag & CFKILL) == 0)
 			kdelete();
 		thisflag |= CFKILL;
 	}
-	return (ldelete(n, KFORW));
+	return ldelete(n, KFORW);
 }
 
 /*
@@ -526,7 +526,7 @@ int backdel(int f, int n)
 	register int s;
 
 	if (n < 0)
-		return (forwdel(f, -n));
+		return forwdel(f, -n);
 	if (f != FALSE)
 	{									/* Really a kill.       */
 		if ((lastflag & CFKILL) == 0)
@@ -535,7 +535,7 @@ int backdel(int f, int n)
 	}
 	if ((s = backchar(f, n)) == TRUE)
 		s = ldelete(n, KFORW);
-	return (s);
+	return s;
 }
 
 /*

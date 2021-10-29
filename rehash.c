@@ -22,7 +22,7 @@ uchar *hashlookup(int i, uchar *p)
 	register struct TBLE *h;
 
 	h = tblfind(hp[i], p);
-	return (h ? h->elm : NULL);
+	return h ? h->elm : NULL;
 }
 
 /* Add to hash table: prg-name, full pathname full path == dir | pnm

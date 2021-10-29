@@ -158,7 +158,7 @@ int getarg(int f, int n)
 	register int c;
 	register int mflag;
 
-	(void) f;
+	UNUSED(f);
 	n = 4;								/* with argument of 4 */
 	mflag = 0;							/* that can be discarded. */
 	mlwrite("Arg: 4");
@@ -334,8 +334,8 @@ processing.  Set up variables and return.  */
 
 int ctlxlp(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (kbdmip != NULL || nctlxe > 0)
 	{
 		mlwrite("sorry, cannot nest key board macros");
@@ -353,8 +353,8 @@ macro.  */
 
 int ctlxrp(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (nctlxe > 1)
 	{
 		storekeys(kbdm);
@@ -372,8 +372,8 @@ int ctlxrp(int f, int n)
 
 int showkbdmacro(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	outstr(sprintp("kbd macro is :%s:", kbdm));
 	return TRUE;
 }
@@ -385,7 +385,7 @@ ok, else FALSE.  */
 
 int ctlxe(int f, int n)
 {
-	(void)f;
+	UNUSED(f);
 	if (kbdmip != NULL || nctlxe > 0)
 	{
 		mlwrite("sorry, cannot do recursive kbd macro!");
@@ -408,8 +408,8 @@ of stuff.  */
 
 int ctrlg(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	mlwrite("^G...ok!");
 	if (kbdmip)
 	{
@@ -417,15 +417,15 @@ int ctrlg(int f, int n)
 		kbdmip = NULL;
 	}
 	nctlxe = 0;
-	return (ABORT);
+	return ABORT;
 }
 
 
 /* temporary exit from ue to gulam; usr expects to return to ue */
 int tempexit(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	exitue = 4;
 	return TRUE;
 }
@@ -455,7 +455,7 @@ int quit(int f, int n)
 {
 	register int s;
 
-	(void) n;
+	UNUSED(n);
 	if (f != FALSE || anycb() == FALSE)
 		goto doquit;
 

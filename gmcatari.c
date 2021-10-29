@@ -211,7 +211,7 @@ void datestr(int d, uchar *p)
 
 int tooold(unsigned int date)
 {
-	return (((masterdate >> 16) - date) >= 0x0180);	/* 0x180 is 12 months */
+	return ((masterdate >> 16) - date) >= 0x0180;	/* 0x180 is 12 months */
 }
 
 void yearstr(unsigned int date, char *s)

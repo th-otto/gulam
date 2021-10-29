@@ -295,7 +295,7 @@ static int kgrow(int back)
 		mlwrite("Can't get %d bytes for killbuf", ksize + KBLOCK);
 		return FALSE;
 	}
-	nstart = (back == TRUE) ? (kstart + KBLOCK) : (KBLOCK / 4);
+	nstart = back ? (kstart + KBLOCK) : (KBLOCK / 4);
 	if (kbufp)
 	{
 		cpymem(&(nbufp[nstart]), &(kbufp[kstart]), (int) (kused - kstart));
@@ -521,6 +521,6 @@ caller just scan along until it gets a "-1" back.  */
 int kremove(int n)
 {
 	if (n < 0 || n + kstart >= kused)
-		return (-1);
-	return (kbufp[n + kstart] & 0xFF);
+		return -1;
+	return kbufp[n + kstart] & 0xFF;
 }

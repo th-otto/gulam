@@ -9,8 +9,8 @@
 
 static int noop(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	return TRUE;
 }
 

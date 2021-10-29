@@ -450,7 +450,7 @@ int isdir(char *p)							/* determine if p is pathname of a dir      */
 	register DTA *dta;
 
 	dta = wlsdta(p);
-	return (dta ? (filetp(p, dta->attr) == DSC) : 0);
+	return dta ? (filetp(p, dta->attr) == DSC) : 0;
 }
 
 /* format of ls -l line:

@@ -26,8 +26,8 @@ void setminibp(void)								/* minibp := minibuffer */
 
 int togulambuf(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	switchwindow(wheadp);
 	if (setgulambp(TRUE))
 	{
@@ -60,8 +60,8 @@ void tominibuf(void)								/* called only from main.c of gulam */
 
 int semireset(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	bufkill(minibp);					/* flush mini buf */
 	tominibuf();
 	freewtbl();
@@ -406,7 +406,7 @@ int execbuf(int f, int n)
 	if (s == ABORT)
 		return ABORT;
 	if (s == TRUE && (bp = bfind(bufn, TRUE, 0, REGKB, BMCREG)) == NULL)
-		return (FALSE);
+		return FALSE;
 	if (bp != gulambp)
 	{
 		switchbuffer(bp);

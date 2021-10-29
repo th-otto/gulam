@@ -231,7 +231,7 @@ uchar *fnmpred(uchar c, uchar *p)
 		else
 			a = 0;
 	}
-	return (a ? ONE : ZERO);
+	return a ? ONE : ZERO;
 }
 
 /* atom ::= number | filename  | filepred | { exp } | ! atom */

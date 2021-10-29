@@ -35,7 +35,7 @@ int reposition(int f, int n)
 	UNUSED(f);
 	curwp->w_force = n;
 	curwp->w_flag |= WFFORCE;
-	return (TRUE);
+	return TRUE;
 }
 
 int switchwindow(WINDOW *wp)
@@ -54,8 +54,8 @@ int switchwindow(WINDOW *wp)
  */
 int nextwind(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (curwp->w_wndp == mlwp)
 		curwp = mlwp;
 	return switchwindow(curwp->w_wndp);
@@ -81,9 +81,9 @@ static WINDOW *predwp(WINDOW *wp)
  */
 int prevwind(int f, int n)
 {
-	(void) f;
-	(void) n;
-	return (switchwindow(predwp(curwp)));
+	UNUSED(f);
+	UNUSED(n);
+	return switchwindow(predwp(curwp));
 }
 
 /*
@@ -129,7 +129,7 @@ int mvupwind(int f, int n)
 	for (i = 0; i < curwp->w_ntrows; ++i)
 	{
 		if (lp == curwp->w_dotp)
-			return (TRUE);
+			return TRUE;
 		if (lp == curbp->b_linep)
 			break;
 		lp = lforw(lp);
@@ -143,7 +143,7 @@ int mvupwind(int f, int n)
 
 	curwp->w_dotp = lp;
 	curwp->w_doto = 0;
-	return (TRUE);
+	return TRUE;
 }
 
 /* Delete a window.  wp != curwp && wp != mlwp.
@@ -184,8 +184,8 @@ int onlywind(int f, int n)
 	register LINE *lp;
 	register int i;
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	for (wp = wheadp; wp; wp = wp2)
 	{
 		wp2 = wp->w_wndp;
@@ -217,7 +217,7 @@ int onlywind(int f, int n)
 	curwp->w_ntrows = term.t_nrow - 1;
 	curwp->w_linep = lp;
 	curwp->w_flag |= WFMODE | WFHARD;
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -231,7 +231,7 @@ WINDOW *makewind(int top, int ntr)
 	if ((wp = (WINDOW *) malloc(((uint) sizeof(WINDOW)))) == NULL)
 	{
 		mlwrite("Cannot allocate WINDOW block");
-		return (wp);
+		return wp;
 	}
 	curbp->b_nwnd++;					/* current buffer will be displayed */
 
@@ -271,10 +271,10 @@ static int lsplitwind(WINDOW *gwp)
 	if (gwp->w_ntrows < 3)
 	{
 		mlwrite("Cannot split a %d line window", gwp->w_ntrows);
-		return (FALSE);
+		return FALSE;
 	}
 	if ((wp = makewind(0, 0)) == NULL)
-		return (FALSE);
+		return FALSE;
 
 	ntru = (gwp->w_ntrows - 1) / 2;		/* Upper size           */
 	ntrl = (gwp->w_ntrows - 1) - ntru;	/* Lower size           */
@@ -317,14 +317,14 @@ static int lsplitwind(WINDOW *gwp)
 	wp->w_linep = lp;					/* if necessary.        */
 	gwp->w_flag |= WFMODE | WFHARD;
 	wp->w_flag |= WFMODE | WFHARD;
-	return (TRUE);
+	return TRUE;
 }
 
 
 int splitwind(int f, int n)
 {
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	return lsplitwind(curwp);
 }
 
@@ -342,11 +342,11 @@ int enlargewind(int f, int n)
 	register int i;
 
 	if (n < 0)
-		return (shrinkwind(f, -n));
+		return shrinkwind(f, -n);
 	if (wheadp->w_wndp == NULL)
 	{
 		mlwrite("Only one window");
-		return (FALSE);
+		return FALSE;
 	}
 	if ((adjwp = curwp->w_wndp) == NULL)
 	{
@@ -357,7 +357,7 @@ int enlargewind(int f, int n)
 	if (adjwp->w_ntrows <= n)
 	{
 		mlwrite("Impossible change");
-		return (FALSE);
+		return FALSE;
 	}
 	if (curwp->w_wndp == adjwp)
 	{									/* Shrink below.        */
@@ -378,7 +378,7 @@ int enlargewind(int f, int n)
 	adjwp->w_ntrows -= n;
 	curwp->w_flag |= WFMODE | WFHARD;
 	adjwp->w_flag |= WFMODE | WFHARD;
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -394,11 +394,11 @@ int shrinkwind(int f, int n)
 	register int i;
 
 	if (n < 0)
-		return (enlargewind(f, -n));
+		return enlargewind(f, -n);
 	if (wheadp->w_wndp == NULL)
 	{
 		mlwrite("Only one window");
-		return (FALSE);
+		return FALSE;
 	}
 	if ((adjwp = curwp->w_wndp) == NULL)
 	{
@@ -409,7 +409,7 @@ int shrinkwind(int f, int n)
 	if (curwp->w_ntrows <= n)
 	{
 		mlwrite("Impossible change");
-		return (FALSE);
+		return FALSE;
 	}
 	if (curwp->w_wndp == adjwp)
 	{									/* Grow below.          */
@@ -430,7 +430,7 @@ int shrinkwind(int f, int n)
 	adjwp->w_ntrows += n;
 	curwp->w_flag |= WFMODE | WFHARD;
 	adjwp->w_flag |= WFMODE | WFHARD;
-	return (TRUE);
+	return TRUE;
 }
 
 

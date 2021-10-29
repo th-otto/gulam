@@ -652,7 +652,7 @@ int wallchart(int f, int n)
 	register KB *ktp;
 	register int cc;
 
-	(void) f;
+	UNUSED(f);
 	mlwrite("wall chart for Regular buffer, Minibuf, or Gulam? [r m or g] ");
 	cc = getkey();
 	n = (cc == 'm' ? 2 : (cc == 'g' ? 1 : 0));
@@ -679,7 +679,7 @@ int desckey(int f, int n)
 	 c2;
 	register KB *ktp;
 
-	(void) f;
+	UNUSED(f);
 	mlwrite("Briefly describe key: ");
 	c = getkey();
 	mlwrite("in Regular buffer, Minibuf, or Gulam? [r m or g] ");
@@ -691,7 +691,7 @@ int desckey(int f, int n)
 			fx = ktp->k_fx;
 			break;
 		}
-	if (fx == 0 && ((c >= 0x20 && c <= 0x7E) || (c >= 0xA0 && c <= 0xFE)))
+	if (fx == 0 && ((c >= 0x20 && c <= 0x7E) || (c >= 0x80 && c <= 0xFE)))
 		/* Self inserting.  these too are ok on ST */
 		fx = Fselfinsert;
 	setupkf(c, fx);

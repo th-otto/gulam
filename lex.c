@@ -166,12 +166,12 @@ WS *useuplexws(void)
 
 uchar *lexgetword(void)
 {
-	return (ws && clxm < nlxm ? nthstr(ws->ps, clxm++) : ES);
+	return ws && clxm < nlxm ? nthstr(ws->ps, clxm++) : ES;
 }
 
 uchar *lexlastword(void)
 {
-	return (ws && clxm < nlxm ? nthstr(ws->ps, --nlxm) : ES);
+	return ws && clxm < nlxm ? nthstr(ws->ps, --nlxm) : ES;
 }
 
 uchar *lextail(void)
@@ -249,7 +249,7 @@ void lexpush(void)
 	tp->ws = ws;
 	tp->next = sp;
 	sp = tp;
-	(void) useuplexws();
+	useuplexws();
 }
 
 

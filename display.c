@@ -181,7 +181,7 @@ With an argument it recenters "." in the current window.  Bound to
 
 int refresh(int f, int n)
 {
-	(void) n;
+	UNUSED(n);
 	if (f == FALSE)
 		sgarbf = TRUE;
 	else
@@ -599,8 +599,8 @@ int mlyesno(uchar *prompt)
 		buf[0] = '\0';
 		s = mlreply(prompt, buf, ((uint) sizeof(buf)));
 		if (s == '\007')
-			return (ABORT);
-		return (buf[0] == 'y' || buf[0] == 'Y');
+			return ABORT;
+		return buf[0] == 'y' || buf[0] == 'Y';
 	}
 }
 

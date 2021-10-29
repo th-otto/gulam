@@ -138,7 +138,7 @@ int useraborted(void)
 	register int c;
 
 	c = usertyped();
-	return (c == CTRLC || c == CTRLG);
+	return c == CTRLC || c == CTRLG;
 }
 
 /* Output string to screen; similar to Cconws, but should not treat ^C

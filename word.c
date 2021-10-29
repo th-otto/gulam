@@ -209,7 +209,7 @@ int delfword(int f, int n)
   out:
 	curwp->w_dotp = dotp;
 	curwp->w_doto = doto;
-	return (ldelete(size, KFORW));
+	return ldelete(size, KFORW);
 }
 
 /* Kill backwards by "n" words.  Move backwards by the desired number
@@ -255,7 +255,7 @@ int delbword(int f, int n)
 		return FALSE;
 	--size;								/* Undo assumed delete. */
   out:
-	return (ldelete(size, KBACK));
+	return ldelete(size, KBACK);
 }
 
 static int fillcol = 70;

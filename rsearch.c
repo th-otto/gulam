@@ -71,12 +71,12 @@ static int readpattern(uchar *prompt)
 		return ABORT;
 	if (tpat[0])
 	{
-		(void) strcpy(pat, tpat);
+		strcpy(pat, tpat);
 		for (q = pat, p = tpat; (c = *q++) != 0; *p++ = c)
 			if (c == '\\')
 				*p++ = CTRLQ;
 		*p = '\0';
-		(void) strcpy(pat, tpat);
+		strcpy(pat, tpat);
 	}
 	gfree(repat);
 	repat = NULL;
@@ -89,7 +89,7 @@ static int readpattern(uchar *prompt)
 		casesensitize(tpat);
 		repat = regcomp(tpat);
 	}
-	return (repat != NULL);
+	return repat != NULL;
 }
 
 /* Replace plen characters before dot with argument string st.
@@ -264,7 +264,7 @@ static int rbsearch(void)
 			goto found;
 		clp = lback(clp);
 	}
-	return (FALSE);
+	return FALSE;
 
   found:
 	for (i = (int)strlen(s); i; i--)
@@ -289,7 +289,7 @@ int forwsearch(int f, int n)
 	UNUSED(n);
 	s = readpattern("re Search Forward");
 	if (s == ABORT || s == FALSE)
-		return (s);
+		return s;
 	s = (s == 0x12 ? rbsearch() : fsearch());
 	if (s == FALSE)
 		failed();
@@ -309,7 +309,7 @@ int backsearch(int f, int n)
 	UNUSED(n);
 	s = readpattern("re Search Backward");
 	if ((s == ABORT) || (s == FALSE))
-		return (s);
+		return s;
 	s = (s == 0x13 ? fsearch() : rbsearch());
 	if (s == FALSE)
 		failed();
@@ -334,7 +334,7 @@ int queryrepl(int f, int n)
 	UNUSED(n);
 	news[0] = '\0';
 	if ((s = readpattern("re Query replace")) != TRUE)
-		return (s);
+		return s;
 	s = mlreply(sprintp("re Query replace %s with: ", pat), news, NPAT);
 	if (s == CCHR('G'))
 		return ABORT;

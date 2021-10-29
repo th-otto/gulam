@@ -277,7 +277,7 @@ static int sendsector(void)
 		if (c == CAN)
 			return cancel(TCR);
 	} while ((c != ACK) && (attempts < RETRYMAX));
-	return (c == ACK);
+	return c == ACK;
 }
 
 
@@ -511,7 +511,7 @@ static int recvfile(char *file)
 		gfclose(fd);
 		alarm(0);
 		mlwrite("%s\r\n%D bytes received.\r\n", xmrs, nbx);
-		return (TRUE);
+		return TRUE;
 	}
 	return cancel(TME);
 }

@@ -96,7 +96,7 @@ uchar *ptometach(uchar *p)
 	}
 	for (r = p - 1; notmeta[(unsigned char)*++r];)
 		;
-	return (*r ? r : NULL);
+	return *r ? r : NULL;
 }
 
 /* Expand the name q in the context of list of words given in lst.
@@ -426,7 +426,7 @@ static void addfnmsofdir(WS *ws, uchar *p)
 	 m;
 
 	q = str3cat(p, DS0, ES);
-	(void) fnmsinparent(q);				/* strg is set as a result */
+	fnmsinparent(q);				/* strg is set as a result */
 	xs = prefixws(q, strg);
 	gfree(q);
 	gfree(strg);
@@ -484,7 +484,7 @@ static WS *mxp(WS *ds, uchar *lf)
 			if (isdir(p))
 			{
 				q = str3cat(p, DS0, ES);
-				(void) fnmsinparent(q);	/* strg = list of names */
+				fnmsinparent(q);	/* strg = list of names */
 				matchednms(strg, lf, 1);
 				xs = prefixws(q, strg);
 				gfree(q);
@@ -583,7 +583,7 @@ void pushws(WS *w)
 {
 	register SE *tp;
 
-	(void) useuplexws();
+	useuplexws();
 	tp = (SE *) gmalloc(((uint) sizeof(SE)));
 	if (tp == NULL)
 		return;

@@ -78,7 +78,7 @@ int getbufname(uchar *fps, uchar *defnm, uchar *bnm)				/* pm */
 		strcpy(bnm, defnm);
 	if (c == '\007')
 		return ABORT;
-	return (c == '\r' || c == '\n');
+	return c == '\r' || c == '\n';
 }
 
 
@@ -112,12 +112,12 @@ int usebuffer(int f, int n)
 	register int s;
 	uchar bufn[NBUFN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	bp = nextbuffer();
 	s = getbufname("Switch to buffer [", bp->b_bname, bufn);
 	if (s == ABORT)
-		return (ABORT);
+		return ABORT;
 	if (s == TRUE && (bp = bfind(bufn, TRUE, 0, REGKB, BMCREG)) == NULL)
 		return FALSE;
 	return switchbuffer(bp);
@@ -188,12 +188,12 @@ int bufferinsert(int f, int n)
 	register int s;
 	uchar bufn[NBUFN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	bp = nextbuffer();
 	s = getbufname("Insert buffer [", bp->b_bname, bufn);
 	if (s == ABORT)
-		return (s);
+		return s;
 	if (s == TRUE)
 		s = insertborf(bufn, 1);
 	curwp->w_flag |= WFMODE | WFHARD;
@@ -272,11 +272,11 @@ int killbuffer(int f, int n)
 	register BUFFER *bp;
 	uchar bufn[NBUFN];
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	s = getbufname("Kill buffer [", curbp->b_bname, bufn);
 	if (s == ABORT)
-		return (ABORT);
+		return ABORT;
 	bp = (s == FALSE ? curbp : bfind(bufn, FALSE, 0, REGKB, 0));
 	return bufkill(bp);
 }
@@ -374,11 +374,11 @@ static int makelist(void)
 		return FALSE;
 	listbp->b_flag &= ~BFCHG;			/* Don't complain!      */
 	if ((s = bclear(listbp)) != TRUE)	/* Blow old text away   */
-		return (s);
+		return s;
 	strcpy(listbp->b_fname, ES);
 	if (addline(listbp, "trc         Size Buffer           File") == FALSE
 		|| addline(listbp, "--- ------------ ------           ----") == FALSE)
-		return (FALSE);
+		return FALSE;
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 	{
 		p = &line[0];					/* Start at left edge   */
@@ -406,7 +406,7 @@ static int makelist(void)
 		}
 		*p = 0;
 		if (addline(listbp, line) == FALSE)
-			return (FALSE);
+			return FALSE;
 	}
 	return TRUE;
 }
@@ -420,8 +420,8 @@ int listbuffers(int f, int n)
 {
 	register WINDOW *wp;
 
-	(void) f;
-	(void) n;
+	UNUSED(f);
+	UNUSED(n);
 	if (makelist() != TRUE || (wp = popbuf(listbp)) == NULL)
 		return FALSE;
 	wp->w_dotp = listbp->b_dotp;		/* fix up if window already on screen */
@@ -442,7 +442,7 @@ int addline(void *_bp, uchar *text)
 	if ((lp = lnlink(bp->b_linep, text, (int) strlen(text))) != 0)
 		if (bp->b_dotp == bp->b_linep)	/* If dot is at the end */
 			bp->b_dotp = lp;			/* move it to new line  */
-	return (lp != NULL);
+	return lp != NULL;
 }
 
 
@@ -471,16 +471,16 @@ BUFFER *bfind(uchar *bname, unsigned int cflag, unsigned int bflag, int keybinds
 
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 		if (strcmp(bname, bp->b_bname) == 0)
-			return (bp);
+			return bp;
 	if (cflag != FALSE)
 	{
 		bp = (BUFFER *) malloc(((uint) sizeof(BUFFER)));
 		if (bp == NULL)
-			return (NULL);
+			return NULL;
 		if ((lp = lalloc(0)) == NULL)
 		{
 			free((uchar *) bp);
-			return (NULL);
+			return NULL;
 		}
 		lp->l_fp = lp;
 		lp->l_bp = lp;
@@ -565,7 +565,7 @@ int savebuffers(int f, int n)
 		killwindow(popbuf(listbp));
 		bufkill(listbp);
 	}
-	return (nsave == 0);
+	return nsave == 0;
 }
 
 
