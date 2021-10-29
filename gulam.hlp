@@ -166,7 +166,7 @@
 027 execute-one-Gulam-cmd
 028 kill-to-beginning-of-line
 029 fill-paragraph
-02a Fsearchagain
+02a hunt-frward
 02b search-backward
 02c search-forward
 02d no-op
@@ -182,8 +182,8 @@
 036 kill-region
 037 keys-reset
 038 semi-reset
-039 Fprefixregion
-03a Fsetprefix
+039 prefix-region
+03a set-prefix
 03b yank
 03c insert-file
 03d find-file
@@ -202,7 +202,7 @@
 049 delete-other-windows
 04a split-window-vertically
 04b ctrlx-four-hack-?
-04c Fnotmodified
+04c make-buffer-unmodified
 04d insert-buffer
 04e switch-to-buffer
 04f Fpoptobuffer
@@ -210,12 +210,12 @@
 050 list-buffers
 051 kill-buffer
 052 save-some-buffers
-053 Fpagenext
+053 next-page
 054 end-of-buffer
 055 beginning-of-buffer
 056 go-to-beginning-of-paragraph
 057 go-to-end-of-paragraph
-058 Fkillpara
+058 kill-paragraph
 059 just-one-space
 05a backward-word
 05b capitalize-word
