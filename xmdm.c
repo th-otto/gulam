@@ -118,8 +118,8 @@ static int openfile(char *file, int rs)
 		if (flnotexists(file) || mlyesno(sprintp("file '%s' exists; overwrite it?", file)))
 		{
 			fd = (int)gfcreate(file, 0);
-			p = "rx_remote_cmd";
 		}
+		p = "rx_remote_cmd";
 	}
 	if (fd < MINFH)
 		return FALSE;
@@ -176,9 +176,8 @@ static void sendeot(void)
 	register char *p;
 
 	attempts = 0;
-	do
+	for (;;)
 	{
-	  s_ag3:
 		alarm(mtimeout);
 		if (setjmp(time_env))
 		{
@@ -186,15 +185,19 @@ static void sendeot(void)
 			{
 				ufb(TIMEOUTS, ++ntimeout);
 				flushinput();
-				goto s_ag3;
+				continue;
 			}
 		}
 		sendchar(EOT);
 		attempts++;
-	} while ((readmodem() != ACK) && (attempts != RETRYMAX));
+		if (readmodem() == ACK)
+			break;
+		if (attempts == RETRYMAX)
+			break;
+	}
 	alarm(0);
-	p = (attempts == RETRYMAX
-		 ? "%s\r\n%D bytes sent; EOF acknowledgment not received though!\r\n" : "%s\r\n%D bytes sent.\r\n");
+	p = attempts == RETRYMAX
+		 ? "%s\r\n%D bytes sent; EOF acknowledgment not received though!\r\n" : "%s\r\n%D bytes sent.\r\n";
 	mlwrite(p, xmrs, nbx);
 }
 

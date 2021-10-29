@@ -94,7 +94,8 @@ uchar *ptometach(uchar *p)
 		charset(notmeta, "[()|?*", 0);
 		notmeta[0] = '\0';
 	}
-	for (r = p - 1; notmeta[*++r];) ;
+	for (r = p - 1; notmeta[(unsigned char)*++r];)
+		;
 	return (*r ? r : NULL);
 }
 

@@ -65,9 +65,6 @@
 #define	offflowcontrol()	Rsconf(-1,0,-1,-1,-1,-1)
 #define	onflowcontrol()		Rsconf(-1,1,-1,-1,-1,-1)
 
-#define	printout(c)		Cprnout(c)
-#define	printstatus()		Cprnos()
-
 #define	inkbdrdy()		Cconis()
 #define	ggetchar()		Crawcin()		/* Bconin(2) */
 #define	gputchar(c)		Bconout(2, c)

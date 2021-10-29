@@ -130,7 +130,6 @@ WS *lex(uchar *p, uchar *dlm, uchar *t2);
 WS *useuplexws(void);
 WS *expand(uchar *p, int addremargs);
 WS *metaexpand(uchar *p);
-WS *fullmetaexpand();
 WS *aliasexp(WS *ws);
 WS *dupenvws(int flag);
 WS *tblws(TBLE *t, int style);

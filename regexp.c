@@ -62,7 +62,7 @@
  * but allows patterns to get big without disasters.
  */
 #define	OP(p)	(*(p))
-#define	NEXT(p)	(((*((p)+1)&0377)<<8) + *((p)+2)&0377)
+#define	NEXT(p)	((((*((p) + 1)) & 0377) << 8) + ((*((p) + 2)) & 0377))
 #define	OPERAND(p)	((p) + 3)
 
 /*
@@ -488,8 +488,11 @@ static char *reg(int paren, int *flagp)
 		regnpar++;
 		ret = regnode(OPEN + parno);
 	} else
+	{
 		ret = NULL;
-
+		parno = 0;
+	}
+	
 	/* Pick up the branches, linking them together. */
 	br = regbranch(&flags);
 	if (br == NULL)

@@ -279,7 +279,7 @@ management routines in fio.c.  The number of lines written is
 displayed.  Sadly, it looks inside a LINE; provide a macro for this.
 Most of the grief is error checking of some sort.  */
 
-static writeout(BUFFER *bp, uchar *fn)
+static int writeout(BUFFER *bp, uchar *fn)
 {
 	register LINE *lp;
 	register long ntotal;
@@ -314,7 +314,7 @@ static writeout(BUFFER *bp, uchar *fn)
 			wupdatemodeline(bp);
 		}
 	}
-	return (s == FIOSUC);
+	return s == FIOSUC;
 }
 
 /* Ask for a file name, and write the contents of the current buffer

@@ -224,6 +224,9 @@ int showcpos(int f, int n)
 	clp = lforw(curbp->b_linep);		/* Collect the data.    */
 	nchar = 0;
 	nline = 0;
+	cbyte = '\n';
+	cline = 0;
+	cchar = 0;
 	for (;;)
 	{
 		++nline;						/* Count this line  */
@@ -464,7 +467,7 @@ int deblank(int f, int n)
  * of tabs and spaces. Return TRUE if all ok. Return FALSE if one of the
  * subcomands failed. Normally bound to "C-J".
  */
-indent(int f, int n)
+int indent(int f, int n)
 {
 	register int nicol;
 	register int c;

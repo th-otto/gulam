@@ -197,7 +197,11 @@ static void switchscreens(void)
 			Setscreen(p, p, -1);
 		/* p should never be NULL here, but ... */
 
-/*	    Vsync(); Vsync();	/* don't know if these are really nec */
+#if 0
+		/* don't know if these are really nec */
+	    Vsync();
+	    Vsync();
+#endif
 		/* they're not... AKP */
 		mvcursor(scrn[n].y, scrn[n].x);
 	}
@@ -456,13 +460,13 @@ int temul(int f, int n)
 				if (c == '0' && (rzcmd = varstr("rz_command")) != ES)
 				{
 					/* execute the command in 'rz_command' */
-					Bconout(2, '\r');
+					gputchar('\r');
 					processcmd(gstrdup(rzcmd), 0);
 				}
 				rzstate = 0;
 				break;
 			}
-			Bconout(2, (int) c);
+			gputchar(c);
 			/* check the console once in a while */
 			/* important at high speeds */
 			if ((++i) == 32)

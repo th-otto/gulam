@@ -216,7 +216,7 @@ void gchmod(uchar *p)
 		if (r[ic])
 			attr &= ~mask;
 	}
-	Fattrib(p, 1, attr);
+	(void) Fattrib(p, 1, attr);
 }
 
 void tch(uchar *p, _DOSTIME *td)

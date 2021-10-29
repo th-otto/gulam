@@ -13,8 +13,9 @@
 #
 # Use these defines for GCC
 CROSS = m68k-atari-mint-
+WARN = -Wall -Wstrict-prototypes -Wmissing-prototypes -Wold-style-declaration -Wold-style-definition -Werror
 CC = $(CROSS)gcc
-CFLAGS = -O2 -fomit-frame-pointer -mshort -funsigned-char
+CFLAGS = -O2 -fomit-frame-pointer -mshort -funsigned-char $(WARN)
 LIBS =
 
 # gasmmwc.o removed, gasmgnu.o added

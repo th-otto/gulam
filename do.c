@@ -78,7 +78,7 @@ void addoptions(uchar *p)
 }
 
 
-void setdate(uchar *arg)
+static void setdate(uchar *arg)
 {
 	UNUSED(arg);
 	gsdatetime(lexgetword());
@@ -250,7 +250,7 @@ void echo(uchar *arg)
 }
 
 
-void bexit(uchar *arg)
+static void bexit(uchar *arg)
 {
 	register char *p;
 	register int n;

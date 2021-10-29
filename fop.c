@@ -492,7 +492,7 @@ static void copyfio(uchar *in, uchar *ou, int iscat)
 	{
 		int attr = Fattrib(in, 0, 0);
 
-		Fattrib(ou, 1, attr);
+		(void) Fattrib(ou, 1, attr);
 	}
 #endif
   frees:maxfree(s);
@@ -570,7 +570,7 @@ static void cpdirtodir(char *ind, char *oud)
 
 	olddir = targetdir;
 	ws = NULL;
-	gfmkdir(oud);
+	(void) gfmkdir(oud);
 	/* create dir oud, if it did not exist before; no harm, ow */
 	p = ind + strlen(ind) - 1;
 	p = (*p == DSC ? ES : DS0);

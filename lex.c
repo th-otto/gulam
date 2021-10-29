@@ -44,9 +44,9 @@ static uchar tkn2s[] = ">>>=<===!=/==~/~";
 */
 static uchar *stdlxm(uchar *p)
 {
-	register uchar *q,
-	 c,
-	 c1;
+	register uchar *q;
+	unsigned char c;
+	unsigned char c1;
 
 	if (lxm2b[c = *p])
 		for (c1 = p[1], q = lxm2s; (q = strchr(q, c)) != NULL; q += 2)
@@ -95,10 +95,10 @@ static uchar *nextlexeme(void)
 		bgnp = p;
 		return NULL;
 	}
-	while (WHITEC[*p])
+	while (WHITEC[(unsigned char)*p])
 		p++;							/* Note 1 */
 	bgnp = p;
-	while (!q[*p])
+	while (!q[(unsigned char)*p])
 		p++;							/* Note 2 */
 	tlx = (int)(p - bgnp);
 	if (!tlx)							/* lexeme length == 0; so, that was a delimiter */
@@ -140,7 +140,7 @@ WS *lex(uchar *p, uchar *dlm, uchar *t2)
 	}
 	delim = dlm;
 	lxm2b = t2;
-	lxm2s = (t2 == TKN2 ? tkn2s : ES);
+	lxm2s = t2 == TKN2 ? tkn2s : ES;
 	if (p == NULL)
 		p = ES;
 	prevc = *p;
@@ -202,8 +202,8 @@ uchar *lexsemicol(void)
 	register uchar *p,
 	*q;
 
-	p = (ws ? p = ws->ps : NULL);
-	n = (p ? n = ws->ns : 0);
+	p = ws ? ws->ps : NULL;
+	n = p ? ws->ns : 0;
 	for (i = 0; (i < n); i++)
 	{
 		if (*p == ';' && p[1] == '\0')

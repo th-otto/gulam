@@ -743,7 +743,7 @@ void eachline(int fd, void (*fn)(uchar *q, int n))
 	register int i;
 	long asz;
 
-	valu = 0L;
+	valu = 0;
 	emsg = NULL;
 	asz = 19 * 1024 + 2;
 	bb = maxalloc(&asz);
@@ -753,7 +753,8 @@ void eachline(int fd, void (*fn)(uchar *q, int n))
 		return;
 	}
 	sz = asz - 2;						/* leave 1 byte for '\n' sentinel; make it even 19k */
-	for (q = r = bb; !valu && (n = gfread(fd, r, (long) (bb - r + sz))) > 0; q = bb)
+	n = 0;
+	for (q = r = bb; valu == 0 && (n = gfread(fd, r, (long) (bb - r + sz))) > 0; q = bb)
 	{
 		be = r + n;
 		be[0] = '\n';					/* sentinels */

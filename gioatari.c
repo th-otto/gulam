@@ -37,21 +37,9 @@
 
 #include "ue.h"
 
-#ifdef	H								/* thse are included in sysdpend.h */
-
-#define	ggetchar()		Bconin(2)
-#define	gputchar(c)		Bconout(2, c)
-#define	onreversevideo()	gputs("\033p")
-#define	offreversevideo()	gputs("\033q")
-#define	toeolerase()		gputs("\033K")
-#define	screenerase()		gputs("\033Y  \033J")
-#define	invisiblecursor()	gputs("\033f")
-#define	visiblecursor()		gputs("\033e")
-#endif
 extern int __mint;
 
 
-#ifndef	H
 uchar Scrninit[] = "\033E\033f\033v";	/* clr scrn, cursr off, wordwrap on */
 
 /* initialize the screen display and key board	*/
@@ -387,7 +375,7 @@ void drawshadedrect(void)
 	CLIP = 0;
 	PATMSK = 1;
 	MFILL = 0;
-	PATPTR = &pattern[0];
+	PATPTR = (void *)&pattern[0];
 	X1 = rp[rez].x1;
 	Y1 = rp[rez].y1;
 	X2 = V_X_MAX - 1;
@@ -574,7 +562,7 @@ static char unsh[128 * 3] = {
 
 void keysetup(void)
 {
-	Keytbl(unsh, shif, caps);
+	(void) Keytbl(unsh, shif, caps);
 	/* The ptr this returns appears to be useless   */
 	/* It should return the ptrs to old tables  */
 }
@@ -587,5 +575,3 @@ int keyreset(int f, int n)								/* should reset to the table we had */
 	Bioskeys();
 	return TRUE;
 }
-
-#endif	/* H */

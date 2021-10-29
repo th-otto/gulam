@@ -238,13 +238,14 @@ static int rbsearch(void)
 	register LINE *clp;
 	register int cbo;
 	register int i;
-	register char *s,
-	 c;
+	register char *s;
+	char c;
 
 	clp = curwp->w_dotp;
 	if (clp == curbp->b_linep)
 		clp = lback(clp);
 	cbo = curwp->w_doto;
+	c = clp->l_text[cbo];
 	while (clp != curbp->b_linep)
 	{
 		s = makelnstr(clp);
@@ -254,13 +255,13 @@ static int rbsearch(void)
 			s[cbo] = '\0';
 		}
 		i = regexec(repat, s);
-		if (i == 1)
-			goto found;
 		if (cbo >= 0)
 		{
 			s[cbo] = c;
 			cbo = -1;
 		}
+		if (i == 1)
+			goto found;
 		clp = lback(clp);
 	}
 	return (FALSE);
@@ -269,8 +270,6 @@ static int rbsearch(void)
 	for (i = (int)strlen(s); i; i--)
 		if (regexec(repat, s + i) == 1)
 			break;
-	if (cbo >= 0)
-		s[cbo] = c;
 	curwp->w_dotp = clp;
 	curwp->w_doto = i;
 	curwp->w_flag |= WFMOVE;

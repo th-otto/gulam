@@ -406,6 +406,7 @@ typedef struct							/* Memory Parameter Block */
 } MPB;
 
 
+#ifdef NEVER
 static void showmemlst(MDB *p, WS *ws)
 {
 	register long total,
@@ -422,6 +423,7 @@ static void showmemlst(MDB *p, WS *ws)
 		strwcat(ws, sprintp("%D \tbytes at %D  \towned by %D\r\n", n, md.base, md.owner), 0);
 	}
 }
+#endif
 
 
 void mem(uchar *arg)

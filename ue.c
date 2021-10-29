@@ -162,7 +162,7 @@ int getarg(int f, int n)
 	n = 4;								/* with argument of 4 */
 	mflag = 0;							/* that can be discarded. */
 	mlwrite("Arg: 4");
-	while ((c = getctlkey()) >= '0' && c <= '9' || c == (CTRL | 'U') || c == '-')
+	while (((c = getctlkey()) >= '0' && c <= '9') || c == (CTRL | 'U') || c == '-')
 	{
 		if (c == (CTRL | 'U'))
 			n *= 4;
@@ -254,7 +254,7 @@ void uebody(void)
 }
 
 
-static ueinkey(void)
+static int ueinkey(void)
 {
 	register int i;
 

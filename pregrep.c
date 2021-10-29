@@ -39,7 +39,7 @@ static void header(void);
 /* ouput to PRN:    */
 static void prout(char *p, int n)
 {
-	register char c;
+	unsigned char c;
 
 	if (n < 0)
 		return;							/* jstncs   */
@@ -54,8 +54,8 @@ static void prout(char *p, int n)
 				nerr++;
 				return;
 			}
-		} while (printstatus() == 0);
-		printout(c);
+		} while (Cprnos() == 0);
+		(void) Cprnout(c);
 		if (c == '\014' && n)
 			header();
 	}
@@ -67,7 +67,7 @@ static void prvar(char *p, char *q)
 	p = varstr(p);
 	if (p == NULL || *p == '\0')
 		p = q;
-	prout(p, ((int) strlen(p)));
+	prout(p, (int) strlen(p));
 }
 
 
@@ -220,8 +220,8 @@ static void igrep(int flag)						/* flag => fgrep; else egrep    */
 	register char *p,
 	*q,
 	*r,
-	*s,
-	 c;
+	*s;
+	unsigned char c;
 
 	p = gstrdup(lexgetword());			/* p has pattern */
 	if (flag && p && (r = q = gmalloc(((uint) (1 + 2 * strlen(p))))) != NULL)

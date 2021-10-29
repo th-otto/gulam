@@ -60,15 +60,13 @@ int getbufname(uchar *fps, uchar *defnm, uchar *bnm)				/* pm */
 	mlmesg(ps);
 	if (ps != fps)
 		gfree(ps);
-	else
-		goto EBLST;
 
 	ws = initws();						/* make a list of buffer names */
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 		strwcat(ws, bp->b_bname, 1);
 	blst = ws->ps;
 
-  EBLST:*bnm = '\0';					/* TENEX style buffer name expansion */
+	*bnm = '\0';					/* TENEX style buffer name expansion */
 	while ((c = getuserinput(bnm, NBUFN)) == '\033')
 	{
 		nameexpand(blst, bnm, 1);

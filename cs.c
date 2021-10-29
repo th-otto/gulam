@@ -127,8 +127,8 @@ void csexit(int n)
 
 void csexecbuf(BUFFER *bp)
 {
-	register uchar *q,
-	 i;
+	register uchar *q;
+	unsigned char i;
 	LINE *lp,
 	*slp;
 	int sfda[4];
@@ -279,7 +279,8 @@ static uchar *arithexp(uchar *p, uchar **nextword)
 	register uchar op;
 
 	niter = 0;
-	i = 0L;
+	q = NULL;
+	i = 0;
 	op = '+';
 	*nextword = ES;
 	while (p && *p)
@@ -292,7 +293,9 @@ static uchar *arithexp(uchar *p, uchar **nextword)
 			nr = atoi(r);
 			gfree(r);
 		} else
-			nr = 0L;
+		{
+			nr = 0;
+		}
 		switch (op)
 		{
 		case '+':
@@ -313,11 +316,11 @@ static uchar *arithexp(uchar *p, uchar **nextword)
 		}
 		*nextword = lexgetword();
 		op = **nextword;
-		if (strrchr("+-/*%", op) == NULL)
+		if (strchr("+-/*%", op) == NULL)
 			break;						/* <=== */
 		p = lexgetword();
 	}
-	return (niter == 1 ? q : gstrdup(itoal((long) i)));
+	return niter == 1 ? q : gstrdup(itoal(i));
 }
 
 

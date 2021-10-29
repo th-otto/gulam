@@ -611,6 +611,7 @@ static void recursels(int lsflag, uchar *p)
 
 	if (p == NULL)
 		return;
+	pp = NULL;
 	for (q = p;;)
 	{
 		outstrg();

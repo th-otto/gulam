@@ -290,6 +290,7 @@ BUFFER *opentempbuf(uchar *p);
 void closebuf(BUFFER *bp);
 void addcurbuf(uchar *p);
 int getccol(int bflg);
+void showgumem(void);
 
 short *lineA(void);
 void hi50(void);
