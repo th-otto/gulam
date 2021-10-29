@@ -85,7 +85,8 @@ int inkey(void)
 	if (inx > 0)
 	{
 		i = (uint) (inc[0]);
-		cpymem(inc, inc + 1, --inx);	/* inx is very small */
+		--inx;
+		cpymem(inc, inc + 1, inx * (int)sizeof(inc[0]));	/* inx is very small */
 	} else
 #ifndef	TEB
 		i = (uint) ggetchar();

@@ -224,8 +224,8 @@ by bammi@cwru.edu  */
 void sbreak(void)
 {
 #if 1
-	static char *tsr_ptr = (char *) 0x00fffa2dL;
-	static long *hz_200 = (long *) 0x000004baL;
+	volatile char *tsr_ptr = (volatile char *) 0x00fffa2dL;
+	volatile long *hz_200 = (volatile long *) 0x000004baL;
 
 	long save_ssp;
 	long time;
@@ -238,14 +238,14 @@ void sbreak(void)
 	*tsr_ptr &= (char) ~8;				/* reset bit 3 of the tsr */
 	SuperToUser(save_ssp);					/* Back to user Mode */
 #else
-	long *hz_200 = (long *) 0x000004baL;
+	volatile long *hz_200 = (volatile long *) 0x000004baL;
 	int otsr;
 	long save_ssp;
 	long time;
 
 	save_ssp = Super(0L);				/* Super Mode */
 
-	otsr = ((int) Rsconf(-1, -1, -1, -1, -1, -1) & 0x0000ff00L) >> 8;
+	otsr = ((int) Rsconf(-1, -1, -1, -1, -1, -1) >> 8) & 0xff;
 	otsr |= 8;
 	Rsconf(-1, -1, -1, -1, otsr, -1);
 	time = *hz_200 + 50;
