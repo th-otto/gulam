@@ -109,7 +109,7 @@ static long readtime(void)
 /* Get the present time (in ticks) to the highest degree of accuracy
 possible.  */
 
-uint32 getticks(void)
+unsigned long getticks(void)
 {
 	return Supexec(readtime);
 }
@@ -313,7 +313,7 @@ ue of Gulam.  Dont do a cr-lf after the line.  If caller so choses, he
 can.  Called only via (*_shell_p)(p); the p better be a ptr to a
 SZcmd-long byte area. */
 
-void __CDECL getlineviaue(uchar *p)
+static void __CDECL getlineviaue(uchar *p)
 {
 	uchar *q;
 
@@ -327,7 +327,7 @@ void __CDECL getlineviaue(uchar *p)
 
 /* Called only via (*_shell_p)(p); returns the status of the cmd */
 
-long __CDECL callgulam(uchar *p)
+static long __CDECL callgulam(uchar *p)
 {
 	int e;
 	int sfda[4];

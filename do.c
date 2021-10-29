@@ -92,15 +92,15 @@ static void run(uchar *g, uchar *cmdln, uchar *envp)
 
 	emsg = NULL;
 	p = strrchr(g, '.');
-	if (p == NULL)
-		goto pexecute;
-	if (isgulamfile(p))
+	if (p != NULL)
 	{
-		valu = batch(g, cmdln, envp);
-		return;
+		if (isgulamfile(p))
+		{
+			valu = batch(g, cmdln, envp);
+			return;
+		}
 	}
 
-  pexecute:
 	keyreset(FALSE, 1);
 	valu = execfile(g, cmdln, envp);
 	keysetup();
@@ -280,7 +280,7 @@ static void bexit(uchar *arg)
 
 int asktodoop(uchar *op, uchar *p)
 {
-	return negopts['i'] ? mlyesno(sprintp("%s %s?", op, p)) : 1;
+	return negopts['i'] ? mlyesno(sprintp("%s %s?", op, p)) : TRUE;
 }
 
 

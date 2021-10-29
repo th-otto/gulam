@@ -70,5 +70,3 @@
 	(for only these keys) values that I use are these +0040.
 */
 #define SHIFTED 0040
-
-/* -eof- */

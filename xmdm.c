@@ -80,7 +80,7 @@ static uint sectnum,						/* The currently expected sector #  */
  attempts,								/* #of attempts to send         */
  errorflag;								/* Just a flag              */
 
-static sint32 nbx;						/* #bytes sent/received sucessfully */
+static long nbx;						/* #bytes sent/received sucessfully */
 
 
 /* display module for rx/sx	*/
@@ -151,7 +151,7 @@ static void ufb(int x, int n)
 
 /* Updates the bytes display  */
 
-static void ufbbytes(sint32 count)
+static void ufbbytes(long count)
 {
 	char *p;
 	int j;
@@ -234,7 +234,7 @@ timeouts, just cancel send */
 
 static int sendsector(void)
 {
-	uint16 checksum;
+	unsigned short checksum;
 	uint c;
 	int j;
 
@@ -356,9 +356,9 @@ static int sendfile(char *file)
 }
 
 
-static void checksector(uint16 checksum)
+static void checksector(unsigned short checksum)
 {
-	uint16 recvcsum;
+	unsigned short recvcsum;
 
 	recvcsum = readmodem();
 	if (checksum == recvcsum)
@@ -373,7 +373,7 @@ static void checksector(uint16 checksum)
 		if (bufptr == BUFSIZ)
 		{								/* Buffer Full - flush it out to file */
 			bufptr = 0;
-			if (gfwrite(fd, bufr, BUFSIZ) != (sint32) BUFSIZ)
+			if (gfwrite(fd, bufr, BUFSIZ) != BUFSIZ)
 			{
 				cancel(EWF);
 				return;
@@ -397,7 +397,7 @@ static void checksector(uint16 checksum)
 
 static void recvsector(void)
 {
-	uint16 checksum;
+	unsigned short checksum;
 	int j;
 
 	sectors = readmodem();

@@ -75,22 +75,12 @@
 #define	invisiblecursor()	gputs("\033f")
 #define	visiblecursor()		gputs("\033e")
 
-typedef	int		sint16;
-typedef	long		sint32;
-typedef unsigned int	uint16;
-typedef unsigned long	uint32;
-
 /* for each compiler that does Ansi C define STANC below.
    note we cannot use __STDC__ because mwc and some others
    define it. Also, we cannot depend of #if __STDC__ because
-   some pre-processors dont handle it correctly. 
+   some pre-processors dont handle it correctly.
+   Note: now always assumed.
 */
-#ifdef __GNUC__
-#define STANC 1
-#endif
-#ifdef __PUREC__
-#define STANC 1
-#endif
 
 
 #include <stddef.h>
@@ -191,5 +181,3 @@ typedef	struct	GSTAT 		/*  similar to disk transfer area	*/
 	gfsatari.s	/* file sys interface */
 	pmalloc.c  	/* malloc/free package */
 #endif
-
-/* -eof- */

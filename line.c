@@ -40,7 +40,10 @@ LINE *lalloc(int used)
 	if (size < 4)
 		size = 4;						/* Assume that an empty line is for type-in. */
 	if ((lp = (LINE *) malloc(1 + ((uint) sizeof(LINE)) + size)) != NULL)
-	{									/* lp->l_zsize = size; * */
+	{
+#ifndef PMMALLOC
+		lp->l_zsize = size;
+#endif
 		lp->l_used = used;
 	} else
 		mlwrite("Could not allocate %d bytes for a line", size);

@@ -14,7 +14,7 @@ alias ls 'ls -F'
 alias cf 'd:\bin\compress.ttp -v'
 alias uc 'd:\bin\compress.ttp -vd'
 alias mwc e:\profile.g	#set up for mark williams
-cd e:\bammi
+cd c:\home
 set home $cwd
 set prompt '$ncmd#  $U'
 set prompt_tail	' '
