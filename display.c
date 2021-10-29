@@ -51,10 +51,10 @@ initially, and then every time we change nrows, or ncols. */
 
 void vtinit(void)								/* redone by pm */
 {
-	register int nc,
-	 j,
-	 nr;
-	register uchar *p;
+	int nc;
+	int j;
+	int nr;
+	uchar *p;
 
 	if (mcp)
 		free(mcp);
@@ -108,10 +108,10 @@ buffers.  Only column overflow is checked.  pm.  */
 /* show lp->l_text on the above row */
 static void vtputln(int n, LINE *lp)
 {
-	register uchar *p,
-	*q,
-	*r;
-	register unsigned int c;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	unsigned int c;
 
 	q = vscreen[vtrow = n]->v_text;
 	r = q + term.t_ncol;
@@ -149,10 +149,10 @@ which the software cursor is located.  */
 
 static void vteeol(void)
 {
-	register char *p,
-	 c;
-	register int i,
-	 j;
+	char *p;
+	char c;
+	int i;
+	int j;
 
 	i = vtcol;
 	j = vtcol = term.t_ncol;
@@ -166,8 +166,8 @@ static void vteeol(void)
 
 static void erasepscrln(int i)
 {
-	register uchar *p,
-	 c;
+	uchar *p;
+	uchar c;
 
 	p = pscreen[i]->v_text;
 	c = '\0';
@@ -199,8 +199,8 @@ redraw.  */
 
 static void reframe(WINDOW *wp)
 {
-	register LINE *lp;
-	register int i;
+	LINE *lp;
+	int i;
 
 	i = wp->w_force;
 	if (i > 0)
@@ -228,8 +228,8 @@ static void reframe(WINDOW *wp)
 
 static void curlnupdate(WINDOW *wp)
 {
-	register LINE *lp;
-	register int i;
+	LINE *lp;
+	int i;
 
 	i = wp->w_toprow;
 	for (lp = wp->w_linep; lp != wp->w_dotp; lp = lforw(lp))
@@ -242,9 +242,8 @@ static void curlnupdate(WINDOW *wp)
 
 static void hardupdate(WINDOW *wp)
 {
-	register LINE *lp;
-	register int i,
-	 j;
+	LINE *lp;
+	int i, j;
 
 	lp = wp->w_linep;
 	j = wp->w_toprow + wp->w_ntrows;
@@ -269,10 +268,10 @@ This is the only update for simple moves.  */
 
 static void computerowcol(void)
 {
-	register LINE *lp;
-	register uchar *p,
-	*q;
-	register int c;
+	LINE *lp;
+	uchar *p;
+	uchar *q;
+	int c;
 
 	currow = curwp->w_toprow;
 	for (lp = curwp->w_linep; lp != curwp->w_dotp; lp = lforw(lp))
@@ -301,7 +300,7 @@ screen change bits, to force a full update.  */
 
 static void scrgarb(void)
 {
-	register int i;
+	int i;
 
 	for (i = 0; i <= term.t_nrow; ++i)
 	{
@@ -335,15 +334,15 @@ the physical row and column variables.  It does try and exploit erase
 to end of line.  */
 static void updateline(int row, uchar *vline, uchar *pline)
 {
-	register uchar *vp,
-	*pp,
-	*vq,
-	*pq,
-	*vr,
-	*vs,
-	 c;
-	register int nbflag,
-	 ncol;
+	uchar *vp;
+	uchar *pp;
+	uchar *vq;
+	uchar *pq;
+	uchar *vr;
+	uchar *vs;
+	uchar c;
+	int nbflag;
+	int ncol;
 
 	if (vscreen[row]->v_flag & MDLIN)
 		onreversevideo();
@@ -429,13 +428,13 @@ static void updateline(int row, uchar *vline, uchar *pline)
 /* Make a modeline for a regular/gulam buffer */
 static void makemodeline(uchar *md, BUFFER *bp)
 {
-	register uchar *cp,
-	*mp,
-	 patc;
-	register uchar *p1,
-	*p2,
-	*tp,
-	*pmdncol;
+	uchar *cp;
+	uchar *mp;
+	uchar patc;
+	uchar *p1;
+	uchar *p2;
+	uchar *tp;
+	uchar *pmdncol;
 
 	if (bp == setgulambp(FALSE))
 	{
@@ -487,8 +486,8 @@ routine.  Called by "update" any time there is a dirty window.  */
 
 static void modeline(WINDOW *wp)
 {
-	register uchar *md;
-	register int n;
+	uchar *md;
+	int n;
 	LINE *lp;
 	uchar mdbuf[sizeof(LINE) + 2 * 150];
 
@@ -515,11 +514,11 @@ virtual and physical screens the same.  */
 
 void update(void)
 {
-	register WINDOW *wp;
-	register LINE *lp;
-	register VIDEO *vp1;
-	register VIDEO *vp2;
-	register int i;
+	WINDOW *wp;
+	LINE *lp;
+	VIDEO *vp1;
+	VIDEO *vp2;
+	int i;
 
 	for (wp = wheadp; wp; wp = wp->w_wndp)
 	{
@@ -591,7 +590,7 @@ of the question with a ^G.  Used any time a confirmation is required.
 
 int mlyesno(uchar *prompt)
 {
-	register int s;
+	int s;
 	uchar buf[4];
 
 	for (;;)
@@ -614,7 +613,7 @@ Returns the terminating char.  */
 
 int mlreply(uchar *prompt, uchar *buf, int nbuf)
 {
-	register uchar c;
+	uchar c;
 
 	mlmesg(prompt);
 	c = getuserinput(buf, nbuf);
@@ -631,8 +630,8 @@ of util.c */
 
 void mlwrite(const char *fmt, ...)						/* rewritten by pm */
 {
-	register int c,
-	 r;
+	int c;
+	int r;
 	uchar *p;
 	va_list ap;
 	long v;
@@ -708,7 +707,7 @@ it does not get seen by the user. */
 
 void mlmesgne(uchar *p)
 {
-	register int n;
+	int n;
 
 	if (p)
 		strcpy(mlstr, p);

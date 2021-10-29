@@ -59,9 +59,9 @@ UL psz[xszM];
 
 static check(HEAP *heap, char *s, MCB *mcb)
 {
-	register MCB *p,
-	*r;
-	register int bad;
+	MCB *p;
+	MCB *r;
+	int bad;
 
 	bad = 0;
 	for (r = &heap->fmcb, p = r->next; p;)
@@ -94,8 +94,8 @@ static check(HEAP *heap, char *s, MCB *mcb)
 
 checkheaps(flag)
 {
-	register HEAP *heap;
-	register MCB *m;
+	HEAP *heap;
+	MCB *m;
 
 	heap = (flag ? &gheaplist : &rheaplist);
 	for (heap = heap->hlink; heap; heap = heap->hlink)
@@ -111,7 +111,7 @@ checkheaps(flag)
 
 static void lstchunks(HEAP *heap)
 {
-	register MCB *p;
+	MCB *p;
 
 	for (heap = heap->hlink; heap; heap = heap->hlink)
 	{
@@ -134,8 +134,8 @@ new MCB q with its (left and/or right) adjacent MCBs. */
 
 static void insert(HEAP *heap, MCB *q)
 {
-	register MCB *p,
-	*r;
+	MCB *p;
+	MCB *r;
 
 	for (r = &heap->fmcb, p = r->next; p && p < q; r = p, p = p->next) ;
 	check(heap, "bef freeins", r);		/*dbg */
@@ -159,8 +159,8 @@ static void insert(HEAP *heap, MCB *q)
 
 static HEAP *allocheap(UI x)
 {
-	register HEAP *heap;
-	register UL lx;
+	HEAP *heap;
+	UL lx;
 
 	lx = x;
 	lx += ((uint) sizeof(HEAP)) + MI;
@@ -168,15 +168,15 @@ static HEAP *allocheap(UI x)
 	if (heap == NULL)
 		return NULL;
 	{									/* insert heap into heap list, which is in descending order of & */
-		register HEAP *h,
-		*g;
+		HEAP *h;
+		HEAP *g;
 
 		for (h = (gflag ? &gheaplist : &rheaplist), g = h->hlink; g > heap; h = g, g = g->hlink) ;
 		h->hlink = heap;
 		heap->hlink = g;
 	}
 	{									/* initialize the fields of the heap, and the 1st MCB */
-		register MCB *m;
+		MCB *m;
 
 		heap->hsize = lx;
 		heap->fmcb.msize = ((uint) sizeof(UL));	/* almost any # will do as long as */
@@ -188,13 +188,14 @@ static HEAP *allocheap(UI x)
 	return heap;
 }
 
+
 void *malloc(size_t x)
 {
-	register MCB *mcb,
-	*m;
-	register HEAP *heap;
-	register UI n;
-	register int ret;
+	MCB *mcb;
+	MCB *m;
+	HEAP *heap;
+	UI n;
+	int ret;
 
 	if (x == (UI) 0xFFFF)
 		return NULL;
@@ -240,8 +241,8 @@ void *malloc(size_t x)
 void free(void *_mcb)
 {
 	MCB *mcb = _mcb;
-	register HEAP *heap,
-	*h;
+	HEAP *heap;
+	HEAP *h;
 
 	if (mcb == NULL)
 		return;
@@ -276,7 +277,7 @@ in the uE part.  */
 
 void *gmalloc(unsigned int n)
 {
-	register char *p;
+	char *p;
 
 	gflag = 1;
 	p = malloc(n);
@@ -295,10 +296,11 @@ int gfree(void *p)
 /* Fast freeing of all rheaplist heaps.  Used by uE when exiting cleanly
 back to the single line oriented shell mode. */
 
+
 void freeall(void)
 {
-	register HEAP *heap,
-	*h;
+	HEAP *heap;
+	HEAP *h;
 
 	for (heap = &rheaplist; (h = heap->hlink) != NULL;)
 	{

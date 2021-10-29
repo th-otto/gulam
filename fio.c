@@ -32,8 +32,6 @@ what was in microEmacs.
 
 #include        "ue.h"
 
-#undef P_
-
 int lnn;								/* line number          */
 int evalu;
 long ntotal;
@@ -87,7 +85,7 @@ static int twrite(void)
 
 int ffclose(void)
 {
-	register int r;
+	int r;
 
 	r = FIOSUC;
 	if ((rwflag == 1) && (x < lsz))
@@ -103,8 +101,8 @@ the status.  Check only at the newline.  */
 
 int ffputline(char *buf, int nb)
 {
-	register int i;
-	register char *p;
+	int i;
+	char *p;
 
 	p = buf;
   xxxx:

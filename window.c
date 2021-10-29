@@ -16,7 +16,7 @@ WINDOW *wheadp;							/* WINDOW listhead              */
 
 void wupdatemodeline(BUFFER *bp)						/* Update mode lines        */
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	for (wp = wheadp; wp; wp = wp->w_wndp)
 		if (bp == NULL || wp->w_bufp == bp)
@@ -63,7 +63,7 @@ int nextwind(int f, int n)
 
 static WINDOW *predwp(WINDOW *wp)
 {
-	register WINDOW *wp1;
+	WINDOW *wp1;
 
 	if (wheadp == mlwp)
 		return NULL;
@@ -107,8 +107,8 @@ int mvdnwind(int f, int n)
  */
 int mvupwind(int f, int n)
 {
-	register LINE *lp;
-	register int i;
+	LINE *lp;
+	int i;
 
 	UNUSED(f);
 	lp = curwp->w_linep;
@@ -150,7 +150,7 @@ int mvupwind(int f, int n)
 */
 void killwindow(WINDOW *wp)
 {
-	register WINDOW *wp1;
+	WINDOW *wp1;
 
 	wp1 = (wp ? predwp(wp) : NULL);
 	if (wp1)
@@ -179,10 +179,10 @@ void killwindow(WINDOW *wp)
  */
 int onlywind(int f, int n)
 {
-	register WINDOW *wp,
-	*wp2;
-	register LINE *lp;
-	register int i;
+	WINDOW *wp;
+	WINDOW *wp2;
+	LINE *lp;
+	int i;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -226,7 +226,7 @@ int onlywind(int f, int n)
 */
 WINDOW *makewind(int top, int ntr)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	if ((wp = (WINDOW *) malloc(((uint) sizeof(WINDOW)))) == NULL)
 	{
@@ -260,13 +260,13 @@ WINDOW *makewind(int top, int ntr)
  */
 static int lsplitwind(WINDOW *gwp)
 {
-	register LINE *lp;
-	register int ntru,
-	 ntrl,
-	 ntrd;
-	register WINDOW *wp,
-	*wp1,
-	*wp2;
+	LINE *lp;
+	int ntru;
+	int ntrl;
+	int ntrd;
+	WINDOW *wp;
+	WINDOW *wp1;
+	WINDOW *wp2;
 
 	if (gwp->w_ntrows < 3)
 	{
@@ -337,9 +337,9 @@ int splitwind(int f, int n)
  */
 int enlargewind(int f, int n)
 {
-	register WINDOW *adjwp;
-	register LINE *lp;
-	register int i;
+	WINDOW *adjwp;
+	LINE *lp;
+	int i;
 
 	if (n < 0)
 		return shrinkwind(f, -n);
@@ -389,9 +389,9 @@ int enlargewind(int f, int n)
  */
 int shrinkwind(int f, int n)
 {
-	register WINDOW *adjwp;
-	register LINE *lp;
-	register int i;
+	WINDOW *adjwp;
+	LINE *lp;
+	int i;
 
 	if (n < 0)
 		return enlargewind(f, -n);
@@ -441,7 +441,7 @@ int shrinkwind(int f, int n)
  */
 WINDOW *wpopup(void)						/* rewritten by pm */
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	if (wheadp == mlwp)
 		return NULL;
@@ -454,7 +454,7 @@ WINDOW *wpopup(void)						/* rewritten by pm */
 
 void wininit(void)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	wheadp = curwp = NULL;				/* First window         */
 	wp = makewind(0, term.t_nrow - 1);	/* "-1" for mode line.  */

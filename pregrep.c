@@ -92,7 +92,7 @@ static void header(void)
 
 static void prinit(void)							/* init before beginning to print/lpr */
 {
-	register char *p;
+	char *p;
 
 	nerr = 0;
 	page = 0;
@@ -136,7 +136,7 @@ static void prline(char *q, int n)
 /* "print" one file */
 static void lprint(uchar *pnm)
 {
-	register int fd;
+	int fd;
 
 	fd = (int)gfopen(pnm, 0);
 	if (fd < 0)
@@ -176,7 +176,7 @@ void lpr(uchar *arg)
 
 static void fgmatch(char *q, int n)
 {
-	register char *s;
+	char *s;
 
 	UNUSED(n);
 	plnn++;
@@ -198,7 +198,7 @@ static void fgmatch(char *q, int n)
 
 static void legrep(char *pnm)
 {
-	register int fd;
+	int fd;
 
 	fd = (int)gfopen(pnm, 0);
 	if (fd < 0)
@@ -217,10 +217,10 @@ static void legrep(char *pnm)
 static void igrep(int flag)						/* flag => fgrep; else egrep    */
 {
 	char meta[256];
-	register char *p,
-	*q,
-	*r,
-	*s;
+	char *p;
+	char *q;
+	char *r;
+	char *s;
 	unsigned char c;
 
 	p = gstrdup(lexgetword());			/* p has pattern */

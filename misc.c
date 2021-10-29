@@ -44,7 +44,7 @@ string to the buffer.  */
 
 void tominibuf(void)								/* called only from main.c of gulam */
 {
-	register uchar *p;
+	uchar *p;
 
 	switchwindow(mlwp);
 	setminibp();
@@ -71,7 +71,7 @@ int semireset(int f, int n)
 
 int help(int f, int n)
 {
-	register KEY c;
+	KEY c;
 
 	if (curbp == minibp)
 	{
@@ -94,7 +94,7 @@ Do this only when verbosity is at least the given level.
 
 void userfeedback(uchar *s, int n)
 {
-	register uchar c;
+	uchar c;
 
 	if (varnum(Verbosity) < n)
 		return;
@@ -118,7 +118,7 @@ is done.  */
 
 void outstr(uchar *text)
 {
-	register int (*fn)(void *, uchar *);
+	int (*fn)(void *, uchar *);
 
 	/* this used to be if (text && *text) but then cat ate blank lines */
 	if (text)							/* so we don't make useless updates */
@@ -158,7 +158,7 @@ void closebuf(BUFFER *bp)
 
 void addcurbuf(uchar *p)
 {
-	register uchar c;
+	uchar c;
 
 	while ((c = *p++) != 0)
 	{
@@ -180,7 +180,7 @@ structs; see lalloc() in line.c.  Fails if user inserted a \0; but
 what the heck!  */
 uchar *makelnstr(LINE *lp)
 {
-	register uchar *q;
+	uchar *q;
 
 	q = lp->l_text;
 	q[llength(lp)] = '\0';
@@ -192,10 +192,10 @@ line.  Ignore the prompt prefix.  */
 
 static uchar *makecmdstr(LINE *lp)
 {
-	register int n,
-	 i;
-	register uchar *p,
-	*q;
+	int n;
+	int i;
+	uchar *p;
+	uchar *q;
 
 	q = gmalloc(1 + (n = lp->l_used));
 	if (q == NULL)
@@ -225,11 +225,11 @@ char that terminated the input.
 */
 uchar getuserinput(uchar *buf, int nbuf)
 {
-	register WINDOW *wp;
-	register BUFFER *bp;
-	register int savedxue,
-	 n;
-	register LINE *lp;
+	WINDOW *wp;
+	BUFFER *bp;
+	int savedxue;
+	int n;
+	LINE *lp;
 
 	setminibp();
 	wp = curwp;
@@ -290,10 +290,10 @@ possible completions.  */
 
 static void gxp(int flag)
 {
-	uchar *p,
-	*q,
-	*r;
-	register LINE *lp;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	LINE *lp;
 
 	if (curbp != setgulambp(FALSE))
 		return;
@@ -352,41 +352,38 @@ int gforwline(int f, int n)
 {
 	if (curbp == setgulambp(FALSE) || curbp == minibp)
 	{
-		register LINE *lp1,
-		*lp2;
+		LINE *lp1;
+		LINE *lp2;
 
 		lp1 = curbp->b_linep;
 		lp2 = curwp->w_dotp;
 		if ((lp2 == lp1 && backchar(TRUE, 1)) || lp2 == lp1->l_bp)
-			goto showhist;
+		{
+			uchar *p;
+			uchar *q;
+			uchar *r;
+	
+			q = prevhist();
+			if (q)
+			{
+				curwp->w_doto = 0;
+				ukill(TRUE, 1);
+				if (curbp == gulambp)
+				{
+					p = str3cat(r = getprompt(), q, ES);
+					if (r)
+						gfree(r);
+					gfree(q);
+				} else
+					p = q;
+				addline(curbp, p);
+				gfree(p);
+				return backchar(TRUE, 1);
+			}
+			return TRUE;
+		}
 	}
 	return forwline(f, n);
-
-  showhist:
-	{
-		register uchar *p,
-		*q,
-		*r;
-
-		q = prevhist();
-		if (q)
-		{
-			curwp->w_doto = 0;
-			ukill(TRUE, 1);
-			if (curbp == gulambp)
-			{
-				p = str3cat(r = getprompt(), q, ES);
-				if (r)
-					gfree(r);
-				gfree(q);
-			} else
-				p = q;
-			addline(curbp, p);
-			gfree(p);
-			return backchar(TRUE, 1);
-		}
-		return TRUE;
-	}
 }
 
 /* Execute the lines of current buffer as Gulam cmds.  If the buffer
@@ -395,8 +392,8 @@ is gulam-buffer, output of cmds also will also be considered as cmds.
 
 int execbuf(int f, int n)
 {
-	register BUFFER *bp;
-	register int s;
+	BUFFER *bp;
+	int s;
 	char bufn[NBUFN];
 
 	UNUSED(f);
@@ -421,8 +418,8 @@ get deposited in any buffer.  */
 
 int gspawn(int f, int n)
 {
-	register WINDOW *wp;
-	register int savedxue;
+	WINDOW *wp;
+	int savedxue;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -456,7 +453,7 @@ void gcconws(char *p)
 
 void gfwrite(long n, char *s)
 {
-	register char c;
+	char c;
 
 	while (n--)
 	{
@@ -497,10 +494,10 @@ static unplanttraps113(void)
 
 int gulam(int f, int n)
 {
-	register uchar *p,
-	*q,
-	*r;
-	register LINE *lp;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	LINE *lp;
 
 	UNUSED(f);
 	UNUSED(n);

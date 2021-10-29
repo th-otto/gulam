@@ -222,13 +222,12 @@ int totebuf(int f, int n)
 
 int tenewline(int f, int n)
 {
-	register uchar *p,
-	*q,
-	*r,
-	 c;
-	register LINE *lp;
-	register int m,
-	 n;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	uchar c;
+	LINE *lp;
+	int m, n;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -248,11 +247,10 @@ int tenewline(int f, int n)
 
 int tesendtext(int f, int n)
 {
-	register LINE *linep;
-	register int loffs,
-	 s;
-	uchar c;
-
+	LINE *linep;
+	int loffs;
+	int s;
+	char c;
 	REGION region;
 
 	UNUSED(f);
@@ -286,9 +284,9 @@ when kbd input is detected. */
 void teupdate(void)
 {
 	uchar buf[100];
-	register uchar *p;
-	register int n;
-	register WINDOW *wp;
+	uchar *p;
+	int n;
+	WINDOW *wp;
 
 	if (inmdmrdy() == 0)
 		return;

@@ -219,7 +219,7 @@ void mem(uchar *arg);
 void lpeekw(uchar *arg);
 void lpokew(uchar *arg);
 void format(uchar *p);
-uchar *drvmap(void);
+uchar *drvmap(char *buf);
 void df(uchar *p);
 void dm(uchar *p);
 int inbatchfile(void);

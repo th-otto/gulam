@@ -93,17 +93,16 @@ static rs232REC *newrs232recp;
 static char *rsbuf;						/* ptr to large rs232 rcv buf   */
 static int szrsbuf;
 
-#define	SZrsbuf		16*1024
-
 static char *tesmallocp;					/* ptr to mem occ by te screen      */
 static int screen_n = 0;					/* index into scrn[]    */
 
 static int speed = -1;					/* baud rate of rs232 */
-static int flowctl = 1,
-	ucr = -1,
-	rsr = -1,
-	tsr = -1,
-	scr = -1;
+static int flowctl = 1;
+static int ucr = -1;
+static int rsr = -1;
+static int tsr = -1;
+static int scr = -1;
+
 
 /* Reset the rs232 buffer to the savedrs232recd, if no one is using it;
 i.e., neither teemulator, nor xmdm() is using. */
@@ -149,7 +148,7 @@ void setrs232buf(void)
 static void setspeed(char *p)
 {
 	static int tbl[10] = { 0, 7, 4, 9, 2, 1, 1, 1, 1, 1 };
-	register int i;
+	int i;
 
 	i = *p - '0';
 	if ((0 > i) || (i > 9))
@@ -165,7 +164,7 @@ static void setspeed(char *p)
 void setrs232speed(void)
 {
 	char buf[4];
-	register int r;
+	int r;
 
 	if (speed >= 0)
 		return;
@@ -184,7 +183,7 @@ static void switchscreens(void)
 {
 	short *lineAvars;					/* address of line A interface vars */
 
-	register char *p;
+	char *p;
 
 	if (!varnum("no_te_scr"))
 	{									/* conditional added AKP */
@@ -228,8 +227,8 @@ void sbreak(void)
 	static char *tsr_ptr = (char *) 0x00fffa2dL;
 	static long *hz_200 = (long *) 0x000004baL;
 
-	register long save_ssp;
-	register long time;
+	long save_ssp;
+	long time;
 
 	save_ssp = Super(0L);				/* Super Mode */
 	*tsr_ptr |= (char) 8;				/* set bit 3 of the TSR */
@@ -239,10 +238,10 @@ void sbreak(void)
 	*tsr_ptr &= (char) ~8;				/* reset bit 3 of the tsr */
 	SuperToUser(save_ssp);					/* Back to user Mode */
 #else
-	register long *hz_200 = (long *) 0x000004baL;
-	register int otsr;
-	register long save_ssp;
-	register long time;
+	long *hz_200 = (long *) 0x000004baL;
+	int otsr;
+	long save_ssp;
+	long time;
 
 	save_ssp = Super(0L);				/* Super Mode */
 
@@ -265,7 +264,7 @@ static long alrm_time = 0L;				/* Time of next timeout (200 Hz) */
 
 void alarm(uint n)
 {
-	register long ticks;
+	long ticks;
 
 	if (n)
 	{
@@ -282,7 +281,7 @@ and timeout at the same time */
 
 int readmodem(void)
 {
-	register long ticks;
+	long ticks;
 
 	for (;;)
 	{
@@ -305,7 +304,7 @@ int readmodem(void)
 
 void writemodem(char *buf, int len)
 {
-	register int i;
+	int i;
 
 	for (i = 0; i < len; i++)
 		Bconout(1, *buf++);
@@ -314,7 +313,7 @@ void writemodem(char *buf, int len)
 
 static void tehelp(void)							/* help for the term emulator only  */
 {
-	register int s;
+	int s;
 
 	switchscreens();					/* to local screen  */
 	s = speed;
@@ -329,7 +328,7 @@ static void tehelp(void)							/* help for the term emulator only  */
 
 static void terminit(void)
 {
-	register char *p;
+	char *p;
 	long SZscreen;
 	short *lineAvars;					/* address of line A interface vars */
 
@@ -412,7 +411,7 @@ the user invokes temul via Keypad-0 again.  */
 int temul(int f, int n)
 {
 	static int stoprecursion = 0;
-	register long i;
+	long i;
 	int rzstate = 0;
 	uchar *rzcmd;
 
@@ -432,7 +431,7 @@ int temul(int f, int n)
 	{
 		for (i = 0; Bconstat(1);)
 		{
-			register char c = (Bconin(1) & 0x7f);
+			char c = (Bconin(1) & 0x7f);
 
 			switch (rzstate)
 			{
@@ -484,7 +483,7 @@ int temul(int f, int n)
 				break;
 		}
 		{
-			register long conin;/*- usrin(): check user's kbd	-*/
+			long conin; /*- usrin(): check user's kbd	-*/
 
 			if ((conin = Crawio(0xff)) != 0)	/* coupled to ggetchar() */
 			{

@@ -27,7 +27,7 @@ int gotobol(int f, int n)
 */
 int backchar(int f, int n)
 {
-	register LINE *lp;
+	LINE *lp;
 
 	if (n < 0)
 		return forwchar(f, -n);
@@ -65,7 +65,7 @@ int gotoeol(int f, int n)
 */
 int forwchar(int f, int n)
 {
-	register LINE *lp;
+	LINE *lp;
 
 	if (n < 0)
 		return backchar(f, -n);
@@ -128,7 +128,7 @@ int gotoeob(int f, int n)
  */
 int forwline(int f, int n)
 {
-	register LINE *dlp;
+	LINE *dlp;
 
 	if (n < 0)
 		return backline(f, -n);
@@ -152,7 +152,7 @@ int forwline(int f, int n)
  */
 int backline(int f, int n)
 {
-	register LINE *dlp;
+	LINE *dlp;
 
 	if (n < 0)
 		return forwline(f, -n);
@@ -175,10 +175,10 @@ int backline(int f, int n)
  */
 int getgoal(LINE *dlp)
 {
-	register int c;
-	register int col;
-	register int newcol;
-	register int dbo;
+	int c;
+	int col;
+	int newcol;
+	int dbo;
 
 	col = 0;
 	dbo = 0;
@@ -207,7 +207,7 @@ int getgoal(LINE *dlp)
  */
 int forwpage(int f, int n)
 {
-	register LINE *lp;
+	LINE *lp;
 
 	if (f == FALSE)
 	{
@@ -239,7 +239,7 @@ int forwpage(int f, int n)
  */
 int backpage(int f, int n)
 {
-	register LINE *lp;
+	LINE *lp;
 
 	if (f == FALSE)
 	{
@@ -290,8 +290,8 @@ int setmark(int f, int n)
  */
 int swapmark(int f, int n)
 {
-	register LINE *odotp;
-	register int odoto;
+	LINE *odotp;
+	int odoto;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -317,7 +317,7 @@ int swapmark(int f, int n)
  */
 int gotoline(int f, int n)
 {
-	register LINE *clp;
+	LINE *clp;
 	char buf[32];
 
 	if (f == FALSE)

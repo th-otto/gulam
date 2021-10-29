@@ -68,7 +68,7 @@ void fg(uchar *arg)
 void ue(uchar *arg)
 {
 	int n;								/* &n is used below */
-	register uchar *p;
+	uchar *p;
 
 	UNUSED(arg);
 	mlmesg(msginit);
@@ -114,9 +114,9 @@ the next command can look at it.  Return the status of command.  */
 
 static int execute(int f, int n, int c)
 {
-	register KB *ktp;
-	register int status,
-	 kc;
+	KB *ktp;
+	int status;
+	int kc;
 
 	lastkey = c;
 	for (ktp = kba[curbp->b_kbn]; (kc = ktp->k_code) != KEOTBL; ktp++)
@@ -155,8 +155,8 @@ static int execute(int f, int n, int c)
 
 int getarg(int f, int n)
 {
-	register int c;
-	register int mflag;
+	int c;
+	int mflag;
 
 	UNUSED(f);
 	n = 4;								/* with argument of 4 */
@@ -232,7 +232,7 @@ void ueexit(void)
 
 void uebody(void)
 {
-	register int c;
+	int c;
 
 	mousecursor();
 	lastflag = 0;						/* Fake last flags.     */
@@ -256,7 +256,7 @@ void uebody(void)
 
 static int ueinkey(void)
 {
-	register int i;
+	int i;
 
 	i = inkey();						/* see util.c */
 	if (kbdmip)
@@ -279,7 +279,7 @@ static int ueinkey(void)
 
 int getctl(void)
 {
-	register int c;
+	int c;
 
 	c = ueinkey();
 	if (c >= 'a' && c <= 'z')
@@ -292,7 +292,7 @@ int getctl(void)
 
 int getkey(void)
 {
-	register int c;
+	int c;
 
 	c = ueinkey();
 	if (c == METACH)
@@ -307,7 +307,7 @@ int getkey(void)
 
 int getctlkey(void)
 {
-	register int c;
+	int c;
 
 	c = ueinkey();
 	if (c >= 0x00 && c <= 0x1F)
@@ -453,7 +453,7 @@ buffers, or user insists on quitting.  */
 
 int quit(int f, int n)
 {
-	register int s;
+	int s;
 
 	UNUSED(n);
 	if (f != FALSE || anycb() == FALSE)

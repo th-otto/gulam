@@ -53,6 +53,8 @@ typedef struct
 } WLSR;
 
 
+#define FNMPOS	45		/* file name position in lsln[] bgns here */
+
 static void recursels (int lsflag, uchar *p);
 
 static TBLE *wtbl;						/* table of wls-entries     */
@@ -63,9 +65,9 @@ static int curattr						/* attr for the files in readdir */
 
 static void sizestr(long i, char *s)
 {
-	register char *p,
-	*q;
-	register int k;
+	char *p;
+	char *q;
+	int k;
 
 	p = itoal(i);
 	k = (int)strlen(p);
@@ -80,7 +82,7 @@ static int fnmcompare(const void *_p, const void *_q)
 {
 	const P2 *p = _p;
 	const P2 *q = _q;
-	register int i;
+	int i;
 
 	i = strcmp(p->nmptr, q->nmptr);
 	if (reversesort)
@@ -95,9 +97,9 @@ static int tmstampcmp(const void *_p, const void *_q)
 {
 	const P2 *p = _p;
 	const P2 *q = _q;
-	register unsigned dp,
-	 dq;
-	register int i;
+	unsigned int dp;
+	unsigned int dq;
+	int i;
 
 	dq = q->statp->date;
 	dp = p->statp->date;
@@ -126,11 +128,11 @@ static void sortls(int style, int nc, uchar *gs, GSTATGA *wa, uchar **frs, GSTAT
 	int nf;
 	int offset;
 	int (*pf) (const void *, const void *);
-	uchar *tailstr,
-	*new;
-	register uchar *p,
-	*q;
-	register P2GA *ptga;
+	uchar *tailstr;
+	uchar *new;
+	uchar *p;
+	uchar *q;
+	P2GA *ptga;
 	P2 tmpp;
 	GSTATGA *nsa;
 
@@ -145,7 +147,7 @@ static void sortls(int style, int nc, uchar *gs, GSTATGA *wa, uchar **frs, GSTAT
 	}
 
 	{									/* construct P2 array from gs */
-		register GSTAT *lda;
+		GSTAT *lda;
 
 		ptga = (P2GA *) initga(((uint) sizeof(P2)), 100);
 		lda = (GSTAT *) (wa ? wa->el : NULL);
@@ -171,9 +173,8 @@ static void sortls(int style, int nc, uchar *gs, GSTATGA *wa, uchar **frs, GSTAT
 	}
 	qsort(ptga->el, (size_t) nf, sizeof(P2), pf);
 	{									/* re build strg */
-		register P2 *pp;
-		register int m,
-		 k;
+		P2 *pp;
+		int m, k;
 
 		m = (int)strlen(tailstr);
 		new = p = gmalloc(1 + nc + nf * m);
@@ -216,10 +217,10 @@ WLSR record.  The entries in WLSR are sorted by file name. */
 
 static WLSR *lwlswr(void)
 {
-	register char *p;
-	register WS *ws;
-	register DTA *dta;
-	register WLSR *wr;
+	char *p;
+	WS *ws;
+	DTA *dta;
+	WLSR *wr;
 	GSTATGA *wa;
 
 	wr = (WLSR *) gmalloc(((uint) sizeof(WLSR)));
@@ -250,8 +251,8 @@ static WLSR *lwlswr(void)
 
 static TBLE *freetble(TBLE *p)
 {
-	register TBLE *q;
-	register WLSR *wr;
+	TBLE *q;
+	WLSR *wr;
 
 	q = p->next;
 	gfree(p->key);
@@ -267,8 +268,8 @@ static TBLE *freetble(TBLE *p)
 
 static void freewlsr(char *k)
 {
-	register TBLE *p,
-	*q;
+	TBLE *p;
+	TBLE *q;
 
 	if (k == NULL || (p = wtbl) == NULL)
 		return;
@@ -283,7 +284,7 @@ static void freewlsr(char *k)
 
 void freewtbl(void)								/* exported */
 {
-	register TBLE *p;
+	TBLE *p;
 
 	if ((p = wtbl) == NULL)
 		return;
@@ -301,10 +302,10 @@ its corresp dir into the tbl.  */
 /* 0 => don't use wlstbl; 1 => do */
 void wls(int flag)
 {
-	register char *p;
-	register WLSR *wr;
-	register TBLE *wp;
-	register int n;
+	char *p;
+	WLSR *wr;
+	TBLE *wp;
+	int n;
 
 	if (wtbl == NULL)
 		wtbl = tblcreate();
@@ -333,10 +334,10 @@ void wls(int flag)
 
 void fnmtbl(uchar *arg)								/* show wls tbl; if arg present delete corresp entry */
 {
-	register char *p;
-	register TBLE *wp;
-	register WLSR *wr;
-	register int nn;
+	char *p;
+	TBLE *wp;
+	WLSR *wr;
+	int nn;
 
 	UNUSED(arg);
 	if (wtbl == NULL)
@@ -363,7 +364,7 @@ bslashes, return NULL. */
 
 static uchar *rmbslashtl(uchar *p)
 {
-	register uchar *q;
+	uchar *q;
 
 	q = p + strlen(p) - 1;
 	if (q < p || *q != DSC)
@@ -382,15 +383,15 @@ backslashes, so take care!  */
 
 static DTA *wlsdta(uchar *pp)
 {
-	register uchar *p,
-	*q,
-	*qq;
-	register TBLE *wp;
-	register GSTATGA *ga;
-	register WLSR *wr;
-	register DTA *dta;
-	register uchar *pbs;
-	register int n;
+	uchar *p;
+	uchar *q;
+	uchar *qq;
+	TBLE *wp;
+	GSTATGA *ga;
+	WLSR *wr;
+	DTA *dta;
+	uchar *pbs;
+	int n;
 
 
 	dta = NULL;
@@ -427,8 +428,14 @@ static DTA *wlsdta(uchar *pp)
 	pp = stdpathname(pp);
 	if (flnotexists(pp))
 	{
+		char buf[34];
+		char drivec;
+		
+		drivec = pp[0];
+		if (drivec >= 'a' && drivec <= 'z')
+			drivec -= 'a' - 'A';
 		if ((strlen(pp) <= 3)			/* if (specialdir(pp)) */
-			&& (pp[1] == ':') && ((pp[2] == DSC) || (pp[2] == '\0')) && (strchr(drvmap(), pp[0]) != NULL))
+			&& (pp[1] == ':') && ((pp[2] == DSC) || (pp[2] == '\0')) && (strchr(drvmap(buf), drivec) != NULL))
 		{
 			dta = (DTA *) gfgetdta();
 			dta->attr = 0x10;			/* can, eg., be "a:\" */
@@ -436,7 +443,9 @@ static DTA *wlsdta(uchar *pp)
 			dta->size = 0;
 		}
 	} else
+	{
 		dta = (DTA *) gfgetdta();
+	}
 	gfree(pp);
   freepq:gfree(p);
 	gfree(q);
@@ -447,7 +456,7 @@ static DTA *wlsdta(uchar *pp)
 
 int isdir(char *p)							/* determine if p is pathname of a dir      */
 {
-	register DTA *dta;
+	DTA *dta;
 
 	dta = wlsdta(p);
 	return dta ? (filetp(p, dta->attr) == DSC) : 0;
@@ -459,20 +468,17 @@ int isdir(char *p)							/* determine if p is pathname of a dir      */
  drwx---... 1 useridxxx size0000 mon dd hh:mm filename.ext\r\n\0
 */
 
-#if	00									/* #defined in sysdepend.h */
-FNMPOS 45								/* file name position in ls -l bgns here */
-#endif
 /* Format the fnms in a into 'ls -l'	*/
 static void lsl(char *p)
 {
-	register WS *ws;
-	register DTA *dta;
-	register int nc,
-	 fstyle,
-	 shouldsort;
+	WS *ws;
+	DTA *dta;
+	int nc;
+	int fstyle;
+	int shouldsort;
 	GSTATGA *ga;
-	char temp[5],
-	*pp;
+	char temp[5];
+	char *pp;
 	char lsln[FNMPOS + 3];				/* timestr() needs 8 bytes */
 
 
@@ -544,12 +550,12 @@ lex.c  has its words stored in WSPS format. */
 
 static void lss(uchar *p)
 {
-	register uchar *q,
-	*r;
-	register WS *ws;
-	register int argsgiven,
-	 parentexp,
-	 flagf;
+	uchar *q;
+	uchar *r;
+	WS *ws;
+	int argsgiven;
+	int parentexp;
+	int flagf;
 	GSTATGA *ga;
 	DTA *d;
 	uchar fi[2];
@@ -603,11 +609,11 @@ static void lss(uchar *p)
 
 static void recursels(int lsflag, uchar *p)
 {
-	register uchar *q,
-	*pp,
-	*cwd,
-	*r;
-	register int d;
+	uchar *q;
+	uchar *pp;
+	uchar *cwd;
+	uchar *r;
+	int d;
 
 	if (p == NULL)
 		return;
@@ -657,7 +663,7 @@ static void recursels(int lsflag, uchar *p)
 
 void ls(uchar *arg)
 {
-	register char *p;
+	char *p;
 
 	UNUSED(arg);
 	p = lexgetword();

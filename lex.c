@@ -44,7 +44,7 @@ static uchar tkn2s[] = ">>>=<===!=/==~/~";
 */
 static uchar *stdlxm(uchar *p)
 {
-	register uchar *q;
+	uchar *q;
 	unsigned char c;
 	unsigned char c1;
 
@@ -59,8 +59,8 @@ static uchar *stdlxm(uchar *p)
 /* and terminate it with \0         */
 static uchar *quotedword(uchar *p)
 {
-	register uchar c,
-	 sdq;
+	uchar c;
+	uchar sdq;
 
 	sdq = *p;							/* single or double qoute   */
   matchsdq:
@@ -83,9 +83,9 @@ static uchar *quotedword(uchar *p)
 */
 static uchar *nextlexeme(void)
 {
-	register uchar *p,
-	*q;
-	register int tlx;					/* length of token  */
+	uchar *p;
+	uchar *q;
+	int tlx;					/* length of token  */
 
 	p = lxnextp;
 	q = delim;
@@ -156,7 +156,7 @@ WS *lex(uchar *p, uchar *dlm, uchar *t2)
 */
 WS *useuplexws(void)
 {
-	register WS *w;
+	WS *w;
 
 	w = ws;
 	ws = NULL;
@@ -197,10 +197,10 @@ uchar *lexhead(void)
 */
 uchar *lexsemicol(void)
 {
-	register int i,
-	 n;
-	register uchar *p,
-	*q;
+	int i;
+	int n;
+	uchar *p;
+	uchar *q;
 
 	p = ws ? ws->ps : NULL;
 	n = p ? ws->ns : 0;
@@ -239,7 +239,7 @@ static SE *sp = NULL;
 
 void lexpush(void)
 {
-	register SE *tp;
+	SE *tp;
 
 	tp = (SE *) gmalloc(((uint) sizeof(SE)));
 	if (tp == NULL)
@@ -255,7 +255,7 @@ void lexpush(void)
 
 void lexpop(void)
 {
-	register SE *tp;
+	SE *tp;
 
 	tp = sp;
 	if (tp == NULL)

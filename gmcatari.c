@@ -69,14 +69,6 @@
 
 
 
-#ifdef	H
-			/* Insert user-id (10 chars at most) at p. */
-#define	userid(x, p)	strcpy(p, "u         ")
-#define	execfile(g, cmdln, envp) Pexec(0, g, cmdln, envp)
-#endif
-
-#ifndef H
-
 /* The following have AtariSt specific special chars embedded in the
 strings.  These special chars are visually more appealing; they have
 no other functional requirements.  */
@@ -146,10 +138,8 @@ static void maketimestr(int hr, int min, int sec, uchar *p)
 
 void computetime(void)
 {
-	register int hr,
-	 mn,
-	 sc;
-	register long totalticks;
+	int hr, mn, sc;
+	long totalticks;
 	uchar tm[10];
 
 	if (starttick == 0)
@@ -187,14 +177,13 @@ p[0..7].  */
 
 void datestr(int d, uchar *p)
 {
-	static uchar *mons[] = { "???",
+	static uchar *mons[] = {
+		"???",
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 		"???", "???", "???"
 	};
-
-	register int day,
-	 mon;
+	int day, mon;
 
 	day = (d & 0x001F);
 	mon = (d >> 5) & 0x000F;
@@ -227,9 +216,7 @@ p[0..8].  */
 
 void timestr(int t, uchar *p)
 {
-	register int min,
-	 hr,
-	 sec;
+	int min, hr, sec;
 
 	min = (t >> 5) & 0x003F;
 	hr = (t >> 11) & 0x001F;
@@ -246,9 +233,8 @@ mask m */
 
 static void sbf(int p, long m, int i)
 {
-	register int a,
-	 b;
-	register long ll;
+	int a, b;
+	long ll;
 
 	a = new[p++];
 	b = new[p];
@@ -270,8 +256,8 @@ which should be free()d when done.  Exported.  */
 
 void gsdatetime(uchar *s)
 {
-	register unsigned long *ip;
-	register uchar *q;
+	unsigned long *ip;
+	uchar *q;
 
 	stamptime(ip = &td);
 	if (*s)
@@ -308,7 +294,7 @@ called from docmd(); see do.c */
 
 void Gem(uchar *arg)
 {
-	register WS *ws;
+	WS *ws;
 
 	UNUSED(arg);
 	gputs(Scrninit);
@@ -329,7 +315,7 @@ SZcmd-long byte area. */
 
 void __CDECL getlineviaue(uchar *p)
 {
-	register uchar *q;
+	uchar *q;
 
 	keysetup();
 	if ((q = getoneline()) != NULL)
@@ -343,10 +329,10 @@ void __CDECL getlineviaue(uchar *p)
 
 long __CDECL callgulam(uchar *p)
 {
-	register int e;
+	int e;
 	int sfda[4];
-	_DTA newdta,
-	*olddta;							/* AKP */
+	_DTA newdta;
+	_DTA *olddta;							/* AKP */
 
 	/* added saving of caller's DTA (AKP) */
 	olddta = (_DTA *) Fgetdta();
@@ -377,7 +363,7 @@ static unsigned short call_gulam_code[] = {
 
 void setgulam(void)
 {
-	register long n;
+	long n;
 	long *pp;
 	
 	n = Super(0L);						/* _shell_p = 0x4f6L */
@@ -409,8 +395,7 @@ typedef struct							/* Memory Parameter Block */
 #ifdef NEVER
 static void showmemlst(MDB *p, WS *ws)
 {
-	register long total,
-	 n;
+	long total, n;
 	MDB md;
 
 	for (total = 0L; p; p = md.next)
@@ -429,11 +414,11 @@ static void showmemlst(MDB *p, WS *ws)
 void mem(uchar *arg)
 {
 #ifdef NEVER
-	register WS *ws;
-	register uchar *p;
+	WS *ws;
+	uchar *p;
 
 	/* pointer to GEMDOS memory parameter block */
-	register MPB *gdosmpb;
+	MPB *gdosmpb;
 
 	UNUSED(arg);
 	/* magic location addresses below! */
@@ -459,7 +444,7 @@ void mem(uchar *arg)
 		gfree(ws);
 	}
 #else
-	register WS *ws = initws();
+	WS *ws = initws();
 	long size;
 	void **buf;
 	void *first = 0;
@@ -506,9 +491,9 @@ static uchar *maxap;
 
 uchar *maxalloc(long *nb)
 {
-	register uchar *q;
-	register unsigned int sz;
-	register long lsz;
+	uchar *q;
+	unsigned int sz;
+	long lsz;
 
 #define	bsz0	19*1024
 #define	bszD	1024
@@ -580,9 +565,8 @@ static void pokew(int *a, int v)
 
 void lpeekw(uchar *arg)
 {
-	register int *a,
-	 v;
-	register uchar *p;
+	int *a, v;
+	uchar *p;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -596,10 +580,9 @@ void lpeekw(uchar *arg)
 
 void lpokew(uchar *arg)
 {
-	register int *a,
-	 v;
-	register uchar *p,
-	*q;
+	int *a, v;
+	uchar *p;
+	uchar *q;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -617,15 +600,15 @@ with 9 sectors/track. */
 
 void format(uchar *p)
 {
-	register int nb,
-	 t,
-	 drive,
-	 ns,
-	 sides,
-	 disktype,
-	*ip,
-	*bf;
-	register uchar c;
+	int nb;
+	int t;
+	int drive;
+	int ns;
+	int sides;
+	int disktype;
+	int *ip;
+	int *bf;
+	uchar c;
 
 	drive = 0;
 	sides = 1 + negopts['2'];
@@ -668,16 +651,22 @@ void format(uchar *p)
 		valu = -nb;
 }
 
-uchar *drvmap(void)
+
+uchar *drvmap(char *dmap)
 {
-	register long n;
-	register uchar *p,
-	 c;
-	static uchar dmap[27];
+	long n;
+	uchar *p;
+	uchar c;
 
 	n = Drvmap();
 	p = dmap;
-	for (c = 'a'; c < 'z'; c++)
+	for (c = 'A'; c <= 'Z'; c++)
+	{
+		if (n & 1L)
+			*p++ = c;
+		n >>= 1;
+	}
+	for (c = '1'; c <= '6'; c++)
 	{
 		if (n & 1L)
 			*p++ = c;
@@ -690,23 +679,28 @@ uchar *drvmap(void)
 
 void df(uchar *p)
 {
-	register int c;
+	int c;
 	_DISKINFO v;
 	unsigned long nb;
 	unsigned long total;
 	uchar s[2];
 
 	c = *p;
-	if (('A' <= c) && (c <= 'P'))
+	if ('A' <= c && c <= 'Z')
 		c -= 'A' - 1;
-	else if (('a' <= c) && (c <= 'p'))
+	else if ('a' <= c && c <= 'z')
 		c -= 'a' - 1;
+	else if ('1' <= c && c <= '6')
+		c -= '1' - 26 - 1;
 	else
 		c = 1 + (int) Dgetdrv();
 
 	if (Dfree(&v, c) >= 0)
 	{
-		s[0] = c + 'a' - 1;
+		if (c > 26)
+			s[0] = c - 26 + '1' - 1;
+		else
+			s[0] = c + 'A' - 1;
 		s[1] = '\0';
 		nb = v.b_secsiz * v.b_clsiz;				/* bytes/cluster    */
 		total = v.b_total * nb;
@@ -717,8 +711,8 @@ void df(uchar *p)
 
 void dm(uchar *arg)
 {
+	char buf[34];
+	
 	UNUSED(arg);
-	strg = str3cat("drive map: ", drvmap(), ES);
+	strg = str3cat("drive map: ", drvmap(buf), ES);
 }
-
-#endif	/* H */

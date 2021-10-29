@@ -77,7 +77,7 @@ void pwd(uchar *arg)
 
 static void cwdvar(void)
 {
-	register char *p;
+	char *p;
 
 	p = gfgetcwd();
 	insertvar("cwd", p);
@@ -86,7 +86,7 @@ static void cwdvar(void)
 
 void cdcmd(uchar *arg)
 {
-	register char *p;
+	char *p;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -101,7 +101,7 @@ void cdcmd(uchar *arg)
 of a dir */
 static void pushdir(uchar *p)
 {
-	register struct de *dp;
+	struct de *dp;
 
 	dp = (struct de *) gmalloc(((uint) sizeof(struct de)));
 	if (dp)
@@ -114,8 +114,8 @@ static void pushdir(uchar *p)
 
 static char *popdir(void)
 {
-	register struct de *dp;
-	register char *dir;
+	struct de *dp;
+	char *dir;
 
 	if (dirstkp == NULL)
 		return NULL;
@@ -130,9 +130,9 @@ static char *popdir(void)
 /* list the directories on the stack into strg      */
 void dirs(uchar *arg)
 {
-	register struct de *dp;
-	register WS *ws;
-	register char *cwd;
+	struct de *dp;
+	WS *ws;
+	char *cwd;
 
 	UNUSED(arg);
 	ws = initws();
@@ -154,8 +154,8 @@ void dirs(uchar *arg)
 /* push the given dir onto the stack */
 void pushd(uchar *arg)
 {
-	register char *p,
-	*q;
+	char *p;
+	char *q;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -192,7 +192,7 @@ void pushd(uchar *arg)
 
 void popd(uchar *arg)
 {
-	register char *p;
+	char *p;
 
 	UNUSED(arg);
 	if ((p = popdir()) != NULL)
@@ -217,9 +217,9 @@ same parent dir.  */
 #if 00
 int samedir(char *p, char *q)
 {
-	register char *r,
-	*s;
-	register int n;
+	char *r;
+	char *s;
+	int n;
 
 	r = strrchr(p, DSC);
 	s = strrchr(q, DSC);
@@ -246,8 +246,8 @@ static int samedevice(uchar *p, uchar *q)
 
 void grename(uchar *arg)
 {
-	register char *p,
-	*q;
+	char *p;
+	char *q;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -267,8 +267,8 @@ void grename(uchar *arg)
 
 static void rm_recurse(uchar *dir)
 {
-	register char *p;
-	register WS *ws;
+	char *p;
+	WS *ws;
 	long vtemp;
 
 	if (isdir(dir))
@@ -342,7 +342,7 @@ void rm(uchar *p)
 
 static uchar *mkfullname(uchar *p)
 {
-	register uchar *q;
+	uchar *q;
 
 #define NFILEN	80
 
@@ -363,13 +363,13 @@ static uchar *mkfullname(uchar *p)
 
 static void copyfio(uchar *in, uchar *ou, int iscat)
 {
-	register uchar *s;
-	register int fi,
-	 fo,
-	 foflag;
+	uchar *s;
+	int fi;
+	int fo;
+	int foflag;
 	int temp;
-	register long m,
-	 n;
+	long m;
+	long n;
 	long lsz;
 	_DOSTIME td;
 
@@ -515,7 +515,7 @@ static void copyfio(uchar *in, uchar *ou, int iscat)
 
 static void setupdir(char *q)
 {
-	register char *r;
+	char *r;
 
 	targetdir = r = gmalloc(((uint) (strlen(q) + 2)));	/* may need to append DSC */
 	if (r == NULL)
@@ -537,9 +537,9 @@ static void cpdirtodir(char *ind, char *oud);
 
 static void cpftodir(char *p)
 {
-	register char *q,
-	*r;
-	register int dirflag;
+	char *q;
+	char *r;
+	int dirflag;
 
 	dirflag = isdir(p);
 
@@ -564,9 +564,9 @@ static void cpftodir(char *p)
 */
 static void cpdirtodir(char *ind, char *oud)
 {
-	register char *p,
-	*olddir;
-	register WS *ws;
+	char *p;
+	char *olddir;
+	WS *ws;
 
 	olddir = targetdir;
 	ws = NULL;
@@ -597,12 +597,12 @@ static void cpdirtodir(char *ind, char *oud)
 
 void cp(uchar *arg)
 {
-	register char *p,
-	*q,
-	*op,
-	*r,
-	 c;
-	register int i;
+	char *p;
+	char *q;
+	char *op;
+	char *r;
+	char c;
+	int i;
 
 	UNUSED(arg);
 	op = (++mvflag == MVFLAG ? "mv" : "cp");
@@ -660,7 +660,7 @@ static void outstrn(uchar *text, int n)
 
 void cat(uchar *p)
 {
-	register int fi;
+	int fi;
 
 	fi = (int)gfopen(p, 0);
 	if (fi <= 0)

@@ -64,7 +64,7 @@ static int lpagain = 0;					/* 0, 1, or 2           */
 
 static void stpush(int op, uchar *f)
 {
-	register STE *s;
+	STE *s;
 
 	state = (f ? atoi(f) : 0) != 0;
 	s = (STE *) gmalloc(((uint) sizeof(STE)));
@@ -85,7 +85,7 @@ static void stpush(int op, uchar *f)
 
 static STE *stpop(void)
 {
-	register STE *s;
+	STE *s;
 
 	s = stp;
 	if (s != &stbot)
@@ -103,7 +103,7 @@ static STE *stpop(void)
 
 static void stfree(void)
 {
-	register int op;
+	int op;
 
 	for (;;)
 	{
@@ -127,10 +127,10 @@ void csexit(int n)
 
 void csexecbuf(BUFFER *bp)
 {
-	register uchar *q;
+	uchar *q;
 	unsigned char i;
-	LINE *lp,
-	*slp;
+	LINE *lp;
+	LINE *slp;
 	int sfda[4];
 
 	for (i = 0; i < 4; i++)
@@ -172,8 +172,8 @@ void csexecbuf(BUFFER *bp)
 /* take commands from file given by p   */
 int batch(uchar *p, uchar *cmdln, uchar *envp)
 {
-	register uchar *q;
-	register BUFFER *bp;
+	uchar *q;
+	BUFFER *bp;
 
 	UNUSED(envp);
 	valu = -1;
@@ -207,8 +207,8 @@ int batch(uchar *p, uchar *cmdln, uchar *envp)
 
 uchar *fnmpred(uchar c, uchar *p)
 {
-	register int a;
-	register DTA *dta;
+	int a;
+	DTA *dta;
 
 	if ((p == NULL) || flnotexists(p))
 		a = 0;
@@ -238,8 +238,8 @@ uchar *fnmpred(uchar c, uchar *p)
 
 static uchar *atom(uchar *p)
 {
-	register uchar c,
-	*r;
+	uchar c;
+	uchar *r;
 	uchar *nextword;
 
 	c = *p;
@@ -271,12 +271,12 @@ the string form of the atom (eg as for "blah" in "set s blah").  */
 
 static uchar *arithexp(uchar *p, uchar **nextword)
 {
-	register uchar *q,
-	*r;
-	register long i,
-	 nr;
-	register int niter;
-	register uchar op;
+	uchar *q;
+	uchar *r;
+	long i;
+	long nr;
+	int niter;
+	uchar op;
 
 	niter = 0;
 	q = NULL;
@@ -326,10 +326,10 @@ static uchar *arithexp(uchar *p, uchar **nextword)
 
 static uchar *relaexp(uchar *p, uchar *op, uchar **nextword)
 {
-	register uchar a,
-	 b;
-	register int np,
-	 nr;
+	uchar a;
+	uchar b;
+	int np;
+	int nr;
 
 	a = op[0];
 	b = op[1];
@@ -355,10 +355,10 @@ static uchar *relaexp(uchar *p, uchar *op, uchar **nextword)
 /** no short-circuit eval yet	**/
 static uchar *andor(uchar *p, uchar *op, uchar **nextword)
 {
-	register uchar a,
-	 b;
-	register int np,
-	 nr;
+	uchar a;
+	uchar b;
+	int np;
+	int nr;
 
 	a = op[0];
 	b = op[1];
@@ -377,7 +377,7 @@ static uchar *andor(uchar *p, uchar *op, uchar **nextword)
 
 uchar *csexp(uchar *p, uchar **nextword)
 {
-	register uchar *r;
+	uchar *r;
 	uchar *q;
 
 	r = arithexp(p, &q);
@@ -410,9 +410,9 @@ void csif(uchar *arg)
 
 void cselse(uchar *arg)
 {
-	register STE *s;
-	register int f;
-	register uchar *p;
+	STE *s;
+	int f;
+	uchar *p;
 	uchar *q;
 
 	UNUSED(arg);
@@ -467,10 +467,10 @@ void csendwhile(uchar *arg)
 
 void csforeach(uchar *arg)
 {
-	register WS *ws;
-	register uchar *p;
-	uchar *loopvar,
-	*q;
+	WS *ws;
+	uchar *p;
+	uchar *loopvar;
+	uchar *q;
 
 	UNUSED(arg);
 	loopvar = lexgetword();
@@ -503,8 +503,8 @@ void csforeach(uchar *arg)
 
 void csendfor(uchar *arg)
 {
-	register uchar *p;
-	register STE *s;
+	uchar *p;
+	STE *s;
 
 	UNUSED(arg);
 	s = stp;

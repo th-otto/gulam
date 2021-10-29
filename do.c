@@ -69,8 +69,8 @@ lex module. */
 
 void addoptions(uchar *p)
 {
-	register uchar *q;
-	register int i;
+	uchar *q;
+	int i;
 
 	q = (*p == '+' ? posopts : negopts);
 	while ((i = (int) *++p) != 0)
@@ -88,7 +88,7 @@ static void setdate(uchar *arg)
 /* "run" the file given by the pathname g */
 static void run(uchar *g, uchar *cmdln, uchar *envp)
 {
-	register uchar *p;
+	uchar *p;
 
 	emsg = NULL;
 	p = strrchr(g, '.');
@@ -114,8 +114,8 @@ static void mkcmdenv(int flag, char *pgm, char **cmdp, char **envp)
 #if	TOS
 	static uchar ARGVVAL[] = "ARGV=CCCP????????????????????????????";
 #endif
-	register uchar *p;
-	register WS *ws;
+	uchar *p;
+	WS *ws;
 	int mwcflag = 0;
 
 	ws = dupenvws(0);
@@ -161,14 +161,12 @@ batch-able as is.  */
 
 static void lexec(uchar *p, int flag)
 {
-
-	register uchar *q,
-	*lst;
-	register int i,
-	 n;
-	uchar *cmdln,
-	*envp,
-	*g;
+	uchar *q;
+	uchar *lst;
+	int i, n;
+	uchar *cmdln;
+	uchar *envp;
+	uchar *g;
 
 	mkcmdenv(flag, p, &cmdln, &envp);
 	if (flag)
@@ -252,8 +250,8 @@ void echo(uchar *arg)
 
 static void bexit(uchar *arg)
 {
-	register char *p;
-	register int n;
+	char *p;
+	int n;
 
 	UNUSED(arg);
 	n = atoi(lexgetword());
@@ -289,8 +287,8 @@ int asktodoop(uchar *op, uchar *p)
 /* do f() for each word in current cmd */
 void doforeach(uchar *op, void (*f)(uchar *arg))
 {
-	register uchar *p;
-	register int flag;
+	uchar *p;
+	int flag;
 
 	for (;;)
 	{
@@ -311,8 +309,8 @@ void doforeach(uchar *op, void (*f)(uchar *arg))
 
 void setuekey(uchar *arg)
 {
-	register uchar *p;
-	register int n;
+	uchar *p;
+	int n;
 
 	UNUSED(arg);
 /*
@@ -330,7 +328,7 @@ void setuekey(uchar *arg)
 
 static int noteredfnm(int r, char *fnm)
 {
-	register char c;
+	char c;
 
 	c = *fnm;
 	if (c == '>')
@@ -370,14 +368,14 @@ all the time.  */
 
 static void processargs(int builtin, int unqflag)
 {
-	register WS *ws;
-	register uchar *p,
-	*q;
-	register int i,
-	 k,
-	 n,
-	 redi,
-	 brl;
+	WS *ws;
+	uchar *p;
+	uchar *q;
+	int i;
+	int k;
+	int n;
+	int redi;
+	int brl;
 
 	ws = useuplexws();
 	redi = 3;
@@ -532,9 +530,9 @@ static struct bi
 
 void showbuiltins(void)
 {
-	register struct bi *b;
-	register uchar *s;
-	register WS *ws;
+	struct bi *b;
+	uchar *s;
+	WS *ws;
 
 	outstr(sprintp("%d built-in commands:", NBC - 1));
 
@@ -552,11 +550,11 @@ void showbuiltins(void)
 
 void docmd(void)
 {
-	register struct bi *b;
-	register uchar *p;
-	register int lw,
-	 i,
-	 btype;
+	struct bi *b;
+	uchar *p;
+	int lw;
+	int i;
+	int btype;
 
 	valu = 0;
 	strg = emsg = NULL;

@@ -108,8 +108,6 @@ typedef unsigned long	uint32;
  drwx---... 1 useridxxx size0000 mon dd hh:mm filename.ext\r\n\0
 */
 
-#define FNMPOS	45		/* file name position in lsln[] bgns here */
-
 typedef	struct DTA 		/* TOS disk transfer area	*/
 {	char	dos[20];	/* 21 bytes actually, but we create */
 	uchar	user;		/* artificial 'user' for portability*/

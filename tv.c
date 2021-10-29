@@ -49,7 +49,7 @@ be arbitrary.
 
 TBLE *tblfind(TBLE *t, uchar *k)
 {
-	register TBLE *p;
+	TBLE *p;
 
 	p = NULL;
 	if (k && (p = t) != NULL)
@@ -84,7 +84,7 @@ void tbldelete(TBLE *t, uchar *k)
 
 void tblinsert(TBLE *t, uchar *k, uchar *e)
 {
-	register TBLE *p;
+	TBLE *p;
 
 	if ((t == NULL) || (k == NULL) || (e == NULL))
 		return;
@@ -102,7 +102,7 @@ void tblinsert(TBLE *t, uchar *k, uchar *e)
 
 TBLE *tblcreate(void)
 {
-	register TBLE *p;
+	TBLE *p;
 
 	if ((p = (TBLE *) gmalloc(((uint) sizeof(TBLE)))) != NULL)
 	{
@@ -116,8 +116,8 @@ TBLE *tblcreate(void)
 
 void tblfree(TBLE *t)
 {
-	register TBLE *p,
-	*q;
+	TBLE *p;
+	TBLE *q;
 
 	for (p = t; p; p = q)
 	{
@@ -135,9 +135,9 @@ void tblfree(TBLE *t)
 */
 WS *tblws(TBLE *t, int style)
 {
-	register TBLE *a;
-	register int i;
-	register WS *ws;
+	TBLE *a;
+	int i;
+	WS *ws;
 	uchar seps[2];
 
 	if (t == NULL)
@@ -169,8 +169,8 @@ WS *tblws(TBLE *t, int style)
 
 uchar *tblstr(TBLE *t, int style)
 {
-	register WS *ws;
-	register uchar *p;
+	WS *ws;
+	uchar *p;
 
 	ws = tblws(t, style);
 	if (ws == NULL)
@@ -191,8 +191,8 @@ static TBLE *alip = NULL;
 /* show/set alias(es)   */
 void alias(uchar *arg)
 {
-	register uchar *p,
-	*q;
+	uchar *p;
+	uchar *q;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -220,7 +220,7 @@ void unalias(uchar *arg)
 /* return the alias'd string, if any, or itself */
 uchar *getalias(char *p)
 {
-	register TBLE *a;
+	TBLE *a;
 
 	a = tblfind(alip, p);
 	return a ? a->elm : p;
@@ -235,7 +235,7 @@ static TBLE *envp = NULL;
 /* name appears in *p...        */
 uchar *ggetenv(uchar *p)
 {
-	register TBLE *a;
+	TBLE *a;
 
 	a = tblfind(envp, p);
 	return a ? a->elm : NULL;
@@ -260,7 +260,7 @@ WS *dupenvws(int flag)
 
 void printenv(uchar *arg)
 {
-	register WS *ws;
+	WS *ws;
 
 	UNUSED(arg);
 	ws = dupenvws(1);
@@ -270,8 +270,8 @@ void printenv(uchar *arg)
 
 void gsetenv(uchar *arg)
 {
-	register uchar *p,
-	*q;
+	uchar *p;
+	uchar *q;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -290,8 +290,8 @@ void gunsetenv(uchar *arg)
 
 void readinenv(uchar *p)
 {
-	register uchar *q,
-	*r;
+	uchar *q;
+	uchar *r;
 
 	if (p == NULL)
 		return;
@@ -345,18 +345,18 @@ static void rehashv(void)
 }
 
 static struct SETVAR stv[] = {
-	{NULL, 1, Cwd},
-	{rehashv, 1, Path},
-	{histinit, 0, History},
-	{NULL, 1, Home},
-	{NULL, 1, Shell},
-	{rdhelpfile, 0, GulamHelp},
+	{ NULL, 1, Cwd },
+	{ rehashv, 1, Path },
+	{ histinit, 0, History },
+	{ NULL, 1, Home },
+	{ NULL, 1, Shell },
+	{ rdhelpfile, 0, GulamHelp },
 #if AtariST
-	{pallete, 1, Rgb},
-	{nrow2550, 1, Nrows},
-	{font, 0, Font},					/* extension by AKP */
-	{setmdmport, 0, Mdmport},			/* extension by AKP */
-	{mousecursor, 0, Mscursor}
+	{ pallete, 1, Rgb },
+	{ nrow2550, 1, Nrows },
+	{ font, 0, Font },					/* extension by AKP */
+	{ setmdmport, 0, Mdmport },			/* extension by AKP */
+	{ mousecursor, 0, Mscursor }
 #endif
 };
 
@@ -369,7 +369,7 @@ static TBLE *varp = NULL;
 /* return the string value of a var */
 uchar *varstr(uchar *p)
 {
-	register TBLE *a;
+	TBLE *a;
 
 	a = tblfind(varp, p);
 	return a ? a->elm : ES;
@@ -377,7 +377,7 @@ uchar *varstr(uchar *p)
 
 int varnum(uchar *p)
 {
-	register uchar *q;
+	uchar *q;
 
 	q = varstr(p);
 	return atoi(q);
@@ -385,7 +385,7 @@ int varnum(uchar *p)
 
 void showvars(void)
 {
-	register TBLE *p;
+	TBLE *p;
 
 	if (varp == NULL)
 		return;
@@ -399,8 +399,8 @@ void showvars(void)
 
 void insertvar(uchar *p, uchar *q)
 {
-	register int i;
-	register void (*f)(void);
+	int i;
+	void (*f)(void);
 
 	if (varp == NULL)
 		varp = tblcreate();
@@ -431,7 +431,7 @@ void setvarnum(uchar *p, int n)
 
 void setvar(uchar *arg)
 {
-	register uchar *p;
+	uchar *p;
 	uchar *dummy;
 
 	UNUSED(arg);
@@ -460,7 +460,7 @@ static TBLE *atbl[3] = { NULL, NULL, NULL };
 
 static void rdhelpln(uchar *q, int nb)
 {
-	register uchar *p;
+	uchar *p;
 
 	lnn++;
 	ntotal += nb;
@@ -483,8 +483,8 @@ static void rdhelpln(uchar *q, int nb)
 
 void rdhelpfile(void)
 {
-	register uchar *p;
-	register int i;
+	uchar *p;
+	int i;
 
 	nstate = -1;
 	p = varstr(GulamHelp);
@@ -503,8 +503,8 @@ void rdhelpfile(void)
 */
 uchar *findname(int x, int k)
 {
-	register uchar *kp;
-	register TBLE *t;
+	uchar *kp;
+	TBLE *t;
 
 	kp = itoar(0x1000L + (long) k, 16) + 1;	/* skip the leading '1' */
 	t = tblfind(atbl[x], kp);

@@ -33,8 +33,8 @@ We allocate one more byte for the \0; see makelnstr() of misc.c.) */
 
 LINE *lalloc(int used)
 {
-	register LINE *lp;
-	register int size;
+	LINE *lp;
+	int size;
 
 	size = used;
 	if (size < 4)
@@ -51,8 +51,8 @@ LINE *lalloc(int used)
 */
 LINE *lnlink(LINE *lx, uchar *q, int nb)
 {
-	register LINE *ly,
-	*lz;
+	LINE *ly;
+	LINE *lz;
 
 	if ((ly = lalloc(nb)) != NULL)
 	{
@@ -73,8 +73,8 @@ updated too.  */
 
 void lfree(LINE *lp)
 {
-	register BUFFER *bp;
-	register WINDOW *wp;
+	BUFFER *bp;
+	WINDOW *wp;
 
 	for (wp = wheadp; wp; wp = wp->w_wndp)
 	{
@@ -122,7 +122,7 @@ MODE if the mode line needs to be updated (the "*" has to be set).  */
 
 void lbpchange(BUFFER *bp, int flag)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	if (bp->b_nwnd != 1)				/* Ensure hard.         */
 		flag = WFHARD;
@@ -152,14 +152,14 @@ insert.  Return TRUE if all is well, and FALSE on errors.  */
 
 int linsert(int n, int c)
 {
-	register LINE *lp1,
-	*lp2;
-	register char *cp1;
-	register LINE *lp3;
-	register char *cp2;
-	register int doto,
-	 i;
-	register WINDOW *wp;
+	LINE *lp1;
+	LINE *lp2;
+	char *cp1;
+	LINE *lp3;
+	char *cp2;
+	int doto;
+	int i;
+	WINDOW *wp;
 
 	lchange(WFEDIT);
 	lp1 = curwp->w_dotp;				/* Current line         */
@@ -232,12 +232,12 @@ in the above case, because the split forces more updating.  */
 
 int lnewline(void)
 {
-	register char *cp1;
-	register char *cp2;
-	register LINE *lp1;
-	register LINE *lp2;
-	register int doto;
-	register WINDOW *wp;
+	char *cp1;
+	char *cp2;
+	LINE *lp1;
+	LINE *lp2;
+	int doto;
+	WINDOW *wp;
 
 	lchange(WFHARD);
 	lp1 = curwp->w_dotp;				/* Get the address and  */
@@ -286,8 +286,8 @@ int lnewline(void)
 to get space at the beginning of the kill buffer.  */
 static int kgrow(int back)
 {
-	register int nstart;
-	register char *nbufp;
+	int nstart;
+	char *nbufp;
 
 	nbufp = malloc(ksize + KBLOCK);
 	if (nbufp == NULL)
@@ -317,12 +317,12 @@ insertion, or direction of insertion into the kill buffer.  */
 
 int ldelete(RSIZE n, int kflag)
 {
-	register char *cp1,
-	*cp2;
-	register LINE *dotp;
-	register RSIZE doto,
-	 chunk;
-	register WINDOW *wp;
+	char *cp1;
+	char *cp2;
+	LINE *dotp;
+	RSIZE doto;
+	RSIZE chunk;
+	WINDOW *wp;
 
 	/*
 	 * HACK - doesn't matter, and fixes back-over-nl bug for empty
@@ -399,12 +399,12 @@ on error and TRUE if all looks ok.  Called by "ldelete" only.  */
 
 int ldelnewline(void)
 {
-	register char *cp1;
-	register char *cp2;
-	register LINE *lp1;
-	register LINE *lp2;
-	register LINE *lp3;
-	register WINDOW *wp;
+	char *cp1;
+	char *cp2;
+	LINE *lp1;
+	LINE *lp2;
+	LINE *lp3;
+	WINDOW *wp;
 
 	lp1 = curwp->w_dotp;
 	lp2 = lp1->l_fp;

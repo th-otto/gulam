@@ -15,8 +15,8 @@ routine knows about the syntax of file names on the target system.
 --pm */
 static void makename(uchar *bname, uchar *name)
 {
-	register uchar *p;
-	register int n;
+	uchar *p;
+	int n;
 
 	p = strrchr(name, DSC);
 	if (p == NULL)
@@ -34,9 +34,9 @@ static void makename(uchar *bname, uchar *name)
 dir of fnm. --pm */
 static int getfilename(uchar *ps, uchar *fnm)
 {
-	register uchar *p,
-	*q,
-	 c;
+	uchar *p;
+	uchar *q;
+	uchar c;
 	uchar *pp;
 
 	p = strrchr(curbp->b_fname, DSC);
@@ -99,9 +99,9 @@ static void lineinsert(uchar *q, int nnb)				/* gets called via frdapply()   */
 any text found there.  Return the final status of the read.  */
 static int readin(uchar *name, LINE *lp)
 {
-	register WINDOW *wp;
-	register BUFFER *bp;
-	register int s;
+	WINDOW *wp;
+	BUFFER *bp;
+	int s;
 
 	bp = curbp;
 	if (lp == NULL)
@@ -136,13 +136,13 @@ static int readin(uchar *name, LINE *lp)
 
 int flvisit(uchar *f)
 {
-	uchar fname[NFILEN],
-	 bname[NBUFN];
-	register BUFFER *bp;
-	register WINDOW *wp;
-	register LINE *lp;
-	register int i,
-	 s;
+	uchar fname[NFILEN];
+	uchar bname[NBUFN];
+	BUFFER *bp;
+	WINDOW *wp;
+	LINE *lp;
+	int i;
+	int s;
 
 	strcpy(fname, f);
 	fullname(fname);
@@ -211,9 +211,9 @@ the current buffer after the current line (after dotp).  */
 
 int insertborf(uchar *name, int flag)
 {
-	register int s,
-	 odoto;
-	register LINE *odotp;
+	int s;
+	int odoto;
+	LINE *odotp;
 
 	odoto = curwp->w_doto;
 	odotp = curwp->w_dotp;
@@ -231,7 +231,7 @@ int insertborf(uchar *name, int flag)
 
 int fileinsert(int f, int n)
 {
-	register int s;
+	int s;
 	uchar name[NFILEN];
 
 	UNUSED(f);
@@ -248,7 +248,7 @@ into the current buffer" code.  Bound to "C-X C-R".  */
 
 int fileread(int f, int n)
 {
-	register int s;
+	int s;
 	uchar name[NFILEN];
 
 	UNUSED(f);
@@ -267,7 +267,7 @@ and switch to the new buffer.  Bound to C-X C-V.  */
 
 int filevisit(int f, int n)
 {
-	register int s;
+	int s;
 	uchar name[NFILEN];
 
 	UNUSED(f);
@@ -283,11 +283,11 @@ Most of the grief is error checking of some sort.  */
 
 static int writeout(BUFFER *bp, uchar *fn)
 {
-	register LINE *lp;
-	register long ntotal;
-	register int nline,
-	 nb,
-	 s;
+	LINE *lp;
+	long ntotal;
+	int nline;
+	int nb;
+	int s;
 
 	if (bp->b_flag & BFRDO)
 	{
@@ -327,7 +327,7 @@ ITS EMACS.  Bound to "C-X C-W".  */
 
 int filewrite(int f, int n)
 {
-	register int s;
+	int s;
 	uchar name[NFILEN];
 
 	UNUSED(f);
@@ -344,7 +344,7 @@ int filewrite(int f, int n)
 
 int flsave(BUFFER *bp)
 {
-	register uchar *p;
+	uchar *p;
 
 	p = bp->b_fname;
 	if ((bp->b_flag & BFCHG) == 0)
@@ -374,7 +374,7 @@ the prompt if you wish.  */
 
 int filename(int f, int n)
 {
-	register int s;
+	int s;
 	uchar name[NFILEN];
 
 	UNUSED(f);

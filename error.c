@@ -4,9 +4,9 @@
 
 int errfwd(int f, int n)
 {
-	register uchar *lp;
-	register uchar *p;
-	register BUFFER *errbp;
+	uchar *lp;
+	uchar *p;
+	BUFFER *errbp;
 	int line;
 	uchar buf[80];
 

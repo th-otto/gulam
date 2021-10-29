@@ -18,11 +18,11 @@ static int nprevcmd;
 /* called from remember(), or after changing szh */
 void histinit(void)
 {
-	register uchar **p;
-	register int x,
-	 i,
-	 j,
-	 n;
+	uchar **p;
+	int x;
+	int i;
+	int j;
+	int n;
 
 	szh = n = varnum("history");
 	if (n <= 0)
@@ -64,9 +64,9 @@ void histinit(void)
 /* the str starting at q            */
 static uchar *strhist(uchar *p, uchar *q)
 {
-	register uchar *b;
-	register int n,
-	 i;
+	uchar *b;
+	int n;
+	int i;
 
 	i = (int)strlen(q);
 	for (n = nh - 1; n >= 0; n--)
@@ -85,8 +85,8 @@ static uchar *strhist(uchar *p, uchar *q)
 /* Find the n-th command            */
 static uchar *wnumhist(int n, uchar *p, uchar *r)
 {
-	register uchar *b;
-	register int i;
+	uchar *b;
+	int i;
 
 	i = n + nh - hcount - 1;
 	if ((0 <= i) && (i < nh))
@@ -104,10 +104,10 @@ static uchar *wnumhist(int n, uchar *p, uchar *r)
 /* ascii digits starting at q           */
 static uchar *numhist(uchar *p, uchar *q)
 {
-	register uchar *r;
-	register int c,
-	 n,
-	 minus;
+	uchar *r;
+	int c;
+	int n;
+	int minus;
 
 	if (*q == '-')
 	{
@@ -135,7 +135,7 @@ static uchar *numhist(uchar *p, uchar *q)
 */
 uchar *prevhist(void)
 {
-	register int n;
+	int n;
 
 	n = nprevcmd++;
 	if (n == nh)
@@ -149,11 +149,11 @@ uchar *prevhist(void)
 */
 uchar *substhist(uchar *s)
 {
-	register char *p,
-	*q;
-	register WS *ws;
-	register int icq,
-	 nsubst;
+	char *p;
+	char *q;
+	WS *ws;
+	int icq;
+	int nsubst;
 
 	if (histp == NULL)
 		return s;
@@ -194,8 +194,8 @@ uchar *substhist(uchar *s)
 /*  Insert a fresh copy of p into hist[]    */
 void remember(char *p, int n)
 {
-	register int i;
-	register uchar **hp;
+	int i;
+	uchar **hp;
 
 	UNUSED(n);
 	if (histp == NULL)
@@ -220,11 +220,11 @@ void remember(char *p, int n)
 /* List history into strg; if flag != 0, include line numbers	*/
 static void histstr(int flag)
 {
-	register int i,
-	 n;
-	register uchar **hp;
-	register uchar *p,
-	*q;
+	int i;
+	int n;
+	uchar **hp;
+	uchar *p;
+	uchar *q;
 
 	hp = histp;
 	if (hp == NULL)
@@ -256,7 +256,7 @@ static void histstr(int flag)
 
 void history(uchar *arg)
 {
-	register uchar *p;
+	uchar *p;
 
 	UNUSED(arg);
 	histstr(((p = lexgetword()) != NULL && (p[0] == '-') && (p[1] == 'h') ? 0 : 1));
@@ -269,7 +269,7 @@ data structure */
 
 void readhistory(void)
 {
-	register uchar *p;
+	uchar *p;
 	int fd;
 
 	p = varstr(HF);
@@ -280,7 +280,7 @@ void readhistory(void)
 
 void savehistory(void)
 {
-	register uchar *p;
+	uchar *p;
 
 	p = varstr(HF);
 	if (*p == '\0' || ffwopen(p) != FIOSUC)

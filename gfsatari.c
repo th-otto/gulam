@@ -50,9 +50,9 @@ the attribute a */
 
 int filetp(uchar *p, int a)
 {
-	register int c,
-	 i;
-	register uchar *q;
+	int c;
+	int i;
+	uchar *q;
 
 	c = ' ';
 	if (a & 0x06)
@@ -74,7 +74,7 @@ p[0..13], with p[13] == '\0'.  */
 
 void attrstr(int a, uchar *p)
 {
-	register uchar c;
+	uchar c;
 
 	c = '-';
 	if (a & 0x20)
@@ -128,8 +128,8 @@ trailing \ But if we are, the returned string is of the form a:\ ]) */
 
 uchar *gfgetcwd(void)
 {
-	register uchar *cwd,
-	*q;
+	uchar *cwd;
+	uchar *q;
 
 	/* AKP */
 	if (mastercwd != NULL)
@@ -155,8 +155,8 @@ uchar *gfgetcwd(void)
 
 void cd(uchar *p)
 {
-	register uchar *q,
-	*path;
+	uchar *q;
+	uchar *path;
 
 	if (p == NULL)
 		return;
@@ -188,13 +188,13 @@ void cd(uchar *p)
 
 void gchmod(uchar *p)
 {
-	register int attr,
-	 ic,
-	 i,
-	 mask;
-	register uchar *q,
-	*r,
-	*s;
+	int attr;
+	int ic;
+	int i;
+	int mask;
+	uchar *q;
+	uchar *r;
+	uchar *s;
 	static uchar opts[] = "whsvdm";
 
 	attr = Fattrib(p, 0, 0);
@@ -202,7 +202,7 @@ void gchmod(uchar *p)
 	r = negopts;
 	s = opts;
 	{
-		ic = (int) 'w';
+		ic = 'w';
 		if (q[ic])
 			attr &= ~1;
 		if (r[ic])
@@ -210,7 +210,7 @@ void gchmod(uchar *p)
 	}
 	for (i = 1, mask = 2; i < 6; i++, mask <<= 1)
 	{
-		ic = (int) s[i];
+		ic = s[i];
 		if (q[ic])
 			attr |= mask;
 		if (r[ic])
@@ -219,9 +219,10 @@ void gchmod(uchar *p)
 	(void) Fattrib(p, 1, attr);
 }
 
+
 void tch(uchar *p, _DOSTIME *td)
 {
-	register int fd;
+	int fd;
 
 	fd = (int)Fopen(p, 0);
 	if (fd < 0)
@@ -279,8 +280,8 @@ prn: and positive numbers for other x when Fopen/Fcreate succeeds.  */
 
 void doredirections(void)
 {
-	register uchar *p;
-	register int h;
+	uchar *p;
+	int h;
 
 	fda[0] = fda[1] = MINFH - 1;
 	if ((p = rednm[0]) != NULL)

@@ -18,10 +18,10 @@ static void failed(void)
 
 void casesensitize(uchar *tpat)
 {
-	register uchar *p,
-	*q,
-	*r,
-	 c;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	unsigned char c;
 
 	if (varnum("case_insensitive"))
 	{									/* replace each lower letter x by [xX]  */
@@ -37,7 +37,9 @@ void casesensitize(uchar *tpat)
 					*p++ = c - 'a' + 'A';
 					*p++ = ']';
 				} else
+				{
 					*p++ = c;
+				}
 			}
 			*p = '\0';
 			if (strlen(r) < 2 * NPAT)
@@ -56,10 +58,10 @@ is '\\' */
 
 static int readpattern(uchar *prompt)
 {
-	register int s;
-	register uchar *p,
-	*q,
-	 c;
+	int s;
+	uchar *p;
+	uchar *q;
+	unsigned char c;
 	uchar tpat[2 * NPAT];
 
 	tpat[0] = '\0';
@@ -100,9 +102,9 @@ to what was there).  */
 /* by Rich Ellison.     */
 static int lreplace(int plen, uchar *st)
 {
-	register int dflen;					/* replacement/src length diff  */
-	register uint c;					/* used for random characters   */
-	register int doto;					/* offset into line     */
+	int dflen;					/* replacement/src length diff  */
+	uint c;					/* used for random characters   */
+	int doto;					/* offset into line     */
 
 	backchar(TRUE, plen);
 
@@ -154,17 +156,13 @@ string; must be *g*free()'d */
 
 static char *regsubst(regexp *prog, char *source)
 {
-#ifndef CHARBITS
-#define	UCHARAT(p)	((int)*(unsigned char *)(p))
-#else
-#define	UCHARAT(p)	((int)*(p)&CHARBITS)
-#endif
+#define	UCHARAT(p)	((int)(unsigned char)(*(p)))
 
-	register char *src,
-	*p;
-	register char c;
-	register int no;
-	register WS *ws;					/* type really is WS * */
+	char *src;
+	char *p;
+	char c;
+	int no;
+	WS *ws;					/* type really is WS * */
 	char ord[2];
 
 	if (prog == NULL || source == NULL || (UCHARAT(prog->program) != MAGIC))
@@ -205,9 +203,9 @@ the window system is notified of the change, and TRUE is returned.  */
 
 static int fsearch(void)
 {
-	register LINE *clp;
-	register int cbo;
-	register char *s;
+	LINE *clp;
+	int cbo;
+	char *s;
 
 	clp = curwp->w_dotp;
 	cbo = curwp->w_doto;
@@ -235,10 +233,10 @@ the string isn't found, FALSE is returned.  */
 
 static int rbsearch(void)
 {
-	register LINE *clp;
-	register int cbo;
-	register int i;
-	register char *s;
+	LINE *clp;
+	int cbo;
+	int i;
+	char *s;
 	char c;
 
 	clp = curwp->w_dotp;
@@ -283,7 +281,7 @@ found, it just prints a message.  */
 
 int forwsearch(int f, int n)
 {
-	register int s;
+	int s;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -303,7 +301,7 @@ last character that was matched].  */
 
 int backsearch(int f, int n)
 {
-	register int s;
+	int s;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -322,13 +320,13 @@ and replace operation.
 
 int queryrepl(int f, int n)
 {
-	register int s,
-	 c,
-	 all;
-	register int rcnt;					/* Replacements made so far */
-	register int plen;					/* length of found string   */
+	int s;
+	int c;
+	int all;
+	int rcnt;					/* Replacements made so far */
+	int plen;					/* length of found string   */
 	char news[NPAT];					/* replacement string       */
-	register char *p;
+	char *p;
 
 	UNUSED(f);
 	UNUSED(n);

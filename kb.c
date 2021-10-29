@@ -589,10 +589,10 @@ given as hex strings.  */
 
 void bindkey(int n, uchar *keycode, uchar *cmdcode)
 {
-	register int kc,
-	 fx,
-	 cc;
-	register KB *ktp;
+	int kc;
+	int fx;
+	int cc;
+	KB *ktp;
 
 	kc = (int) atoir(keycode, 16);
 	fx = (int) atoir(cmdcode, 16);
@@ -615,7 +615,7 @@ static char bl[16] = "               ";	/* 15 blanks */
 
 static void setupkf(int kc, int fx)
 {
-	register long xx;
+	long xx;
 
 	/* 0x1000 is added because itoar() does not give leading 0s */
 	xx = 0x1000L + (long) kc;
@@ -648,9 +648,9 @@ static uchar *wcname[3] = {
 
 int wallchart(int f, int n)
 {
-	register BUFFER *bp;
-	register KB *ktp;
-	register int cc;
+	BUFFER *bp;
+	KB *ktp;
+	int cc;
 
 	UNUSED(f);
 	mlwrite("wall chart for Regular buffer, Minibuf, or Gulam? [r m or g] ");
@@ -673,11 +673,11 @@ Display the name of the function currently bound to the key.  */
 
 int desckey(int f, int n)
 {
-	register int fx;
-	register KEY c,
-	 kc,
-	 c2;
-	register KB *ktp;
+	int fx;
+	KEY c;
+	KEY kc;
+	KEY c2;
+	KB *ktp;
 
 	UNUSED(f);
 	mlwrite("Briefly describe key: ");

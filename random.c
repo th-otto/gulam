@@ -26,8 +26,8 @@ static void gsleep(int i)
  */
 static int displaymatch(LINE *clp, int cbo)
 {
-	register LINE *tlp;
-	register int tbo;
+	LINE *tlp;
+	int tbo;
 	int inwindow;
 
 	/* Figure out if matching char is in current window by  */
@@ -73,12 +73,12 @@ static int displaymatch(LINE *clp, int cbo)
  */
 static int balance(int k)
 {
-	register LINE *clp;
-	register int cbo;
-	register char *p;
-	register int c;
-	int rbal,
-	 lbal;
+	LINE *clp;
+	int cbo;
+	char *p;
+	int c;
+	int rbal;
+	int lbal;
 	int depth;
 	static char bal[] = ")(][}{";
 
@@ -142,7 +142,7 @@ static int balance(int k)
  */
 int selfinsert(int f, int n)
 {
-	register int c;
+	int c;
 	int k = lastkey;
 	
 	UNUSED(f);
@@ -161,8 +161,8 @@ int selfinsert(int f, int n)
 
 int showmatch(int f, int n)
 {
-	register int i,
-	 s;
+	int i;
+	int s;
 
 	if (lastkey == KRANDOM)
 		return FALSE;
@@ -181,9 +181,9 @@ int showmatch(int f, int n)
  */
 int getccol(int bflg)
 {
-	register int c,
-	 i,
-	 col;
+	int c;
+	int i;
+	int col;
 
 	col = 0;
 	for (i = 0; i < curwp->w_doto; ++i)
@@ -210,13 +210,13 @@ This is normally bound to "C-X =".  */
 
 int showcpos(int f, int n)
 {
-	register LINE *clp;
-	register long nchar;
+	LINE *clp;
+	long nchar;
 	long cchar;
-	register int nline,
-	 row;
-	int cline,
-	 cbyte;								/* Current line/char/byte */
+	int nline;
+	int row;
+	int cline;
+	int cbyte;								/* Current line/char/byte */
 	int ratio;
 
 	UNUSED(f);
@@ -267,11 +267,11 @@ line, so "WFEDIT" is good enough.  */
 
 int twiddle(int f, int n)
 {
-	register LINE *dotp;
-	register int doto,
-	 odoto;
-	register int cl;
-	register int cr;
+	LINE *dotp;
+	int doto;
+	int odoto;
+	int cl;
+	int cr;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -300,8 +300,8 @@ int twiddle(int f, int n)
  */
 int quote(int f, int n)
 {
-	register int s,
-	 c;
+	int s;
+	int c;
 
 	UNUSED(f);
 	c = inkey();						/*      c = (*term.t_getchar)();    */
@@ -349,8 +349,8 @@ int tab(int f, int n)
  */
 int openline(int f, int n)
 {
-	register int i;
-	register int s;
+	int i;
+	int s;
 
 	if (n < 0)
 		return FALSE;
@@ -375,8 +375,8 @@ int openline(int f, int n)
  */
 int newline(int f, int n)
 {
-	register LINE *lp;
-	register int s;
+	LINE *lp;
+	int s;
 
 	UNUSED(f);
 	if (n < 0)
@@ -398,14 +398,14 @@ int newline(int f, int n)
 
 int delwhite(int f, int n)
 {
-	register int i,
-	 j,
-	 c,
-	 d;
-	register char *p,
-	*q,
-	*r;
-	register LINE *lp;
+	int i;
+	int j;
+	int c;
+	int d;
+	char *p;
+	char *q;
+	char *r;
+	LINE *lp;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -439,9 +439,9 @@ int delwhite(int f, int n)
  */
 int deblank(int f, int n)
 {
-	register LINE *lp1;
-	register LINE *lp2;
-	register int nld;
+	LINE *lp1;
+	LINE *lp2;
+	int nld;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -469,9 +469,9 @@ int deblank(int f, int n)
  */
 int indent(int f, int n)
 {
-	register int nicol;
-	register int c;
-	register int i;
+	int nicol;
+	int c;
+	int i;
 
 	UNUSED(f);
 	if (n < 0)
@@ -523,7 +523,7 @@ int forwdel(int f, int n)
  */
 int backdel(int f, int n)
 {
-	register int s;
+	int s;
 
 	if (n < 0)
 		return forwdel(f, -n);
@@ -584,11 +584,11 @@ int lforwchar(int f, int n)
 */
 int ukill(int f, int n)
 {
-	register RSIZE chunk;
-	register LINE *nextp;
-	register int i,
-	 len,
-	 c;
+	RSIZE chunk;
+	LINE *nextp;
+	int i;
+	int len;
+	int c;
 
 	if ((lastflag & CFKILL) == 0)
 		kdelete();						/* Clear kill buffer    */
@@ -652,10 +652,10 @@ int killtobln(int f, int n)
 */
 int yank(int f, int n)
 {
-	register int c;
-	register int i;
-	register LINE *lp;
-	register int nline;
+	int c;
+	int i;
+	LINE *lp;
+	int nline;
 
 	UNUSED(f);
 	if (n < 0)

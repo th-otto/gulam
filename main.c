@@ -104,9 +104,9 @@ static void outemsg(void)
 */
 uchar *getprompt(void)
 {
-	register uchar *p,
-	*q;
-	register WS *ws;
+	uchar *p;
+	uchar *q;
+	WS *ws;
 
 	p = varstr("prompt");
 	if (*p == '\0')
@@ -139,9 +139,9 @@ void gulamhelp(uchar *arg)
 unsigned int userfnminput(uchar **p, int sz, void (*fn)(uchar *r), int pexp)
 {
 	uchar *q;
-	register uchar *r,
-	 c;
-	register int n;
+	uchar *r;
+	uchar c;
+	int n;
 
 	for (;;)
 	{
@@ -176,7 +176,7 @@ completion. */
 uchar *getoneline(void)
 {
 	char *p;
-	register unsigned int u;
+	unsigned int u;
 
 	tominibuf();
 	if ((p = gmalloc(SZcmd)) != NULL)
@@ -194,7 +194,7 @@ misc.c via spawn(), and (3) via _shell_p */
 
 void getcmdanddoit(void)
 {
-	register char *p;
+	char *p;
 
 	p = getoneline();
 	gputs(CRLF);
@@ -204,7 +204,7 @@ void getcmdanddoit(void)
 
 void gtime(uchar *arg)									/* called from docmd(); see do.c */
 {
-	register WS *ws;
+	WS *ws;
 
 	UNUSED(arg);
 	starttick = getticks();
@@ -215,7 +215,7 @@ void gtime(uchar *arg)									/* called from docmd(); see do.c */
 
 uchar *execcmd(WS *ws)
 {
-	register char *qq;
+	char *qq;
 
 	qq = NULL;
 	if (stackoverflown(256))
@@ -244,10 +244,10 @@ aliassed cmds containing semicolons.  */
 
 void processcmd(char *qq, int savehist)
 {
-	register char *p;
-	register WS *ws;
-	register int nsemi,
-	 maxsemi;
+	char *p;
+	WS *ws;
+	int nsemi;
+	int maxsemi;
 
 	if (qq == NULL || *qq == '\0')
 	{
@@ -308,10 +308,10 @@ non-interactive work.  */
 
 int main(int argc, char **argv, char **envp)
 {
-	register uchar *p;
-	register WS *ws;
-	register int m,
-	 nco;
+	uchar *p;
+	WS *ws;
+	int m;
+	int nco;
 
 	ueinit();
 	if (exitue == 3)

@@ -80,7 +80,7 @@ void storekeys(uchar *p)
 
 int inkey(void)
 {
-	register uint i;
+	uint i;
 
 	if (inx > 0)
 	{
@@ -119,7 +119,7 @@ if this is a typeahead.  */
 
 int usertyped(void)
 {
-	register int c;
+	int c;
 
 	c = -1;
 	if (inkbdrdy())
@@ -135,7 +135,7 @@ int usertyped(void)
 
 int useraborted(void)
 {
-	register int c;
+	int c;
 
 	c = usertyped();
 	return c == CTRLC || c == CTRLG;
@@ -146,7 +146,7 @@ as an exception.  */
 
 void gputs(const char *s)
 {
-	register int c;
+	int c;
 
 	while ((c = *s++) != 0)
 		gputchar(c);
@@ -182,7 +182,7 @@ void mvcursor(int row, int col)
 
 void nrow2550(void)								/* called from tv.c via a set var   */
 {
-	register int n;
+	int n;
 
 	if (varnum(OwnFonts) == 0)
 	{
@@ -216,7 +216,7 @@ void nrow2550(void)								/* called from tv.c via a set var   */
 
 void font(void)
 {
-	register int n;
+	int n;
 
 	if (varnum(OwnFonts) == 0)
 	{
@@ -260,10 +260,10 @@ void setmdmport(void)
 
 static char *showpallete(void)
 {
-	register int i,
-	 j,
-	 n;
-	register char *p;
+	int i;
+	int j;
+	int n;
+	char *p;
 
 	char bf[5];
 	WS *ws;
@@ -292,9 +292,9 @@ static char *showpallete(void)
 
 void pallete(void)
 {
-	register char *p,
-	*q;
-	register int i;
+	char *p;
+	char *q;
+	int i;
 	static int pal[16];
 
 	/* pal has to be static, not auto; Setpallete does not work
@@ -315,20 +315,18 @@ void pallete(void)
 
 static struct r
 {
-	int p0,
-	 p1;
+	int p0, p1;
 	int x1, y1;
-	int c0,
-	 c1;
+	int c0, c1;
 } rp[8] = {
-	{0xFFFF, 0xFFFF, 0, 8, 0, 1},
-	{0xFFFF, 0xFFFF, 0, 8, 0, 1},
-	{0xAAAA, 0x5555, 0, 16, 1, 1},
-	{0},
-	{0xAAAA, 0x5555, 0, 16, 0, 1},
-	{0},
-	{0xAAAA, 0xFFFF, 0, 32, 1, 1},
-	{0xFFFF, 0xFFFF, 0, 8, 0, 1}
+	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 },
+	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 },
+	{ 0xAAAA, 0x5555, 0, 16, 1, 1 },
+	{ 0, 0, 0, 0, 0, 0 },
+	{ 0xAAAA, 0x5555, 0, 16, 0, 1 },
+	{ 0, 0, 0, 0, 0, 0 },
+	{ 0xAAAA, 0xFFFF, 0, 32, 1, 1 },
+	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 }
 };
 
 /* This thing draws the gray-shaded rectangle that GEM-oriented programs
@@ -342,7 +340,7 @@ assume as their background. */
 
 void drawshadedrect(void)
 {
-	register unsigned int rez;
+	unsigned int rez;
 	unsigned short pattern[2];
 
 	lineA();
@@ -391,7 +389,7 @@ void mousecursor(void)
 {
 	static char defikbdcmd[3] = { 0x0a, 0x07, 0x07 };	/* fast enough */
 	static char usrikbdcmd[3] = { 0x0a };
-	register char *p;
+	char *p;
 
 #ifdef __MINT__
 	if (__mint)

@@ -47,11 +47,11 @@ does tenex style name completion.
 
 int getbufname(uchar *fps, uchar *defnm, uchar *bnm)				/* pm */
 {
-	register uchar *blst,
-	*ps,
-	 c;
-	register BUFFER *bp;
-	register WS *ws;
+	uchar *blst;
+	uchar *ps;
+	uchar c;
+	BUFFER *bp;
+	WS *ws;
 
 	ws = NULL;
 	ps = str3cat(fps, defnm, "]: ");
@@ -89,7 +89,7 @@ possible.  Note that bheadp != NULL.  The next buffer got CAN be the
 
 BUFFER *nextbuffer(void)					/* pm */
 {
-	register BUFFER *bp;
+	BUFFER *bp;
 
 	bp = curbp->b_bufp;
 	if (bp == NULL || bp == minibp || bp == listbp)
@@ -108,8 +108,8 @@ other window.  */
 
 int usebuffer(int f, int n)
 {
-	register BUFFER *bp;
-	register int s;
+	BUFFER *bp;
+	int s;
 	uchar bufn[NBUFN];
 
 	UNUSED(f);
@@ -125,7 +125,7 @@ int usebuffer(int f, int n)
 
 int switchbuffer(BUFFER *bp)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	if (--curbp->b_nwnd == 0)
 		bwdotmark(curbp, curwp);
@@ -152,10 +152,10 @@ int switchbuffer(BUFFER *bp)
 
 int bufinsert(uchar *bufn)
 {
-	register BUFFER *bp;
-	register LINE *clp,
-	*lp;
-	register int n;
+	BUFFER *bp;
+	LINE *clp;
+	LINE *lp;
+	int n;
 
 	bp = bfind(bufn, FALSE, 0, REGKB, 0);
 	if (bp == NULL)
@@ -184,8 +184,8 @@ int bufinsert(uchar *bufn)
 
 int bufferinsert(int f, int n)
 {
-	register BUFFER *bp;
-	register int s;
+	BUFFER *bp;
+	int s;
 	uchar bufn[NBUFN];
 
 	UNUSED(f);
@@ -203,9 +203,9 @@ int bufferinsert(int f, int n)
 
 static int killbf(BUFFER *bp)
 {
-	register BUFFER *bp1,
-	*bp2;
-	register int s;
+	BUFFER *bp1;
+	BUFFER *bp2;
+	int s;
 
 	if ((s = bclear(bp)) != TRUE)
 		return s;
@@ -237,8 +237,8 @@ other buffer to switch to, we switch to Gulam.  */
 
 int bufkill(BUFFER *bp)
 {
-	register BUFFER *bp1;
-	register WINDOW *wp;
+	BUFFER *bp1;
+	WINDOW *wp;
 
 	if (bp == NULL)
 		return TRUE;
@@ -268,8 +268,8 @@ Default buffer to kill added by -pm */
 
 int killbuffer(int f, int n)
 {
-	register int s;
-	register BUFFER *bp;
+	int s;
+	BUFFER *bp;
 	uchar bufn[NBUFN];
 
 	UNUSED(f);
@@ -287,8 +287,8 @@ action on redisplay.  */
 
 static int showbuffer(BUFFER *bp, WINDOW *wp, int flags)
 {
-	register BUFFER *obp;
-	register WINDOW *owp;
+	BUFFER *obp;
+	WINDOW *owp;
 
 	if (wp->w_bufp == bp)				/* Easy case!   */
 	{
@@ -322,7 +322,7 @@ static int showbuffer(BUFFER *bp, WINDOW *wp, int flags)
 
 WINDOW *popbuf(BUFFER *bp)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	if (bp == NULL)
 		return NULL;
@@ -360,13 +360,13 @@ Return TRUE if everything works.  Return FALSE if there is an error
 
 static int makelist(void)
 {
-	register uchar *p,
-	*q;
-	register BUFFER *bp;
-	register LINE *lp;
-	register long nbytes;
-	register int c,
-	 s;
+	uchar *p;
+	uchar *q;
+	BUFFER *bp;
+	LINE *lp;
+	long nbytes;
+	int c;
+	int s;
 	uchar line[128];
 
 	listbp = bfind(Bufferlist, TRUE, BFTEMP, REGKB, BMCTMP);
@@ -418,7 +418,7 @@ the windows that are displaying the list.  Bound to "C-X C-B".  */
 
 int listbuffers(int f, int n)
 {
-	register WINDOW *wp;
+	WINDOW *wp;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -435,7 +435,7 @@ worked and FALSE if you ran out of room.  */
 int addline(void *_bp, uchar *text)
 {
 	BUFFER *bp = _bp;
-	register LINE *lp;
+	LINE *lp;
 
 	if (bp == NULL || text == NULL)
 		return FALSE;
@@ -452,7 +452,7 @@ not considered.  Return FALSE if no buffers have been changed.  */
 
 int anycb(void)
 {
-	register BUFFER *bp;
+	BUFFER *bp;
 
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 		if ((bp->b_flag & BFTEMP) == 0 && (bp->b_flag & BFCHG) != 0)
@@ -466,8 +466,8 @@ create it.  */
 
 BUFFER *bfind(uchar *bname, unsigned int cflag, unsigned int bflag, int keybinds, uchar bmodec)
 {
-	register BUFFER *bp;
-	register LINE *lp;
+	BUFFER *bp;
+	LINE *lp;
 
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 		if (strcmp(bname, bp->b_bname) == 0)
@@ -510,8 +510,8 @@ not lfreed.  Return TRUE if everything looks good.  */
 
 int bclear(BUFFER *bp)
 {
-	register LINE *lp;
-	register int s;
+	LINE *lp;
+	int s;
 
 	if ((bp->b_flag & BFTEMP) == 0		/* Not scratch buffer.  */
 		&& (bp->b_flag & BFCHG) != 0	/* Something changed    */
@@ -536,9 +536,9 @@ changed buffer.  */
 
 int savebuffers(int f, int n)
 {
-	register BUFFER *bp;
-	register int s,
-	 nsave;
+	BUFFER *bp;
+	int s;
+	int nsave;
 
 	nsave = 0;
 	if (anycb() == FALSE)
@@ -571,7 +571,7 @@ int savebuffers(int f, int n)
 
 void killcompletions(void)
 {
-	register BUFFER *bp;
+	BUFFER *bp;
 
 	bp = bfind(Completions, FALSE, BFTEMP, REGKB, 0);
 	if (bp)
@@ -583,8 +583,8 @@ void killcompletions(void)
 
 void showcompletions(uchar *text)
 {
-	register WINDOW *wp;
-	register BUFFER *bp;
+	WINDOW *wp;
+	BUFFER *bp;
 
 	bp = bfind(Completions, TRUE, BFTEMP, REGKB, BMCTMP);
 	if (bp == NULL)

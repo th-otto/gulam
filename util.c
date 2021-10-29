@@ -28,9 +28,9 @@ the chars in s; the rest to 1-v.  */
 
 void charset(uchar *a, uchar *s, uint v)
 {
-	register uchar *p,
-	 u;
-	register int i;
+	uchar *p;
+	uchar u;
+	int i;
 
 	u = (uchar) (v ? 0 : 1);			/* more robust than 1 - v   */
 	for (p = a + 256; p > a;)
@@ -55,7 +55,7 @@ want to use as little space as possible.  */
 
 GA *initga(int z, int i)
 {
-	register GA *a;
+	GA *a;
 
 	if (z <= 0 || i <= 0)
 		return NULL;
@@ -70,9 +70,9 @@ GA *initga(int z, int i)
 
 GA *addelga(GA *ga, void *e)
 {
-	register GA *a;
-	register int n,
-	 z;
+	GA *a;
+	int n;
+	int z;
 
 	if (ga && e)
 	{
@@ -102,7 +102,7 @@ are numbered 0 to ws->ns - 1.  */
 
 WS *initws(void)
 {
-	register WS *ws;
+	WS *ws;
 
 	if ((ws = (WS *) gmalloc((uint) sizeof(WS))) != NULL)
 	{
@@ -133,7 +133,7 @@ void freews(WS *ws)
 
 WS *dupws(WS *ws)
 {
-	register WS *w2;
+	WS *w2;
 
 	if (ws == NULL)
 		return NULL;
@@ -157,7 +157,7 @@ WS *dupws(WS *ws)
 
 int findstr(WSPS q, uchar *p)
 {
-	register int n;
+	int n;
 
 	if (p && q)
 	{
@@ -189,9 +189,9 @@ with ' '.) */
 
 uchar *catall(WS *ws, int m)
 {
-	register uchar *p,
-	*q;
-	register int n;
+	uchar *p;
+	uchar *q;
+	int n;
 
 	if (ws == NULL || 0 > m || m >= (n = ws->ns))
 		return ES;
@@ -209,8 +209,8 @@ The value of i is either 1, or 0.  */
 
 void strwcat(WS *ws, const uchar *p, int i)
 {
-	register int n;
-	register uchar *q;
+	int n;
+	uchar *q;
 
 	if (p == NULL || ws == NULL)
 		return;
@@ -247,15 +247,15 @@ one-char based on its argument string; this char can be '\0'.  */
 
 uchar *pscolumnize(uchar *r, int ns, int cw)
 {
-	register uchar *p,
-	*q,
-	*qq,
-	**aa;
-	register int i,
-	 m,
-	 n,
-	 nc,
-	 nr;								/* #col per line, #rows */
+	uchar *p;
+	uchar *q;
+	uchar *qq;
+	uchar **aa;
+	int i;
+	int m;
+	int n;
+	int nc;
+	int nr;								/* #col per line, #rows */
 
 	if (r == NULL)
 		return NULL;
@@ -310,7 +310,7 @@ uchar *pscolumnize(uchar *r, int ns, int cw)
 */
 WS *prefixws(uchar *p, WSPS q)
 {
-	register WS *w;
+	WS *w;
 
 	w = initws();
 	if (w && q)
@@ -329,8 +329,8 @@ WS *prefixws(uchar *p, WSPS q)
 
 void appendws(WS *u, WS *v, int m)
 {
-	register int n;
-	register uchar *p;
+	int n;
+	uchar *p;
 
 	if (u == NULL || v == NULL)
 		return;
@@ -350,9 +350,9 @@ void appendws(WS *u, WS *v, int m)
 
 void shiftws(WS *ws, int m)
 {
-	register uchar *q;
-	register int n,
-	 k;
+	uchar *q;
+	int n;
+	int k;
 
 	if (ws == NULL || m > ws->ns || m <= 0)
 		return;
@@ -370,7 +370,7 @@ void shiftws(WS *ws, int m)
 
 void showwsps(WSPS p)
 {
-	register uchar *q;
+	uchar *q;
 
 	if (p == NULL)
 	{
@@ -423,8 +423,8 @@ static uchar bschar[256] = {
 
 static uchar *escapedchar(uchar *p, int *ip)
 {
-	register int ic,
-	 n;
+	int ic;
+	int n;
 
 	ic = p[1];
 	if ('0' <= ic && ic <= '9')
@@ -449,8 +449,8 @@ ptr to new eos.  */
 
 uchar *unquote(uchar *q, uchar *p)
 {
-	register uchar c,
-	 sdq;
+	uchar c;
+	uchar sdq;
 	int i;
 
 	if (p && q)
@@ -482,8 +482,8 @@ uchar *unquote(uchar *q, uchar *p)
 
 uchar *str3cat(uchar *p, uchar *q, uchar *r)					/* return the catenation p|q|r  */
 {
-	register uchar *a,
-	*b;
+	uchar *a;
+	uchar *b;
 	uchar *s;
 
 	s = a = ((p && q && r) ? gmalloc(((uint) (strlen(p) + strlen(q) + strlen(r) + 1))) : NULL);
@@ -509,7 +509,7 @@ match.  */
 
 uchar *strsub(uchar *p, uchar *q)
 {
-	register int n;
+	int n;
 
 	if (p && q)
 	{
@@ -528,7 +528,7 @@ uchar *strsub(uchar *p, uchar *q)
  */
 char *gstrdup(const char *p)
 {
-	register char *q;
+	char *q;
 	
 	q = p ? gmalloc(((uint)strlen(p)) + 1) : NULL;
 	if (q)
@@ -541,11 +541,11 @@ char *gstrdup(const char *p)
 
 uchar *chcase(uchar *p, int i)
 {
-	register uchar *q,
-	 c;
-	register int lb,
-	 ub,
-	 d;
+	uchar *q;
+	uchar c;
+	int lb;
+	int ub;
+	int d;
 
 	if ((q = p) != NULL)
 	{
@@ -580,10 +580,10 @@ int atoi(const char *p)
 
 long atoir(const char *p, int r)
 {
-	register long x,
-	 d;
-	register uchar c,
-	 sign;
+	long x;
+	long d;
+	char c;
+	char sign;
 
 	x = 0L;
 	if (p == NULL)
@@ -593,7 +593,9 @@ long atoir(const char *p, int r)
 		sign = '-';
 		p++;
 	} else
+	{
 		sign = '+';
+	}
 	while ((c = *p++) != 0)
 	{
 		d = r;
@@ -622,8 +624,8 @@ static string.  */
 uchar *itoar(long i, int r)
 {
 	static uchar s[33];
-	register uchar *p,
-	 c;
+	uchar *p;
+	uchar c;
 
 	p = &s[32];
 	*p-- = '\0';
@@ -656,7 +658,7 @@ the stack grows down (see ap += ...  in the argument scan loop).
 
 uchar *sprintp(uchar *fmt, ...)
 {
-	register int c, r;
+	int c, r;
 	va_list ap;
 	uchar *p;
 	static uchar ms[1024];
@@ -733,14 +735,14 @@ the given function on each line of the file.  */
 
 void eachline(int fd, void (*fn)(uchar *q, int n))
 {
-	register uchar *q,
-	*r,
-	*be,
-	*bb,
-	*p;
-	register long sz,
-	 n;
-	register int i;
+	uchar *q;
+	uchar *r;
+	uchar *be;
+	uchar *bb;
+	uchar *p;
+	long sz;
+	long n;
+	int i;
 	long asz;
 
 	valu = 0;
@@ -816,11 +818,11 @@ line.  */
 
 void streachline(uchar *text, int (*fn)(void *ap, uchar *p), void *ap)
 {
-	register uchar *p,
-	*q,
-	*et,
-	 cr;
-	register int d;
+	uchar *p;
+	uchar *q;
+	uchar *et;
+	uchar cr;
+	int d;
 
 	if (text == NULL)
 		return;

@@ -15,9 +15,9 @@ static uchar DOTS3[] = "...";
 /* p != NULL, & it does not have DSC        */
 static uchar *mapfnmregexp(uchar *p)
 {
-	register uchar *q,
-	*bq,
-	 c;
+	uchar *q;
+	uchar *bq;
+	uchar c;
 
 	bq = q = gmalloc(((uint) (2 * strlen(p) + 3)));
 	if (q == NULL)
@@ -43,11 +43,11 @@ unmatched strings; ow leave the lst unchanged.  */
 
 int matchednms(uchar *lst, uchar *p, int flag)
 {
-	register int nmatches;
-	register uchar *f,
-	*g,
-	*q;
-	register regexp *re;
+	int nmatches;
+	uchar *f;
+	uchar *g;
+	uchar *q;
+	regexp *re;
 
 	nmatches = 0;
 	f = g = lst;
@@ -86,7 +86,7 @@ uchar *ptometach(uchar *p)
 {
 	static uchar notmeta[256];
 	static int metanotinit = 1;			/* ==0 => notmeta initialized  */
-	register uchar *r;
+	uchar *r;
 
 	if (metanotinit)
 	{
@@ -107,8 +107,8 @@ long-enough area to contain the expanded word.  */
 
 int nameexpand(uchar *lst, uchar *q, int tenex)
 {
-	register int i,
-	 n;
+	int i;
+	int n;
 
 	if (q == NULL)
 		return 0;
@@ -125,8 +125,7 @@ int nameexpand(uchar *lst, uchar *q, int tenex)
 		strcpy(q, lst);
 	else /* n >= 1 => lst != NULL */ if (n > 1 && tenex)	/* extend w/o losing matches */
 	{
-		register int j,
-		 k;
+		int j, k;
 
 		q[i] = '*';
 		do
@@ -147,9 +146,9 @@ int nameexpand(uchar *lst, uchar *q, int tenex)
 /* Remove redundant \.., and \. 	*/
 static void simplifypath(uchar *name)
 {
-	register uchar *p,
-	*q,
-	 c;
+	uchar *p;
+	uchar *q;
+	uchar c;
 
 	for (; (q = strsub(name, DS1)) != NULL; name = q)
 	{
@@ -175,10 +174,10 @@ containing this path.  */
 
 uchar *stdpathname(uchar *nm)
 {
-	register uchar *p,
-	*q,
-	*r;
-	register int len;
+	uchar *p;
+	uchar *q;
+	uchar *r;
+	int len;
 
 	p = gstrdup(nm);
 	if (p == NULL)
@@ -243,8 +242,8 @@ path is invalid; see e.g., mxp() below. */
 
 uchar *fnmsinparent(uchar *p)
 {
-	register uchar *q,
-	*oldcwd;
+	uchar *q;
+	uchar *oldcwd;
 
 	strg = emsg = NULL;
 	valu = 0L;
@@ -277,9 +276,9 @@ area.  Given arg rs will get freed. */
 
 static uchar *parentexp(uchar *rs)
 {
-	register uchar *r,
-	*pp;
-	register WS *ws;
+	uchar *r;
+	uchar *pp;
+	WS *ws;
 
 	rs = stdpathname(r = rs);
 	gfree(r);
@@ -325,12 +324,12 @@ possible completions; **q != '\0', if there are some completions, **q
 */
 int fnmexpand(uchar **p, uchar **q, int pexp, int tenex)
 {
-	register uchar *r,
-	*rs,
-	*es,
-	*pp,
-	*last;
-	register int n;
+	uchar *r;
+	uchar *rs;
+	uchar *es;
+	uchar *pp;
+	uchar *last;
+	int n;
 
 	*q = NULL;
 	if ((p == NULL) || (*p == NULL))
@@ -378,14 +377,12 @@ int fnmexpand(uchar **p, uchar **q, int pexp, int tenex)
 Occasionally, a space terminates the first fnm in name; so take care!
 The resulting name better not have any meta uchars */
 
-#define	NFILEN	80						/* see ue.h */
-
 int fullname(uchar *name)
 {
-	register uchar *p;
-	uchar *pp,
-	*qq;
-	register int n;
+	uchar *p;
+	uchar *pp;
+	uchar *qq;
+	int n;
 
 	lexpush();
 	if ((pp = gstrdup(name)) != NULL && (qq = strchr(pp, ' ')) != NULL)
@@ -420,10 +417,9 @@ full path name.  It does not end with a \ */
 
 static void addfnmsofdir(WS *ws, uchar *p)
 {
-	register uchar *q;
-	register WS *xs;
-	register int n,
-	 m;
+	uchar *q;
+	WS *xs;
+	int n, m;
 
 	q = str3cat(p, DS0, ES);
 	fnmsinparent(q);				/* strg is set as a result */
@@ -451,7 +447,7 @@ Expand it, and return the stringlets in WS format.  */
 
 static WS *dots3(uchar *p)
 {
-	register WS *ws;
+	WS *ws;
 
 	if ((ws = initws()) != NULL)
 	{
@@ -468,11 +464,11 @@ pattern lf in each of these dirs, and return the resulting seq of fnms. */
 
 static WS *mxp(WS *ds, uchar *lf)
 {
-	register WS *ws,
-	*xs;
-	register uchar *p,
-	*q;
-	register int i;
+	WS *ws;
+	WS *xs;
+	uchar *p;
+	uchar *q;
+	int i;
 
 	ws = initws();
 	if (ds == NULL)
@@ -506,9 +502,9 @@ in between the back-slashes also.  */
 
 WS *metaexpand(uchar *p)
 {
-	register uchar *q,
-	 c;
-	register WS *ds;
+	uchar *q;
+	uchar c;
+	WS *ds;
 
 	ds = NULL;
 	if (p && ptometach(p))
@@ -555,7 +551,7 @@ WS *metaexpand(uchar *p)
 #if 00
 static WS *fullmetaexpand(uchar *p)
 {
-	register WS *ds;
+	WS *ds;
 
 	p = stdpathname(p);
 	ds = metaexpand(p);
@@ -581,7 +577,7 @@ gfree the old ws lex.c hold onto unless it is NULL.  */
 
 void pushws(WS *w)
 {
-	register SE *tp;
+	SE *tp;
 
 	useuplexws();
 	tp = (SE *) gmalloc(((uint) sizeof(SE)));
@@ -594,7 +590,7 @@ void pushws(WS *w)
 
 void popargws(void)
 {
-	register SE *tp;
+	SE *tp;
 
 	tp = spargws;
 	if (tp == NULL)
@@ -611,10 +607,10 @@ void popargws(void)
 */
 static uchar *dot(void)
 {
-	register uchar *q,
-	*r,
-	*qq,
-	 c;
+	uchar *q;
+	uchar *r;
+	uchar *qq;
+	uchar c;
 
 	qq = q = gstrdup(varstr("cwd"));
 	if (q && *q)
@@ -643,9 +639,9 @@ filenames can have them; eg., 9~.n or f.c~).  */
 
 static uchar *wiggle(uchar *w)
 {
-	register uchar *q,
-	*r,
-	*qq;
+	uchar *q;
+	uchar *r;
+	uchar *qq;
 
 	qq = q = gstrdup(varstr("home"));
 	if (q && *q)
@@ -666,11 +662,11 @@ static uchar *wiggle(uchar *w)
 
 static uchar *dollar(int *n)
 {
-	register uchar *p,
-	*q,
-	 c;
-	register int braceflag;
-	register WS *argws;
+	uchar *p;
+	uchar *q;
+	uchar c;
+	int braceflag;
+	WS *argws;
 	uchar buf[256];
 
 	*n = -1;
@@ -722,13 +718,13 @@ expanded result.  */
 
 WS *expand(uchar *p, int addremargs)
 {
-	WS *ws,
-	*ws2,
-	*ws3;
-	register uchar *q,
-	*lemsg;
-	register int dqsflag,
-	 maxdn;
+	WS *ws;
+	WS *ws2;
+	WS *ws3;
+	uchar *q;
+	uchar *lemsg;
+	int dqsflag;
+	int maxdn;
 	int ii;
 
 	lemsg = NULL;
@@ -817,8 +813,8 @@ WS *expand(uchar *p, int addremargs)
 
 WS *aliasexp(WS *ws)
 {
-	register uchar *q,
-	*r;
+	uchar *q;
+	uchar *r;
 
 	if (ws == NULL)
 		return NULL;					/* q == r => no alias for r */

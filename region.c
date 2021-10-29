@@ -12,11 +12,11 @@ looking for mark.  This should save time.  Return a standard code.  */
 
 int getregion(REGION *rp)
 {
-	register LINE *flp,
-	*blp,
-	*lastp;
-	register int fsize,
-	 bsize;
+	LINE *flp;
+	LINE *blp;
+	LINE *lastp;
+	int fsize;
+	int bsize;
 
 	if (curwp->w_markp == NULL)
 	{
@@ -78,7 +78,7 @@ region.  Move dot to the start, and kill the characters.  Bound to
 
 int killregion(int f, int n)
 {
-	register int s;
+	int s;
 	REGION region;
 
 	UNUSED(f);
@@ -100,9 +100,9 @@ Bound to "M-W".  */
 
 int copyregion(int f, int n)
 {
-	register LINE *linep;
-	register int loffs,
-	 s;
+	LINE *linep;
+	int loffs;
+	int s;
 	REGION region;
 
 	UNUSED(f);

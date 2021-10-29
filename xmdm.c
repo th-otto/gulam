@@ -86,7 +86,7 @@ static sint32 nbx;						/* #bytes sent/received sucessfully */
 /* display module for rx/sx	*/
 static void xmmsginit(char rsc, char *s)
 {
-	register int n;
+	int n;
 
 	cpymem(xmrs, xmi, MESSAGE);
 	xmrs[RSX] = rsc;
@@ -105,8 +105,8 @@ static void xmmsginit(char rsc, char *s)
 
 static int openfile(char *file, int rs)
 {
-	register char *p,
-	*q;
+	char *p;
+	char *q;
 
 	fd = MINFH - 1;
 	if (rs == 's')
@@ -153,9 +153,9 @@ static void ufb(int x, int n)
 
 static void ufbbytes(sint32 count)
 {
-	register char *p;
-	register int j,
-	 k;
+	char *p;
+	int j;
+	int k;
 
 	p = itoal(count);
 	k = (int)strlen(p);
@@ -173,7 +173,7 @@ if it does'nt */
 
 static void sendeot(void)
 {
-	register char *p;
+	char *p;
 
 	attempts = 0;
 	for (;;)
@@ -205,7 +205,7 @@ static void sendeot(void)
 
 static int cancel(char *p)
 {
-	register int i;
+	int i;
 
 	if (fd >= 0)
 		gfclose(fd);
@@ -234,9 +234,9 @@ timeouts, just cancel send */
 
 static int sendsector(void)
 {
-	register uint16 checksum;
-	register uint c;
-	register int j;
+	uint16 checksum;
+	uint c;
+	int j;
 
 	attempts = 0;
 	do
@@ -285,9 +285,9 @@ static int sendsector(void)
 */
 static int sendfile(char *file)
 {
-	register char c;
-	register int j;
-	register int nb;
+	char c;
+	int j;
+	int nb;
 
 	if (openfile(file, 's') == FALSE)
 		return FALSE;
@@ -358,7 +358,7 @@ static int sendfile(char *file)
 
 static void checksector(uint16 checksum)
 {
-	register uint16 recvcsum;
+	uint16 recvcsum;
 
 	recvcsum = readmodem();
 	if (checksum == recvcsum)
@@ -397,8 +397,8 @@ static void checksector(uint16 checksum)
 
 static void recvsector(void)
 {
-	register uint16 checksum;
-	register int j;
+	uint16 checksum;
+	int j;
 
 	sectors = readmodem();
 	sectcomp = readmodem();
@@ -456,7 +456,7 @@ timeouts occur, dynamically.  */
 
 static int recvfile(char *file)
 {
-	register int firstchar;				/* of the packet    */
+	int firstchar;				/* of the packet    */
 
 	if (openfile(file, 'r') == FALSE)
 		return FALSE;
@@ -519,7 +519,7 @@ static int recvfile(char *file)
 
 static void xmdm(char rsc, char *fnm)
 {
-	register int ok;
+	int ok;
 
 	BUFSIZ = 0x4000;					/* ask for this much, and see ... */
 	bufr = maxalloc(&BUFSIZ);

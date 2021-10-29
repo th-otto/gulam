@@ -11,7 +11,7 @@ pm@Case */
 
 static void lowerc(uchar *p)
 {
-	register uchar c;
+	uchar c;
 
 	c = *p;
 	if ('A' <= c && c <= 'Z')
@@ -23,7 +23,7 @@ static void lowerc(uchar *p)
 
 static void upperc(uchar *p)
 {
-	register uchar c;
+	uchar c;
 
 	c = *p;
 	if ('a' <= c && c <= 'z')
@@ -40,9 +40,9 @@ coded.  Should be setable.  */
 
 static int inword(void)
 {
-	register int c,
-	 n;
-	register LINE *lp;
+	int c;
+	int n;
+	LINE *lp;
 
 	lp = curwp->w_dotp;
 	n = curwp->w_doto;
@@ -56,7 +56,7 @@ static int inword(void)
 
 static int bgnofword(void)
 {
-	register int n;
+	int n;
 
 	for (n = 0; (inword() == FALSE); n++)
 	{
@@ -178,9 +178,9 @@ issue the kill command for the right number of characters.  Bound to
 
 int delfword(int f, int n)
 {
-	register RSIZE size;
-	register LINE *dotp;
-	register int doto;
+	RSIZE size;
+	LINE *dotp;
+	int doto;
 
 	UNUSED(f);
 	if (n < 0)
@@ -225,7 +225,7 @@ Normally this is bound to "M-Rubout" and to "M-Backspace".  */
 
 int delbword(int f, int n)
 {
-	register RSIZE size;
+	RSIZE size;
 
 	UNUSED(f);
 	if (n < 0)
@@ -266,10 +266,10 @@ begining of a paragraph.  */
 
 int gotobop(int f, int n)
 {
-	register LINE *lp,
-	*lastp;
-	register int suc,
-	 c;
+	LINE *lp;
+	LINE *lastp;
+	int suc;
+	int c;
 
 	if (n < 0)
 		return gotoeop(f, -n);
@@ -300,10 +300,10 @@ begining of a paragraph.  */
 
 int gotoeop(int f, int n)
 {
-	register LINE *lp,
-	*lastp;
-	register int suc,
-	 c;
+	LINE *lp;
+	LINE *lastp;
+	int suc;
+	int c;
 
 	if (n < 0)
 		return gotobop(f, -n);
@@ -345,10 +345,10 @@ Delete these lines.  curwp->dotp pts to the line below the para.  */
 
 static WS *makeparastr(void)
 {
-	register LINE *lp,
-	*eopg;
-	register WS *ws;
-	register int n;
+	LINE *lp;
+	LINE *eopg;
+	WS *ws;
+	int n;
 
 	gotoeop(TRUE, 1);
 	eopg = curwp->w_dotp;
@@ -372,11 +372,11 @@ static WS *makeparastr(void)
 
 int fillpara(int f, int n)
 {
-	register WS *ln,
-	*ws;
-	register uchar *p;
-	register int nln,
-	 i;
+	WS *ln;
+	WS *ws;
+	uchar *p;
+	int nln;
+	int i;
 
 	UNUSED(f);
 	if ((ws = makeparastr()) == NULL)

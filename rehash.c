@@ -19,7 +19,7 @@ path */
 
 uchar *hashlookup(int i, uchar *p)
 {
-	register struct TBLE *h;
+	struct TBLE *h;
 
 	h = tblfind(hp[i], p);
 	return h ? h->elm : NULL;
@@ -29,9 +29,9 @@ uchar *hashlookup(int i, uchar *p)
 */
 static void addname(uchar *dir, uchar *pnm)
 {
-	register uchar *p,
-	*nm,
-	*pt;
+	uchar *p;
+	uchar *nm;
+	uchar *pt;
 
 	pt = str3cat(dir, DS0, pnm);
 	nm = gstrdup(pnm);
@@ -45,10 +45,10 @@ static void addname(uchar *dir, uchar *pnm)
 /* find exec files in dir p; dont alter p */
 static void findexecs(uchar *p)
 {
-	register uchar *q,
-	*pbs,
-	*cwd;
-	register int n;
+	uchar *q;
+	uchar *pbs;
+	uchar *cwd;
+	int n;
 
 	if (p[0] == '.' && p[1] == '\0')
 		hx = 0;
@@ -87,7 +87,7 @@ static void findexecs(uchar *p)
 
 void which(int f)
 {
-	register WS *ws;
+	WS *ws;
 
 	ws = initws();
 	strwcat(ws, tblstr(hp[0], f), 0);
@@ -101,10 +101,10 @@ void which(int f)
 
 void cmdwhich(uchar *arg)
 {
-	register uchar *p,
-	*q;
-	register struct TBLE *a;
-	register int i;
+	uchar *p;
+	uchar *q;
+	struct TBLE *a;
+	int i;
 
 	UNUSED(arg);
 	p = lexgetword();
@@ -122,10 +122,10 @@ void cmdwhich(uchar *arg)
 
 void rehash(uchar *arg)								/* rebuild the table of executable file names */
 {
-	register uchar *q,
-	*p;
-	register int n;
-	register WS *ws;
+	uchar *q;
+	uchar *p;
+	int n;
+	WS *ws;
 
 	UNUSED(arg);
 	for (n = 0; n < 2;)
