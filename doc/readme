@@ -1,0 +1,8 @@
+
+472	Makefile -- makefile to make the TeX-able manual and ascii doc
+73493	gulam.doc -- ascii version of the manual
+73972	gulam.texinfo -- TeX-able src of the manual; see GNU TeXinfo fmt
+38464	texindex.c -- src for texinfo fmt indexing program
+29541	texinfmt.el -- customized texinfo fmt .el for use inside GNU Emacs
+        *do NOT* use the texinfmt.el distributed with GNUEmacs
+276	gulam.el -- GNU elisp file to generate ascii version of the manual.

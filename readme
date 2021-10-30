@@ -1,4 +1,0 @@
-epson.g -- initialize Epson MX/FX-80 printers (set up tabs etc)
-gulam.g -- sample startup for Gulam
-gulam.prg -- the real McCoy
-mwc.g -- set up for Mark William's C compiler

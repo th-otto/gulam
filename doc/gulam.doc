@@ -414,10 +414,14 @@ File: gulam.info  Node: chmod, Prev: cd, Up: Glossary, Next: cp
 
 chmod
 -----
-     chmod [+-w] FILENAMES
+     chmod [+-whsvm] FILENAMES
 
-`chmod'  changes  the  read/write  attributes of the files: `+w'
-makes them read-write, and `-w' makes them read-only.  
+`chmod' changes the read/write attributes of the files.  The
+`+' flags have inverse effect to the `-' flags.  The `+w'
+makes them read-write, and `-w' makes them read-only.  The
+`+h' hides the files from directory searches; `+s' marks
+them as hidden system files; `-m' turns off the `archived' flag
+on the file.
 
 
 File: gulam.info  Node: cp, Prev: chmod, Up: Glossary, Next: date
@@ -504,15 +508,17 @@ File: gulam.info  Node: dirc, Prev: dm, Up: Glossary, Next: dirs
 dir cache dirc
 --------------
 
-To help do the Tenex file name completion efficiently, there is a cache of
-contents of directories.  `dirc' shows the names of these dirs, and
+To help do the Tenex file name completion efficiently, there is a cache
+of contents of directories.  `dirc' shows the names of these dirs, and
 how many bytes are used by their contents.  Unless you did a `set
-dir_cache 1', or you executed commands that only examine the file system
-the `dirc' has nothing to show since the cache is flushed at the end
-of each command.  Try *Gulam* with `dir_cache' set to 1.  Note
-however that this cache is updated only by the `ls' command; so even
-after you deleted some files, file name completion may still find those
-names.  `dirc -' will explicitly flush the cache.
+dir_cache 1', or you executed commands that only examine the file
+system the `dirc' has nothing to show since the cache is flushed at the
+end of each command.  Try *Gulam* with `dir_cache' set to 1.  Note
+however that this cache is updated only by commands that change the
+contents of a directory (such as `rm', `cp').  A rather annoying result
+is that even after you change the diskette in a drive, you may see the
+directory contents of the previous diskette listed.  An `UNDO', `dirc
+-', `rm' with/without arguments will explicitly flush the cache.
 
 
 File: gulam.info  Node: dirs, Prev: dirc, Up: Glossary, Next: echo
@@ -567,14 +573,14 @@ File: gulam.info  Node: egrep, Prev: ef, Up: Glossary, Next: endif
 
 egrep
 -----
--- see grep
+-- see `grep'
 
 
 File: gulam.info  Node: endif, Prev: egrep, Up: Glossary, Next: endfor
 
 endif
 -----
--- see if
+-- see `if'
 
 
 File: gulam.info  Node: endfor, Prev: endif, Up: Glossary, Next: exit
@@ -584,7 +590,7 @@ endfor
 -- see foreach
 
 
-$env style 
+$env_style 
 -----------
 
 This shell var controls the format of the environment string supplied to
@@ -672,16 +678,17 @@ full path names.
 
 *Gulam* will standardize, in three situations, non-standard form of
 a `path', as shown in the example below.  These situations are:
-  1. Tenex file name expansion is inoked.
+  1. Tenex file name expansion is invoked.
   2. the word contains meta characters.
   3. the name is being given to one of the file operations in `ue'.
 
-`e:\gulam\a:\lex.c' is standarddized to `a:\lex.c'
-`e:\gulam\\src\util.c' is standarddized to `c:\src\util.c'
-`e:\gulam\~\ex.o' is standarddized to `d:\bin\ex.c'
+`e:\gulam\a:\lex.c' is standardized to `a:\lex.c'
+`e:\gulam\\src\util.c' is standardized to `c:\src\util.c'
+`e:\gulam\~\ex.o' is standardized to `d:\bin\ex.c'
 
-assuming that the current drive was c:\, and home was d:\bin.  This is
-especially nice inside `ue' when visiting other files.
+assuming that the current drive was `c:\', and home was `d:\bin', and
+variable `parent_expand' is set.  This is especially nice inside
+`ue' when visiting other files.
 
 Words, as given by the you, that contain meta characters (which are
 `*?|()[]') or the string `...' are expanded.  In general, one
@@ -823,7 +830,8 @@ its contents.  Here is an example file:
      set histfile    e:\history.g
      set baud_rate   9600
      set sz_rs232_buffer     4096
-     set rgb '005-707-070-075-' # set the palette; note the trailing '-'
+     # set palette; note the trailing '-'
+     set rgb '005-707-070-075-'
      # the following sets tabs on Epson MX-80
      set pr_bof '^Q033^QD^Q010^Q020^Q030^Q040^Q050^Q060^Q070^Q033^QC^Q102'
      set pr_eof '^Q214'
@@ -854,45 +862,67 @@ the explanation is `variable_name: default-value meaning'.
 `batch_max_nesting: 20'     
      if you need to nest batch file execution at levels deeper than this,
      change this variable.
+
 `batch_echo: 0'     
      if  1  echoes each command of the batch file as it is executed.  
+
 `baud_rate: none'     
      for  use  in  the  terminal  emulator, rx/sx file transfers.  
+
 `cwd:'     
 `CWD: full  pathname  of  current directory'     
      gets re-set every time a cd, pushd or popd is executed.  
+
 `delay: unset'     
      set it to control the duration that the cursor sits
      on a matching paren, bracket, or brace.  A value of 2000 produces about
      a 2-sec delay.
+
 `dir_cache: 0'     
      if non-0, turns on the dir list cache.  This substantially speeds up the
      Tenex file name completion.
-`gulam_help_file: unset'     
-     set this variable to the full path name of
-     the file containing the supplied `gulam.hlp' file.
-`home'     
-`HOME: full   pathname   of   home  directory'     
-     home  is  the directory you were in before invoking *Gulam*.  
+
 `ginprompt: $<'     
      the  prompt  shown  when  asking you for input in dollar-substituting a $<.
+
 `gulam_help_file: none'     
-     set  this  var  to the full pathname of the
-     `gulam.hlp' file,  which contains descriptive info about keys,
-     functions, bindings and commands.  Unless this var is set
-     properly,  the  wall  chart  that `ue' generates is of not much use.  
+     set this var to the full pathname of the `gulam.hlp' file, which
+     contains descriptive info about keys, functions, bindings and
+     commands.  Unless this var is set properly, the wall chart that
+     `ue' generates is of not much use.
+
 `histfile: none'     
      reads and saves history in file named $histfile .
-`ncmd: number  of  the  current  command'     
-     gets  set  after each executing each command.  
+
+`history: 20'     
+     This variable controls the number of previous commands displayed
+     by the command `history'.
+
+`home'     
+`HOME: full pathname of home directory'     
+     home  is  the directory you were in before invoking *Gulam*.  
+
 `mscursor: unset'     
      set it to a string of 4 digits (e.g., "0508").  This
      controls the scaling of mouse movements being turned into cursor keys.  If
      it is set to "0000", mouse movements do not get translated to cursor keys.
+
+`ncmd: number  of  the  current  command'     
+     gets  set  after each executing each command.  
+
+`nrows: unset'     
+     This variable controls the number of lines per screen.  At present, only
+     valid values are 25 or 50.  Changing `nrows' to 50 will cause the
+     re-initialization of the screen using the small system font.
+     
 `path: unset'     
-     when  set,  it  will cause the environment variable
-     PATH  to  be  automatically  also  set  to  the  same  string
-     ($path), and cause rehashing.  
+     when set, it will cause the environment variable PATH to be
+     automatically also set to the same string ($path), and cause
+     rehashing.
+
+`parent_expand: unset'     
+     when set, the Tenex name completion will provide the full path name rather
+     than just the leaf name.
 
 The following pr_XXX vars are relevant with `print', and `lpr'
 commands.  When set, these strings are sent to the printer :
@@ -1228,7 +1258,7 @@ File: gulam.info  Node: ls, Prev: lpr, Up: Glossary, Next: mem
 
 ls
 --
-     ls [-lRLF] FILENAMES 
+     ls [-ltrRLF] FILENAMES 
 
 The `ls' (list files) command, with no arguments, prints the sorted
 list of names of the files in the current directory.  It has a number of
@@ -1244,7 +1274,8 @@ subtrees of directories in the argument list of files to be traversed.  The
 `-F' will append to each listed filename one char that indicates the
 type of that file: `*' if it is executable (i.e., has an extension of
 `.prg, .tos, .ttp', or `.g'), a `\' if its is a directory, a
-' ' otherwise.
+' ' otherwise.  The `-t' causes a sort by time of modification of the
+files.  The `-r' reverses the chosen order of sorting.
 
 `ls' always (even if DIR_CACHE is 1)
 updates the directory cache for the relevant directories.
@@ -1325,26 +1356,47 @@ File: gulam.info  Node: mson, Prev: mv, Up: Glossary, Next: peekw
 mson/msoff
 ----------
 
-These enable/disable the mouse.  Gulam/ue does not use the mouse; we intend
-to in a good way.  Most GEM-based `.prg' programs use mouse, but do
+These commands enable/disable the mouse.  To make the mouse disappear
+give the command  `msoff' and to make it re-appear again, give the
+command `mson'.  Most GEM-based `.prg' programs use mouse, but do
 not set it up themselves.  Some of these will hang if invoked from
 *Gulam*, which is no big deal; do `mson' and then try.
+
+*Gulam* makes use of the mouse in two effective ways.
+(1) When in Gulam command mode, moving the mouse around
+allows you to select among previous commands that you
+have in your history.  You can edit these in the usual
+way with `ue' like commands.
+(2) When editing a buffer with `ue', moving the mouse around
+will move the cursor around the screen.
+
+To modify the effect of the mouse, set the variable  `mscursor'
+to a four digit number.  The command
+`set mscursor 0508'
+is equivalent to the default mouse action.  The command
+`set mscursor 1016'
+you will require twice as much movement of the mouse to get the
+same effect on the screen, and
+`set mscursor 0000'
+will turn it off altogether.
 
 
 File: gulam.info  Node: path, Prev: metacharacter-expansion, Up: top, Next: query-search-replace
 
-PATH
-----
+$path also $PATH
+----------------
 
-A comma-separated list (with no white chars) of directiries should be the
-value of this environment variable.  This value is use by `rehash'
-command.  `rehash' scans the files in each directory looking for
-executable files (by def, files with extensions of .prg, .tos. .ttp, or
-.g).  The leaf names and full pathnames are entered into a hash table.
-Typing the `help' command (not the `HELP' key) will list the hash
-table in brief; `which' command lists it in full.  *Gulam* does
-NOT auto rehash whenever PATH is changed (which I will change if a lot of
-you think it should).
+A comma-separated list (with no white chars) of directiries should be
+the value of the environment variable `PATH'.  `PATH' can be set
+independently by using `setenv', however, it gets automatically reset
+to the value of `path' every time you do a `set path whatever'.  This
+value is used by `rehash' command.  `rehash' scans the files in each
+directory looking for executable files (by def, files with extensions
+of `.prg', `.tos', `.ttp', or `.g').  The leaf names and full pathnames
+are entered into a hash table.  Typing the `help' command (not the
+`HELP' key) will list the hash table in brief; `which' command lists it
+in full.  *Gulam* does NOT auto rehash whenever `PATH' is changed, but
+does rehash whenever `path' is changed.
 
      setenv PATH c:,c:\bin,d:\mwc\bin 
 
@@ -1396,9 +1448,10 @@ print
 -----
      print FILENAMES
 
-The print command is used to prepare listings of the contents of files with
-headers giving the name of the file and the date and time at which the file
-was last modified.
+The `print' command is used to prepare listings of the contents of
+files with headers giving the name of the file and the date and time at
+which the file was last modified.  Use the `date' command to set the
+time and date of the system properly.
 
 
 File: gulam.info  Node: printenv, Prev: print, Up: Glossary, Next: pushd
@@ -1406,14 +1459,14 @@ File: gulam.info  Node: printenv, Prev: print, Up: Glossary, Next: pushd
 printenv
 --------
 
-The `printenv'  command  is equiv to setenv with no args.  
+The `printenv' command is equivalent to `setenv' with no arguments.
 
 
 $prompt
 -------
 
 *Gulam* prompts for input with the contents of this variable.  Set
-it with set command.
+it with the `set' command.
 
      set prompt      '$ncmd $cwd gu > $u' 
 
@@ -1437,7 +1490,9 @@ pwd
 ---
 
 This built-in command prints the full pathname of the current working
-directory.
+directory. It is equivalent to
+
+     	echo $cwd
 
 
 File: gulam.info  Node: query-search-replace, Prev: path, Up: top, Next: regular-expressions
@@ -1553,7 +1608,7 @@ less-preferred alternatives.)
 Here are some examples of usage: 
 
      ls *[sg]        # print file names ending in s or g
-     egrep '(MWC|MEGAMAX)' *.c       
+     egrep '(MWC|MEGAMAX|MANX)' *.c       
      egrep '^$' *.c  # print line numbers of empty lines
      egrep 'aa*' *.c
 
@@ -1599,8 +1654,8 @@ File: gulam.info  Node: rx, Prev: rm, Up: Glossary, Next: set
 rx/sx
 -----
 
-These are built-in commands.  `rx' receives a file from the remote
-system; and `sx' sends a file to the remote system using Xmodem
+These are built-in commands.  `rx' receives file(s) from the remote
+system; and `sx' sends file(s) to the remote system using Xmodem
 protocol.
 
      rx FNM
@@ -1628,6 +1683,16 @@ that files received with Xmodem usually contain extraneous bytes at the
 very end of the file.  With text files, you often see a bunch of
 `^Z's.
 
+	When both `sx_remote_cmd' and `rx_remote_cmd' are set
+appropriately, it is possible to transfers of batches of files.  For example,
+
+     sx D1/D2/F1 D1/F2
+
+will invoke `xm rt' on the far end and send file `d1/d2/f1',
+and after this is finished invoke `xm rt' once again and send the
+second file `d1/f2'.  The `rx' command also can similarly
+take multiple arguments.
+
 
 File: gulam.info  Node: set, Prev: rx, Up: Glossary, Next: setenv
 
@@ -1642,9 +1707,9 @@ arguments are present, second and subsequent words are processed as an
 expression yielding a value which is then assigned to the first argument.
 The `unset' command deletes a variable.
 
-     set i  {  $j > 10 } # sets i to 1 if $j is > 10; to 0 otherwise 
+     set i  {$j > 10 } # sets i to 1 if $j is > 10; else to 0
      set x "hi there" 
-     set y $i + 4 @ 2     # @ stands for multiplication 
+     set y $i + 4 @ 2   # @ stands for multiplication 
 
 
 File: gulam.info  Node: setenv, Prev: set, Up: Glossary, Next: source
@@ -1663,9 +1728,9 @@ source
 ------
      source FILE-NAME
 
-The contents of file FILE-NAME are excuted by *Gulam*.  Unless
-the FILE-NAME has an extension other than .g, use the simpler command
-`file.g' instead.
+The contents of file FILE-NAME are excuted by *Gulam*.
+Unless the FILE-NAME has an extension other than `.g', use
+the simpler command `file.g' instead.
 
 
 status

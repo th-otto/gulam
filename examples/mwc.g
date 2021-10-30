@@ -1,3 +1,4 @@
+set env_style mw
 set path c:\mwc\bin,c:\bin,f:
 setenv SUFF .prg,.tos,.ttp
 setenv LIBPATH f:,c:\mwc\lib,c:\mwc\bin
