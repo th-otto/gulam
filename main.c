@@ -326,7 +326,7 @@ int main(int argc, char **argv, char **envp)
 		gfree(p);
 	}
 	insertvar(Ncmd, itoal(1L));
-	insertvar(Verbosity, "2");
+	insertvar(Verbosity, "1");
 
 	stamptime(&masterdate);			/* AKP */
 

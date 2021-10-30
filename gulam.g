@@ -17,6 +17,7 @@ alias mwc e:\profile.g	#set up for mark williams
 cd c:\home
 set home $cwd
 set prompt '$ncmd#  $U'
+set mscursor '0000'
 set prompt_tail	' '
 set baud_rate 9600
 set sz_rs232_buffer 4096
