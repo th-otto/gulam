@@ -4,7 +4,7 @@
  */
 
 #include "regexp.h"
-#include "gu.h"
+#include "ue.h"
 
 #include <string.h>
 #include <stddef.h>

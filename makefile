@@ -16,6 +16,7 @@ CROSS = m68k-atari-mint-
 WARN = -Wall -Wstrict-prototypes -Wmissing-prototypes -Wold-style-declaration -Wold-style-definition -Werror
 CC = $(CROSS)gcc
 CFLAGS = -O2 -fomit-frame-pointer -mshort -funsigned-char $(WARN)
+LDFLAGS = -s
 LIBS =
 
 # gasmmwc.o removed, gasmgnu.o added
@@ -34,7 +35,7 @@ OFILES	= $(UEFILES) $(GUFILES)
 all: gunew.prg
 
 gunew.prg:	$(OFILES)
-		$(CC) $(CFLAGS) -o $@ $(OFILES) $(LIBS)
+		$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OFILES) $(LIBS)
 
 $(OFILES):	ue.h gu.h keynames.h regexp.h sysdpend.h
 

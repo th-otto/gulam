@@ -36,6 +36,7 @@
 */
 
 #include "ue.h"
+#include "keynames.h"
 
 extern int __mint;
 
@@ -58,18 +59,18 @@ ST remains in reverse video, in some situations, even after receiving
 a \033q.  */
 
 #define	SZinc	4*256
-static uchar inc[SZinc];				/* storage for typeahead keys   */
+static KEY inc[SZinc];				/* storage for typeahead keys   */
 static int inx = 0;						/* circular buffer is overkill  */
 
-static void charinc(uint c)
+static void charinc(KEY c)
 {
 	if (inx < SZinc - 1)
-		inc[inx++] = (uchar) c;
+		inc[inx++] = c;
 }
 
 /* Store the string p as if the chars are typed ahead */
 
-void storekeys(uchar *p)
+void storekeys(KEY *p)
 {
 	if (p)
 		while (*p)
@@ -78,30 +79,92 @@ void storekeys(uchar *p)
 
 /* Return the next key pressed by the user; it is in inc if inx > 0 */
 
-int inkey(void)
+KEY inkey(void)
 {
-	uint i;
+	KEY i;
 
 	if (inx > 0)
 	{
-		i = (uint) (inc[0]);
+		i = inc[0];
 		--inx;
 		cpymem(inc, inc + 1, inx * (int)sizeof(inc[0]));	/* inx is very small */
 	} else
-#ifndef	TEB
-		i = (uint) ggetchar();
-#else
 	{
+		long l;
+		short s;
+		
+#ifndef	TEB
+		l = ggetchar();
+#else
 	  checkagain:
 		if (inkbdrdy())
-			i = (uint) ggetchar();
+			l = ggetchar();
 		else
 		{
 			teupdate();
 			goto checkagain;
 		}
-	}
 #endif
+		i = (KEY)l & 0xff;
+		switch ((int)(l >> 16) & 0xff)
+		{
+		case 0x3b: i = F1; break;
+		case 0x3c: i = F2; break;
+		case 0x3d: i = F3; break;
+		case 0x3e: i = F4; break;
+		case 0x3f: i = F5; break;
+		case 0x40: i = F6; break;
+		case 0x41: i = F7; break;
+		case 0x42: i = F8; break;
+		case 0x43: i = F9; break;
+		case 0x44: i = F10; break;
+		case 0x54: i = F1 | SHIFTED; break;
+		case 0x55: i = F2 | SHIFTED; break;
+		case 0x56: i = F3 | SHIFTED; break;
+		case 0x57: i = F4 | SHIFTED; break;
+		case 0x58: i = F5 | SHIFTED; break;
+		case 0x59: i = F6 | SHIFTED; break;
+		case 0x5a: i = F7 | SHIFTED; break;
+		case 0x5b: i = F8 | SHIFTED; break;
+		case 0x5c: i = F9 | SHIFTED; break;
+		case 0x5d: i = F10 | SHIFTED; break;
+		case 0x61: i = UNDO; break;
+		case 0x62: i = HELP; break;
+		case 0x52: i = INSERT; break;
+		case 0x53: i = DELETE; break;
+		case 0x47: i = HOME; break;
+		case 0x48: i = UPARRO; break;
+		case 0x4b: i = LTARRO; break;
+		case 0x4d: i = RTARRO; break;
+		case 0x50: i = DNARRO; break;
+		case 0x4a: i = KMINUS; break;
+		case 0x4e: i = KPLUS; break;
+		case 0x63: i = KLP; break;
+		case 0x64: i = KRP; break;
+		case 0x65: i = KSLASH; break;
+		case 0x66: i = KSTAR; break;
+		case 0x67: i = K7; break;
+		case 0x68: i = K8; break;
+		case 0x69: i = K9; break;
+		case 0x6a: i = K4; break;
+		case 0x6b: i = K5; break;
+		case 0x6c: i = K6; break;
+		case 0x6d: i = K1; break;
+		case 0x6e: i = K2; break;
+		case 0x6f: i = K3; break;
+		case 0x70: i = K0; break;
+		case 0x71: i = KDOT; break;
+		case 0x72: i = KENTER; break;
+		case 0x73: i = LTARRO | CTRL; break;
+		case 0x74: i = RTARRO | CTRL; break;
+		case 0x77: i = HOME | CTRL; break;
+		default:
+			return i;
+		}
+		s = Kbshift(-1);
+		if (s & 0x03)
+			i |= SHIFTED;
+	}
 	return i;
 }
 
@@ -250,11 +313,7 @@ void font(void)
 
 void setmdmport(void)
 {
-#ifdef __GNUC__
-	Bconmap((int) varnum(Mdmport));		/* 43 is Bconmap() */
-#else
-	xbios(43, (int) varnum(Mdmport));	/* 43 is Bconmap() */
-#endif
+	Bconmap(varnum(Mdmport));		/* 43 is Bconmap() */
 }
 
 #ifdef DEBUG
@@ -402,7 +461,9 @@ void mousecursor(void)
 		usrikbdcmd[2] = (p[2] - '0') * 16 + p[3] - '0';
 		p = usrikbdcmd;
 	} else
+	{
 		p = defikbdcmd;
+	}
 	if (p[1] && p[2])
 		Ikbdws(2, p);
 }
@@ -418,152 +479,10 @@ void mouseregular(void)
 	Ikbdws(0, "\010");					/* Ikbdws(0, put mouse back to relative) */
 }
 
-/*	mapping of keys follows			1/13/86
-	scan code to ascii keymap for use in microEmacs on ST520
-================
-changed shifted keypad keys, changed to char constants
-kbad 880601
-================
-*/
-
-#include "keynames.h"
-
-static char unsh[128 * 3] = {
-/* UNSHIFTED */
-	/* -------scan codes: 0x00-0x0f ---------------------------- */
-	'\0' /*NUL*/, '\033' /*ESC*/, '1', '2', '3', '4', '5', '6',
-	'7', '8', '9', '0', '-', '=', '\010' /*BS*/, '\011' /*HT*/,
-
-	/* ------------------ 0x10-0x1f ---------------------------- */
-	'q', 'w', 'e', 'r', 't', 'y', 'u', 'i',
-	'o', 'p', '[', ']', '\015' /*CR*/, '\0' /*CTL*/, 'a', 's',
-
-	/* ------------------ 0x20-0x2f ---------------------------- */
-	'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',
-	'\'', '`', '\0' /*LSH*/, '\\', 'z', 'x', 'c', 'v',
-
-	/* ------------------ 0x30-0x3f ---------------------------- */
-	'b', 'n', 'm', ',', '.', '/', '\0' /*RSH*/, '\0' /*NA*/,
-	'\0' /*ALT*/, ' ', '\0' /*CAP*/, F1, F2, F3, F4, F5,
-
-
-	/* ------------------ 0x40-0x4f ---------------------------- */
-	F6, F7, F8, F9, F10, '\0' /*NA*/, '\0' /*NA*/, HOME,
-	UPARRO, '\0' /*NA*/, KMINUS, LTARRO,
-	'\0' /*NA*/, RTARRO, KPLUS, '\0' /*NA*/,
-
-	/* ------------------ 0x50-0x5f ---------------------------- */
-	DNARRO, '\0' /*NA*/, INSERT, '\177' /*DEL*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-
-	/* ------------------ 0x60-0x6f ---------------------------- */
-	'\0' /*ISO*/, UNDO, HELP,
-	KLP, KRP, KSLASH, KSTAR, K7,
-	K8, K9, K4, K5, K6, K1, K2, K3,
-
-	/* ------------------ 0x70-0x72 ---------------------------- */
-	K0, KDOT, KENTER,
-
-	/* ------------------ 0x73-0x7f  undefined ----------------- */
-	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-
-/* SHIFTED */
-
-	/* -------scan codes: 0x00-0x0f ---------------------------- */
-	'\0' /*NUL*/, '\033' /*ESC*/, '!', '@', '#', '$', '%', '^',
-	'&', '*', '(', ')', '_', '+', '\010' /*BS*/, '\011' /*HT*/,
-
-	/* ------------------ 0x10-0x1f ---------------------------- */
-	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I',
-	'O', 'P', '{', '}', '\015' /*CR*/, '\0' /*CTL*/, 'A', 'S',
-
-	/* ------------------ 0x20-0x2f ---------------------------- */
-	'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',
-	'\"', '~', '\0' /*LSH*/, '|', 'Z', 'X', 'C', 'V',
-
-	/* ------------------ 0x30-0x3f ---------------------------- */
-	'B', 'N', 'M', '<', '>', '?', '\0' /*RSH*/, '\0' /*NA*/,
-	'\0' /*ALT*/, ' ', '\0' /*CAP*/, F1 + SHIFTED,
-	F2 + SHIFTED, F3 + SHIFTED, F4 + SHIFTED, F5 + SHIFTED,
-
-
-	/* ------------------ 0x40-0x4f ---------------------------- */
-	F6 + SHIFTED, F7 + SHIFTED, F8 + SHIFTED, F9 + SHIFTED,
-	F10 + SHIFTED, '\0' /*NA*/, '\0' /*NA*/, HOME + SHIFTED,
-	UPARRO + SHIFTED, '\0' /*NA*/, '-' /*KMINUS+SHIFTED */ , LTARRO + SHIFTED,
-	'\0' /*NA*/, RTARRO + SHIFTED, '+' /*KPLUS+SHIFTED */ , '\0' /*NA*/,
-
-	/* ------------------ 0x50-0x5f ---------------------------- */
-	DNARRO + SHIFTED, '\0' /*NA*/, INSERT + SHIFTED, '\177' /*DEL*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-
-	/* ------------------ 0x60-0x6f ---------------------------- */
-	'\0' /*ISO*/, UNDO + SHIFTED, HELP + SHIFTED, '(' /*KLP+SHIFTED */ ,
-	')' /*KRP+SHIFTED */ , '/' /*KSLASH+SHIFTED */ , '*' /*KSTAR+SHIFTED */ ,
-	'7' /*K7+SHIFTED */ , '8' /*K8+SHIFTED */ , '9' /*K9+SHIFTED */ ,
-	'4' /*K4+SHIFTED */ , '5' /*K5+SHIFTED */ , '6' /*K6+SHIFTED */ ,
-	'1' /*K1+SHIFTED */ , '2' /*K2+SHIFTED */ , '3' /*K3+SHIFTED */ ,
-
-	/* ------------------ 0x70-0x72 ---------------------------- */
-	'0' /*K0+SHIFTED */ , '.' /*KDOT+SHIFTED */ , '\015' /*KENTER+SHIFTED */ ,
-
-	/* ------------------ 0x73-0x7f  undefined ----------------- */
-	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-
-/* CAPSLOCKED */
-
-	/* -------scan codes: 0x00-0x0f ---------------------------- */
-	'\0' /*NUL*/, '\033' /*ESC*/, '1', '2', '3', '4', '5', '6',
-	'7', '8', '9', '0', '-', '=', '\010' /*BS*/, '\011' /*HT*/,
-
-	/* ------------------ 0x10-0x1f ---------------------------- */
-	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I',
-	'O', 'P', '[', ']', '\015' /*CR*/, '\0' /*CTL*/, 'A', 'S',
-
-	/* ------------------ 0x20-0x2f ---------------------------- */
-	'D', 'F', 'G', 'H', 'J', 'K', 'L', ';',
-	'\'', '`', '\0' /*LSH*/, '\\', 'Z', 'X', 'C', 'V',
-
-	/* ------------------ 0x30-0x3f ---------------------------- */
-	'B', 'N', 'M', ',', '.', '/', '\0' /*RSH*/, '\0' /*NA*/,
-	'\0' /*ALT*/, ' ', '\0' /*CAP*/, F1, F2, F3, F4, F5,
-
-
-	/* ------------------ 0x40-0x4f ---------------------------- */
-	F6, F7, F8, F9, F10, '\0' /*NA*/, '\0' /*NA*/, HOME,
-	UPARRO, '\0' /*NA*/, KMINUS, LTARRO,
-	'\0' /*NA*/, RTARRO, KPLUS, '\0' /*NA*/,
-
-	/* ------------------ 0x50-0x5f ---------------------------- */
-	DNARRO, '\0' /*NA*/, INSERT, '\177' /*DEL*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-	'\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/, '\0' /*NA*/,
-
-	/* ------------------ 0x60-0x6f ---------------------------- */
-	'\0' /*ISO*/, UNDO, HELP,
-	KLP, KRP, KSLASH, KSTAR, K7,
-	K8, K9, K4, K5, K6, K1, K2, K3,
-
-	/* ------------------ 0x70-0x72 ---------------------------- */
-	K0, KDOT, KENTER,
-
-	/* ------------------ 0x73-0x7f  undefined ----------------- */
-	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
-};
-
-#define	shif	unsh+128
-#define	caps	unsh+256
 
 void keysetup(void)
 {
-	(void) Keytbl(unsh, shif, caps);
-	/* The ptr this returns appears to be useless   */
-	/* It should return the ptrs to old tables  */
+	/* messing with keytables removed */
 }
 
 
@@ -571,6 +490,6 @@ int keyreset(int f, int n)								/* should reset to the table we had */
 {										/* prior to entering uE         */
 	UNUSED(f);
 	UNUSED(n);
-	Bioskeys();
+	/* messing with keytables removed */
 	return TRUE;
 }

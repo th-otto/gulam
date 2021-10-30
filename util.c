@@ -42,11 +42,16 @@ void charset(uchar *a, uchar *s, uint v)
 
 /* Copy n bytes from s to d; these are either disjoint areas, or d is < s.
 */
-void cpymem(uchar *d, uchar *s, int n)
+void cpymem(void *_d, void *_s, int n)
 {
-	if (d && s)
-		while (n--)
+	char *d = _d;
+	const char *s = _s;
+	if (d && s && n)
+	{
+		do
 			*d++ = *s++;
+		while (--n != 0);
+	}
 }
 
 

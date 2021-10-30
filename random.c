@@ -8,14 +8,14 @@
 
 int tabsize;							/* Tab size (0: use real tabs)  */
 
-static void gsleep(int i)
+static void gsleep(void)
 {
 	long j;
 
-	j = (long) varnum("delay");
+	j = varnum("delay");
 	if (j == 0)
 		j = 2000L;
-	for (j = j * i * 16; j--;)
+	for (j = j * 16; j--;)
 		;
 }
 
@@ -48,7 +48,7 @@ static int displaymatch(LINE *clp, int cbo)
 		curwp->w_flag |= WFMOVE;
 
 		update();						/* show match */
-		gsleep(1);						/* wait a bit */
+		gsleep();						/* wait a bit */
 
 		curwp->w_dotp = tlp;			/* return to old position */
 		curwp->w_doto = tbo;
@@ -57,7 +57,7 @@ static int displaymatch(LINE *clp, int cbo)
 	{									/* match not in this window so display line in echo area */
 		mlmesg(makelnstr(clp));
 		update();
-		gsleep(1);
+		gsleep();
 		mlmesg(ES);
 	}
 	update();
@@ -71,7 +71,7 @@ static int displaymatch(LINE *clp, int cbo)
  * for a balancing character.  If such a balancing character
  * is found, it uses displaymatch() to display the match.
  */
-static int balance(int k)
+static int balance(KEY k)
 {
 	LINE *clp;
 	int cbo;
@@ -143,7 +143,7 @@ static int balance(int k)
 int selfinsert(int f, int n)
 {
 	int c;
-	int k = lastkey;
+	KEY k = lastkey;
 	
 	UNUSED(f);
 	if (n < 0)

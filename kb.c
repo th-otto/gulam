@@ -299,11 +299,7 @@ keypad keys
 	{0x7F, Fforwdel},
 	{HELP + SHIFTED, Fkbreset},
 	/* room for new key bindings */
-/*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*/ {0, Fnoop},
+	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
@@ -458,11 +454,7 @@ keypad keys
 	{0x7F, Fforwdel},
 	{HELP + SHIFTED, Fkbreset},
 	/* room for new key bindings */
-/*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*/ {0, Fnoop},
+	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
@@ -564,11 +556,7 @@ keypad keys
 	{0x7F, Fforwdel},
 	{HELP + SHIFTED, Fkbreset},
 	/* room for new key bindings */
-/*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*	{0,			Fnoop},
-*/ {0, Fnoop},
+	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
 	{0, Fnoop},
@@ -591,7 +579,7 @@ void bindkey(int n, uchar *keycode, uchar *cmdcode)
 {
 	int kc;
 	int fx;
-	int cc;
+	KEY cc;
 	KB *ktp;
 
 	kc = (int) atoir(keycode, 16);
@@ -613,7 +601,7 @@ void bindkey(int n, uchar *keycode, uchar *cmdcode)
 static char buf[64];
 static char bl[16] = "               ";	/* 15 blanks */
 
-static void setupkf(int kc, int fx)
+static void setupkf(KEY kc, int fx)
 {
 	long xx;
 
@@ -650,7 +638,7 @@ int wallchart(int f, int n)
 {
 	BUFFER *bp;
 	KB *ktp;
-	int cc;
+	KEY cc;
 
 	UNUSED(f);
 	mlwrite("wall chart for Regular buffer, Minibuf, or Gulam? [r m or g] ");
@@ -684,14 +672,15 @@ int desckey(int f, int n)
 	c = getkey();
 	mlwrite("in Regular buffer, Minibuf, or Gulam? [r m or g] ");
 	c2 = getkey();
-	n = (c2 == 'm' ? 2 : (c2 == 'g' ? 1 : 0));
-	for (fx = 0, ktp = kba[n]; (kc = ktp->k_code) != KEOTBL; ktp++)
+	n = c2 == 'm' ? 2 : c2 == 'g' ? 1 : 0;
+	fx = 0;
+	for (ktp = kba[n]; (kc = ktp->k_code) != KEOTBL; ktp++)
 		if (kc == c)
 		{
 			fx = ktp->k_fx;
 			break;
 		}
-	if (fx == 0 && ((c >= 0x20 && c <= 0x7E) || (c >= 0x80 && c <= 0xFE)))
+	if (fx == 0 && Selfinserting(c))
 		/* Self inserting.  these too are ok on ST */
 		fx = Fselfinsert;
 	setupkf(c, fx);

@@ -16,13 +16,14 @@ uchar msginit[] = "ue as adapted by pm@cwru.edu  03/04/86";
 BUFFER *setgulambp(int f)					/* gulambp := shell buffer   */
 {
 	return gulambp = bfind(GulamLogo, f, BFTEMP, GUKB, BMCGUL);
-
 }
+
 
 void setminibp(void)								/* minibp := minibuffer */
 {
-	minibp = bfind(Mini, TRUE, BFTEMP, MINKB, BMCREG);
+	minibp = bfind(Mini, TRUE, BFTEMP, MINIKB, BMCREG);
 }
+
 
 int togulambuf(int f, int n)
 {
@@ -39,7 +40,7 @@ int togulambuf(int f, int n)
 	return TRUE;
 }
 
-/* Swicth to mesgln window, and to mini buffer.  Then, add the prompt
+/* Switch to mesgln window, and to mini buffer.  Then, add the prompt
 string to the buffer.  */
 
 void tominibuf(void)								/* called only from main.c of gulam */

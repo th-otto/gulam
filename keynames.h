@@ -11,6 +11,7 @@
 #define CTRL    0x0100                  /* Control flag, or'ed in       */
 #define META    0x0200                  /* Meta flag, or'ed in          */
 #define CTLX    0x0400                  /* ^X flag, or'ed in            */
+#define KFUNC   0x0800
 
 /*	The values below are chosen with certain patterns:
 	to SHIFT	add 0040
@@ -23,50 +24,51 @@
 	they are regular ascii codes.
 
 */
-#define F1	0201
-#define F2	0202
-#define F3	0203
-#define F4	0204
-#define F5	0205
-#define F6      0206
-#define F7	0207
-#define F8	0210
-#define F9	0211
-#define F10	0212
+#define F1	(KFUNC+0x0001)
+#define F2  (KFUNC+0x0002)
+#define F3  (KFUNC+0x0003)
+#define F4	(KFUNC+0x0004)
+#define F5	(KFUNC+0x0005)
+#define F6  (KFUNC+0x0006)
+#define F7	(KFUNC+0x0007)
+#define F8	(KFUNC+0x0008)
+#define F9	(KFUNC+0x0009)
+#define F10	(KFUNC+0x000a)
 
-#define HELP    0213
-#define UNDO	0214
-#define INSERT	0215
-#define HOME	0216
+#define HELP    (KFUNC+0x000b)
+#define UNDO	(KFUNC+0x000c)
+#define INSERT	(KFUNC+0x000d)
+#define HOME	(KFUNC+0x000e)
+#define DELETE  0x7f
 
-#define UPARRO	0273
-#define DNARRO	0274
-#define LTARRO	0275
-#define RTARRO	0276
+#define	K0	(KFUNC+0x00b0)
+#define	K1	(KFUNC+0x00b1)
+#define	K2	(KFUNC+0x00b2)
+#define	K3	(KFUNC+0x00b3)
+#define	K4	(KFUNC+0x00b4)
+#define	K5	(KFUNC+0x00b5)
+#define	K6	(KFUNC+0x00b6)
+#define	K7	(KFUNC+0x00b7)
+#define	K8	(KFUNC+0x00b8)
+#define	K9	(KFUNC+0x00b9)
 
-#define	KLP	0300
-#define	KRP	0301
-#define	KSTAR	0302
-#define	KPLUS	0303
-#define	KENTER	0304
-#define	KMINUS	0305
-#define	KDOT	0306
-#define	KSLASH	0307
+#define UPARRO	(KFUNC+0x00bb)
+#define DNARRO	(KFUNC+0x00bc)
+#define LTARRO	(KFUNC+0x00bd)
+#define RTARRO	(KFUNC+0x00be)
 
-#define	K0	0260
-#define	K1	0261
-#define	K2	0262
-#define	K3	0263
-#define	K4	0264
-#define	K5	0265
-#define	K6	0266
-#define	K7	0267
-#define	K8	0270
-#define	K9	0271
+#define	KLP     (KFUNC+0x00c0)
+#define	KRP     (KFUNC+0x00c1)
+#define	KSTAR	(KFUNC+0x00c2)
+#define	KPLUS	(KFUNC+0x00c2)
+#define	KENTER	(KFUNC+0x00c3)
+#define	KMINUS	(KFUNC+0x00c4)
+#define	KDOT	(KFUNC+0x00c5)
+#define	KSLASH	(KFUNC+0x00c6)
 
 
 /*
 	The above are the unshifted values.  Shifted, as well as 'capslocked'
 	(for only these keys) values that I use are these +0040.
 */
-#define SHIFTED 0040
+#define SHIFTED 0x0020

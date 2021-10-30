@@ -1044,7 +1044,7 @@ IO Redirection
 Prefixing a file name F with `>' causes all standard output
 produced by that command to get deposited into file F.  Similarly,
 `<g' will cause standard input to be taken from the file G
-rather than the key board.  If you prefer, you may include white chars
+rather than the keyboard.  If you prefer, you may include white chars
 between the `<' (or `>' ) and the filename.  If you have more
 than one `<', or `>' in a command all but the last are ignored.
 
@@ -1079,25 +1079,25 @@ gulam_help_file <filename>' was done earlier.
      |       |       key name (uekb ignores this)
      |       |       |              function name  (uekb ignores this)
      ---------------------------------------------------------
-     081     5c      F1              kill-backward-word
-     082     5d      F2              kill-word
-     083     20      F3              kill-line
-     084     35      F4              copy-region-as-kill
-     085     51      F5              kill-buffer
-     086     50      F6              list-buffers
-     087     4e      F7              switch-to-buffer
-     088     3f      F8              write-file
-     089     3d      F9              find-file
-     08a     3e      F10             save-buffer
-     08b     14      HELP            help
-     08c     0d      UNDO            quick-exit
-     08d     62      INSERT          scroll-down
-     08e     61      HOME            scroll-up
-     0bb     23      UPARRO          previous-line
-     0bc     0f      DNARRO          gulam-forward-line
-     0bd     1a      LTARRO          backward-char
-     0be     1b      RTARRO          forward-char
-     140     30      C-@            set-mark-command
+     801     5c      F1              kill-backward-word
+     802     5d      F2              kill-word
+     803     20      F3              kill-line
+     804     35      F4              copy-region-as-kill
+     805     51      F5              kill-buffer
+     806     50      F6              list-buffers
+     807     4e      F7              switch-to-buffer
+     808     3f      F8              write-file
+     809     3d      F9              find-file
+     80a     3e      F10             save-buffer
+     80b     14      HELP            help
+     80c     0d      UNDO            quick-exit
+     80d     62      INSERT          scroll-down
+     80e     61      HOME            scroll-up
+     8bb     23      UPARRO          previous-line
+     8bc     0f      DNARRO          gulam-forward-line
+     8bd     1a      LTARRO          backward-char
+     8be     1b      RTARRO          forward-char
+     140     30      C-@             set-mark-command
      141     1e      C-A             beginning-of-line
      142     1a      C-B             backward-char
      143     06      C-C             switch-to-gulam-buffer
@@ -1124,26 +1124,26 @@ gulam_help_file <filename>' was done earlier.
      15a     0e      C-Z             temporary-exit
      15f     14      C-_             help
      029     6b      )               blink-matching-paren-hack
-     07d     6b      }              blink-matching-paren-hack
+     07d     6b      }               blink-matching-paren-hack
      05d     6b      ]               blink-matching-paren-hack
-     0c0     0c      KLP             move-window-dn
-     0c1     0b      KRP             move-window-up
-     0c7     4a      KSLASH          split-window-vertically
-     0c2     49      KSTAR           delete-other-windows
-     0c5     45      KMINUS          previous-window
-     0c3     44      KPLUS           next-window
-     0c4     17      KENTER          call-last-kbd-macro
-     0c6     26      KDOT            goto-line
-     0b0     0a      K0              terminal-emulator
-     0b7     55      K7              beginning-of-buffer
-     0b8     32      K8              recenter
-     0b9     54      K9              end-of-buffer
-     0b4     5a      K4              backward-word
-     0b5     23      K5              previous-line
-     0b6     5e      K6              forward-word
-     0b1     1e      K1              beginning-of-line
-     0b2     0f      K2              gulam-forward-line
-     0b3     1f      K3              goto-end-of-line
+     8c0     0c      KLP             move-window-dn
+     8c1     0b      KRP             move-window-up
+     8c2     49      KSTAR           delete-other-windows
+     8c5     45      KMINUS          previous-window
+     8c3     44      KPLUS           next-window
+     8c4     17      KENTER          call-last-kbd-macro
+     8c6     26      KDOT            goto-line
+     8c7     4a      KSLASH          split-window-vertically
+     8b0     0a      K0              terminal-emulator
+     8b7     55      K7              beginning-of-buffer
+     8b8     32      K8              recenter
+     8b9     54      K9              end-of-buffer
+     8b4     5a      K4              backward-word
+     8b5     23      K5              previous-line
+     8b6     5e      K6              forward-word
+     8b1     1e      K1              beginning-of-line
+     8b2     0f      K2              gulam-forward-line
+     8b3     1f      K3              goto-end-of-line
      541     09      C-X C-A         show-key-board-macro
      542     50      C-X C-B         list-buffers
      543     12      C-X C-C         save-buffers-kill-emacs
@@ -1201,7 +1201,7 @@ gulam_help_file <filename>' was done earlier.
      344     63      ESC C-D         expand-names-and-show-them
      346     04      ESC C-F         file-name
      07f     1c      DEL             backward-delete-char
-     0ab     37      SHIFT-HELP      keys-reset
+     82b     37      SHIFT-HELP      keys-reset
      000     00      NUL             no-op
      000     00      NUL             no-op
      000     00      NUL             no-op

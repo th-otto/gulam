@@ -7,6 +7,8 @@ contains the stuff you have to edit to create a version of the editor
 for a specific operating system and terminal.  */
 
 
+typedef	unsigned short KEY;
+
 #include "gu.h"
 
 
@@ -49,15 +51,14 @@ for a specific operating system and terminal.  */
 #define KNONE	0			/* Flags for "ldelete"/"kinsert" */
 #define KFORW	1
 #define KBACK	2
-#define	KEOTBL	(-1)			/* no key code matches this	*/
+#define	KEOTBL	0xffff			/* no key code matches this	*/
 
 					/* key-to-fn bindings		*/
 #define	REGKB	0
 #define	GUKB	1
-#define	MINKB	2
+#define	MINIKB	2
 #define	TEKB	3
 	
-typedef	int	KEY;
 typedef struct
 {	KEY	k_code;			/* Key code                     */
 	int	k_fx;			/* corresp fn index into FPFS	*/
@@ -305,8 +306,8 @@ int font10(void);
 int font16(void);
 
 void tioinit(void);
-void storekeys(uchar *p);
-int inkey(void);
+void storekeys(KEY *p);
+KEY inkey(void);
 void showinc(void);
 int usertyped(void);
 int useraborted(void);
@@ -321,7 +322,7 @@ void drawshadedrect(void);
 void mousecursor(void);
 void mouseregular(void);
 void keysetup(void);
-void cpymem(uchar *d, uchar *s, int n);
+void cpymem(void *d, void *s, int n);
 int flvisit(uchar *f);
 int ffwopen(char *fn);
 int ffclose(void);
@@ -348,11 +349,11 @@ uchar getuserinput(uchar *buf, int nbuf);
 /*
  * Defined by "ue.c".
  */
-int ctrlg(int f, int n);						/* Abort out of things      */
+int ctrlg(int f, int n);					/* Abort out of things      */
 int quit(int f, int n);						/* Quit             */
 int ctlxlp(int f, int n);					/* Begin macro          */
 int ctlxrp(int f, int n);					/* End macro            */
-int ctlxe(int f, int n);						/* Execute macro        */
+int ctlxe(int f, int n);					/* Execute macro        */
 
 /*
  * Defined by "search.c".
@@ -360,7 +361,7 @@ int ctlxe(int f, int n);						/* Execute macro        */
 int forwsearch(int f, int n);				/* Search forward       */
 int backsearch(int f, int n);				/* Search backwards     */
 int searchagain(int f, int n);				/* Repeat last search command   */
-int queryrepl(int f, int n);					/* Query replace        */
+int queryrepl(int f, int n);				/* Query replace        */
 
 /*
  * Defined by "basic.c".
@@ -384,7 +385,7 @@ int gotoline(int f, int n);					/* Go to a specified line.  */
  * Defined by "buffer.c".
  */
 int listbuffers(int f, int n);				/* Display list of buffers  */
-int usebuffer(int f, int n);					/* Switch a window to a buffer  */
+int usebuffer(int f, int n);				/* Switch a window to a buffer  */
 int poptobuffer(int f, int n);				/* Other window to a buffer */
 int killbuffer(int f, int n);				/* Make a buffer go away.   */
 int savebuffers(int f, int n);				/* Save unmodified buffers  */
@@ -398,8 +399,8 @@ int errfwd(int f, int n);					/* Find an error forward    */
 /*
  * Defined by "file.c".
  */
-int filevisit(int f, int n);					/* Get a file, read write   */
-int filewrite(int f, int n);					/* Write a file         */
+int filevisit(int f, int n);				/* Get a file, read write   */
+int filewrite(int f, int n);				/* Write a file         */
 int filesave(int f, int n);					/* Save current file        */
 int fileinsert(int f, int n);				/* Insert file into buffer  */
 
@@ -407,7 +408,7 @@ int fileinsert(int f, int n);				/* Insert file into buffer  */
  * Defined by "match.c"
  */
 int blinkparen(int f, int n);				/* Fake blink-matching-paren var */
-int showmatch(int f, int n);					/* Hack to show matching paren   */
+int showmatch(int f, int n);				/* Hack to show matching paren   */
 
 /*
  * Defined by "random.c".
@@ -415,7 +416,7 @@ int showmatch(int f, int n);					/* Hack to show matching paren   */
 int selfinsert(int f, int n);				/* Insert character     */
 int showcpos(int f, int n);					/* Show the cursor position */
 int twiddle(int f, int n);					/* Twiddle characters       */
-int quote(int f, int n);						/* Insert literal       */
+int quote(int f, int n);					/* Insert literal       */
 int openline(int f, int n);					/* Open up a blank line     */
 int newline(int f, int n);					/* Insert CR-LF         */
 int deblank(int f, int n);					/* Delete blank lines       */
@@ -425,9 +426,9 @@ int tab(int f, int n);						/* insert \t; or, set tabsize   */
 int forwdel(int f, int n);					/* Forward delete       */
 int backdel(int f, int n);					/* Backward delete in       */
 int lbackdel(int f, int n);					/* line-backward-delete     */
-int lbackchar(int f, int n);					/* line-backward-character  */
+int lbackchar(int f, int n);				/* line-backward-character  */
 int lforwdel(int f, int n);					/* line-delete-next-character   */
-int lforwchar(int f, int n);					/* line-forward-character   */
+int lforwchar(int f, int n);				/* line-forward-character   */
 int ukill(int f, int n);					/* Kill forward         */
 int yank(int f, int n);						/* Yank back from killbuffer.   */
 
@@ -439,7 +440,7 @@ int copyregion(int f, int n);				/* Copy region to kill buffer.  */
 int lowerregion(int f, int n);				/* Lower case region.       */
 int upperregion(int f, int n);				/* Upper case region.       */
 int prefixregion(int f, int n);				/* Prefix all lines in region   */
-int setprefix(int f, int n);					/* Set line prefix string   */
+int setprefix(int f, int n);				/* Set line prefix string   */
 
 /*
  * Defined by "window.c".
@@ -449,7 +450,7 @@ int refresh(int f, int n);					/* Refresh the screen       */
 int nextwind(int f, int n);					/* Move to the next window  */
 int prevwind(int f, int n);					/* Move to the previous window  */
 int onlywind(int f, int n);					/* Make current window only one */
-int splitwind(int f, int n);					/* Split current window     */
+int splitwind(int f, int n);				/* Split current window     */
 int delwind(int f, int n);					/* Delete current window    */
 int enlargewind(int f, int n);				/* Enlarge display window.  */
 int shrinkwind(int f, int n);				/* Shrink window.       */
@@ -470,8 +471,8 @@ int fillword(int f, int n);					/* Insert char with word wrap.  */
  */
 int backword(int f, int n);					/* Backup by words      */
 int forwword(int f, int n);					/* Advance by words     */
-int upperword(int f, int n);					/* Upper case word.     */
-int lowerword(int f, int n);					/* Lower case word.     */
+int upperword(int f, int n);				/* Upper case word.     */
+int lowerword(int f, int n);				/* Lower case word.     */
 int capword(int f, int n);					/* Initial capitalize word. */
 int delfword(int f, int n);					/* Delete forward word.     */
 int delbword(int f, int n);					/* Delete backward word.    */
@@ -481,15 +482,15 @@ int delbword(int f, int n);					/* Delete backward word.    */
  */
 int extend(int f, int n);					/* Extended commands.       */
 int desckey(int f, int n);					/* Help key.            */
-int bindtokey(int f, int n);					/* Modify key bindings.     */
+int bindtokey(int f, int n);				/* Modify key bindings.     */
 int unsetkey(int f, int n);					/* Unbind a key.        */
-int wallchart(int f, int n);					/* Make wall chart.     */
+int wallchart(int f, int n);				/* Make wall chart.     */
 
 /*
  * defined by prefix.c
  */
 int help(int f, int n);						/* Parse help key.      */
-int ctlx4hack(int f, int n);					/* Parse a pop-to key.      */
+int ctlx4hack(int f, int n);				/* Parse a pop-to key.      */
 
 int escctrld(int f, int n);
 int escesc(int f, int n);

@@ -28,7 +28,7 @@
 #define	MINELM		0	/* used in array[MINELM]; make it 0	*/
 				/* preferrably, 2 otherwise		*/
 
-#define	Selfinserting(c) ((c>=0x20 && c<=0x7E) || (c>=0xA0 && c<=0xFE))
+#define	Selfinserting(c) ((c>=0x20 && c<=0x7E) || (c>=0x80 && c<=0xFE))
 #define	kbddisplayinit()	/* empty */
 #define	topen()			/* empty */
 #define	execfile(g, cmdln, envp) Pexec(0, g, cmdln, envp)

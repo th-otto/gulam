@@ -313,14 +313,7 @@ void setuekey(uchar *arg)
 	int n;
 
 	UNUSED(arg);
-/*
-	p = lexgetword();
-	if (*p != '-') n = 0;
-	else	
-		{ c = p[1]; n = (c == 'm'? 2 : (c == 'g'? 1 : 0)); }
-*/
-	/* REGKB = 0, MINIKB == 2, GUKB == 1        */
-	n = (negopts['m'] ? 2 : (negopts['g'] ? 1 : 0));
+	n = negopts['m'] ? MINIKB : negopts['g'] ? GUKB : REGKB;
 	p = lexgetword();
 	bindkey(n, p, lexgetword());		/* see ue's kb.c */
 }

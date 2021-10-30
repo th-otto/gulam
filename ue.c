@@ -26,8 +26,8 @@ int exitue = 2;							/* == 2    => uebody is not active      */
 			/* == -1   => uebody active, via >mini<     */
 
 static int nctlxe;						/* arg of ctlxe         */
-static uchar kbdm[NKBDM];				/* kbd macro area               */
-static uchar *kbdmip;					/* Input  for above             */
+static KEY kbdm[NKBDM];				/* kbd macro area               */
+static KEY *kbdmip;					/* Input  for above             */
 static BUFFER *fgbp;
 static int rdonly;
 
@@ -112,11 +112,11 @@ binding of all the keys to "self-insert".  It also clears out the
 "thisflag" word, and arranges to move it to the "lastflag", so that
 the next command can look at it.  Return the status of command.  */
 
-static int execute(int f, int n, int c)
+static int execute(int f, int n, KEY c)
 {
 	KB *ktp;
 	int status;
-	int kc;
+	KEY kc;
 
 	lastkey = c;
 	for (ktp = kba[curbp->b_kbn]; (kc = ktp->k_code) != KEOTBL; ktp++)
@@ -254,9 +254,9 @@ void uebody(void)
 }
 
 
-static int ueinkey(void)
+static KEY ueinkey(void)
 {
-	int i;
+	KEY i;
 
 	i = inkey();						/* see util.c */
 	if (kbdmip)
@@ -269,7 +269,7 @@ static int ueinkey(void)
 			kbdmip = NULL;
 			mlmesg("[kbd macro forced to end; no more room]");
 		} else
-			*kbdmip++ = (uchar) i;		/* room for ^X, rt-paren,\0 */
+			*kbdmip++ = i;		/* room for ^X, rt-paren,\0 */
 	}
 	return i;
 }
@@ -277,40 +277,40 @@ static int ueinkey(void)
 
 /* Get a key.  Apply control modifications to the read key. */
 
-int getctl(void)
+static KEY getctl(void)
 {
-	int c;
+	KEY c;
 
 	c = ueinkey();
 	if (c >= 'a' && c <= 'z')
 		c -= 0x20;						/* Force to upper   */
-	if (c >= 0x00 && c <= 0x1F)
+	if (/* c >= 0x00 && */ c <= 0x1F)
 		c = CTRL | (c + '@');			/* C0 control -> C- */
 	return c;
 }
 
 
-int getkey(void)
+KEY getkey(void)
 {
-	int c;
+	KEY c;
 
 	c = ueinkey();
 	if (c == METACH)
 		c = META | getctl();
 	else if (c == CCHR('X'))
 		c = CTLX | getctl();
-	else if (c >= 0x00 && c <= 0x1F)
+	else if (/* c >= 0x00 && */ c <= 0x1F)
 		c = CTRL | (c + '@');
 	return c;
 }
 
 
-int getctlkey(void)
+KEY getctlkey(void)
 {
-	int c;
+	KEY c;
 
 	c = ueinkey();
-	if (c >= 0x00 && c <= 0x1F)
+	if (/* c >= 0x00 && */ c <= 0x1F)
 		c = CTRL | (c + '@');
 	return c;
 }
