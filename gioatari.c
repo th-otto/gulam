@@ -247,9 +247,39 @@ void mvcursor(int row, int col)
 {
 	static char es[5] = "\033Yrc";
 
-	es[2] = (char) row + 32;
-	es[3] = (char) col + 32;
-	gputs(es);
+	/*
+	 * The VT52 escape only allows to encode rows/colums up to 224 (256 - 32),
+	 * so we have to cheat if our resolution is too large
+	 */
+	es[2] = row + 32;
+	es[3] = col + 32;
+	if (row >= 224 || col >= 224)
+	{
+		if (row >= 224)
+		{
+			es[2] = 255;
+			row -= 223;
+		}
+		if (col >= 224)
+		{
+			es[3] = 255;
+			col -= 223;
+		}
+		gputs(es);
+		while (row > 0)
+		{
+			gputs("\033B"); /* cursor down */
+			row--;
+		}
+		while (col > 0)
+		{
+			gputs("\033C"); /* cursor right */
+			col--;
+		}
+	} else
+	{
+		gputs(es);
+	}
 }
 
 

@@ -64,8 +64,9 @@ void hi50(void)
 	V_OFF_AD = (void *) f8x8->off_table;	/* v_off_ad <- 8x8 offset tab addr */
 	V_FNT_AD = (void *) f8x8->dat_table;			/* v_fnt_ad <- 8x8 font data addr   */
 	V_CEL_HT = 8;						/* v_cel_ht <- 8    8x8 cell height */
-	V_CEL_MY = 49;						/* v_cel_my <- 49   maximum cell "Y"    */
-	V_CEL_WR = 640;						/* v_cel_wr <- 640  offset to cell Y+1  */
+	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
+	V_CEL_MY = (V_Y_MAX / 8) - 1;		/* v_cel_my <- 49   maximum cell "Y"    */
+	V_CEL_WR = V_BYTES_LIN * 8;;		/* v_cel_wr <- 640  offset to cell Y+1  */
 }
 
 
@@ -96,8 +97,9 @@ void hi40(void)
 	V_FNT_AD = (void *) fnt_8x10;		/* v_fnt_ad <- 8x10 font data addr    */
 	V_CEL_HT = 10;						/* v_cel_ht <- 10   8x10 cell height    */
 
-	V_CEL_MY = 39;						/* v_cel_my <- 39   maximum cell "Y"    */
-	V_CEL_WR = 800;						/* v_cel_wr <- 800  offset to cell Y+1  */
+	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
+	V_CEL_MY = (V_Y_MAX / 10) - 1;						/* v_cel_my <- 39   maximum cell "Y"    */
+	V_CEL_WR = V_CEL_WR = V_BYTES_LIN * 10;;			/* v_cel_wr <- 800  offset to cell Y+1  */
 }
 
 
@@ -118,8 +120,9 @@ void hi25(void)
 	V_OFF_AD = (void *) f8x16->off_table;	/* v_off_ad <- 8x16 offset tab addr */
 	V_FNT_AD = (void *) f8x16->dat_table;		/* v_fnt_ad <- 8x16 font data addr     */
 	V_CEL_HT = 16;						/* v_cel_ht <- 16    8x16 cell height   */
-	V_CEL_MY = 24;						/* v_cel_my <- 24   maximum cell "Y"    */
-	V_CEL_WR = 1280;					/* v_cel_wr <- 1280  offset to cell Y+1 */
+	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
+	V_CEL_MY = (V_Y_MAX / 16) - 1;		/* v_cel_my <- 24   maximum cell "Y"    */
+	V_CEL_WR = V_BYTES_LIN * 16;		/* v_cel_wr <- 1280  offset to cell Y+1 */
 }
 
 /*
