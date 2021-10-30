@@ -118,6 +118,7 @@ int inbatchfile(void)
 	return snl > 0;
 }
 
+
 void csexit(int n)
 {
 	lpagain = 2;
@@ -433,6 +434,7 @@ void cselse(uchar *arg)
 		emsg = "unexpected else";
 }
 
+
 void csendif(uchar *arg)
 {
 	UNUSED(arg);
@@ -442,11 +444,13 @@ void csendif(uchar *arg)
 		emsg = "extraneous endif";
 }
 
+
 void cswhile(uchar *arg)
 {
 	UNUSED(arg);
 	stpush(WHILE, (stp->tf ? csexp(lexgetword(), &dummy) : ZERO));
 }
+
 
 void csendwhile(uchar *arg)
 {
@@ -464,6 +468,7 @@ void csendwhile(uchar *arg)
 		emsg = "extraneous endwhile";
 	}
 }
+
 
 void csforeach(uchar *arg)
 {
@@ -500,6 +505,7 @@ void csforeach(uchar *arg)
 	stp->wp = ws;
 	stp->nn = 1;
 }
+
 
 void csendfor(uchar *arg)
 {

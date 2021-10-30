@@ -321,7 +321,7 @@ and replace operation.
 int queryrepl(int f, int n)
 {
 	int s;
-	int c;
+	KEY c;
 	int all;
 	int rcnt;					/* Replacements made so far */
 	int plen;					/* length of found string   */
@@ -344,7 +344,7 @@ int queryrepl(int f, int n)
 		if (all)
 		{
 			c = usertyped();
-			if (c == -1)
+			if (c == 0)
 				c = ' ';
 			if ((rcnt & 0x003f) == 0)
 				update();

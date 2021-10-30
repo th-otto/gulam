@@ -373,7 +373,7 @@ void shiftws(WS *ws, int m)
 
 /* Show the wsps p */
 
-void showwsps(WSPS p)
+void showwsps(WSPS *p)
 {
 	uchar *q;
 
@@ -827,7 +827,7 @@ void streachline(uchar *text, int (*fn)(void *ap, uchar *p), void *ap)
 	uchar *q;
 	uchar *et;
 	uchar cr;
-	int d;
+	KEY d;
 
 	if (text == NULL)
 		return;

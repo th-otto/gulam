@@ -48,11 +48,11 @@ static char TME[] = "> Too many errors -- aborting <";
 static char RNK[] = "> Receiver not sending NAK's -- aborting <";
 static char NNS[] = "> No acknowledgment of sector -- aborting <";
 
-uchar *bufr;							/* file buffer */
-long BUFSIZ;							/* size of this buffer  */
+static uchar *bufr;						/* file buffer */
+static long BUFSIZ;						/* size of this buffer  */
 
-jmp_buf abort_env,						/* Long jump when transfers are aborted */
- time_env;								/* Long jump on timeout       */
+jmp_buf abort_env;						/* Long jump when transfers are aborted */
+jmp_buf time_env;						/* Long jump on timeout       */
 
 
 #ifdef	DEBUG
@@ -62,23 +62,23 @@ static int debug = 1;
 #define	mlwrite	printf
 #endif
 
-static int fd,							/* File descriptor for opened file */
- bufptr,								/* Ptr to file buffer    */
- mtimeout,								/* Time out period      */
- npsent,								/* #packets sent successfully   */
- nprecd,								/* #packets received successfully */
- npackets,								/* #packets received/sent   */
- npdup,									/* #duplicate Packets       */
- npbad,									/* #bad packets         */
- ntimeout,								/* #Timeouts            */
- nnaked;								/* #naked packets       */
+static int fd;							/* File descriptor for opened file */
+static int bufptr;						/* Ptr to file buffer    */
+static int mtimeout;					/* Time out period      */
+static int npsent;						/* #packets sent successfully   */
+static int nprecd;						/* #packets received successfully */
+static int npackets;					/* #packets received/sent   */
+static int npdup;						/* #duplicate Packets       */
+static int npbad;						/* #bad packets         */
+static int ntimeout;					/* #Timeouts            */
+static int nnaked;						/* #naked packets       */
 
-static uint sectnum,						/* The currently expected sector #  */
- sectors,								/* The received/sent sector #       */
- sectcomp,								/* The 1's complements of sectcurr  */
- errors,								/* #errors encountered in this recv */
- attempts,								/* #of attempts to send         */
- errorflag;								/* Just a flag              */
+static uint sectnum;					/* The currently expected sector #  */
+static uint sectors;					/* The received/sent sector #       */
+static uint sectcomp;					/* The 1's complements of sectcurr  */
+static uint errors;						/* #errors encountered in this recv */
+static uint attempts;					/* #of attempts to send         */
+static uint errorflag;					/* Just a flag              */
 
 static long nbx;						/* #bytes sent/received sucessfully */
 

@@ -7,7 +7,8 @@
 */
 #include        "ue.h"
 
-int curgoal;							/* Goal column                  */
+static int curgoal;							/* Goal column                  */
+
 
 /* Move the cursor to the beginning of the current line.
 */

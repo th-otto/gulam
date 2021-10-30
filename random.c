@@ -10,13 +10,16 @@ int tabsize;							/* Tab size (0: use real tabs)  */
 
 static void gsleep(void)
 {
-	long j;
-
-	j = varnum("delay");
-	if (j == 0)
-		j = 2000L;
-	for (j = j * 16; j--;)
-		;
+	unsigned long msecs;
+	unsigned long start, end;
+	
+	msecs = varnum("delay");
+	if (msecs == 0)
+		msecs = 2000;
+	start = getticks();
+	end = start + msecs / 5;
+	while (getticks() < end)
+		Vsync();
 }
 
 /* Display matching character.   Matching characters that are not in the

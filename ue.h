@@ -28,12 +28,6 @@ typedef	unsigned short KEY;
 #define	KRANDOM	0xFF			/* A "no key" code. pm		*/
 #define	KCHAR	0x00FF			/* The basic character code.	*/
 
-#define	_W	0x01			/* Word.			*/
-#define	_U	0x02			/* Upper case letter.		*/
-#define	_L	0x04			/* Lower case letter.		*/
-#define	_C	0x08			/* Control.			*/
-#define _P	0x10			/* end of sentence punctuation	*/
-
 #define BEL		007
 #define	CCHR(c)		(c & 0x1F)
 #define	ISLOWER(c)	(('a' <= c) && (c <= 'z'))
@@ -118,7 +112,7 @@ typedef struct  WINDOW
 	uchar	w_ntrows;		/* # of rows of text in window  */
 	uchar	w_force;		/* If NZ, forcing row.          */
 	uchar	w_flag;			/* Flags.                       */
-}       WINDOW;	
+} WINDOW;	
 
 #define WFFORCE 0x01			/* Window needs forced reframe  */
 #define WFMOVE  0x02			/* Movement from line to line   */
@@ -154,9 +148,6 @@ typedef struct  BUFFER
 #define BFCHG   0x02			/* Changed since last write     */
 #define	BFRDO	0x04			/* Buffer is read-only		*/
 
-void wwdotmark(WINDOW *wp2, WINDOW *wp);
-void wbdotmark(WINDOW *wp, BUFFER *bp);
-void bwdotmark(BUFFER *bp, WINDOW *wp);
 
 
 typedef	int	RSIZE;
@@ -211,7 +202,6 @@ extern  int	currow;                 /* Cursor row                   */
 extern  int	curcol;                 /* Cursor column                */
 extern  int	thisflag;               /* Flags, this command          */
 extern  int	lastflag;               /* Flags, last command          */
-extern  int	curgoal;                /* Goal for C-P, C-N            */
 extern  int	mpresf;                 /* Stuff in message line        */
 extern  int	sgarbf;                 /* State of screen unknown      */
 extern  WINDOW	*wheadp;                /* Head of list of windows      */
@@ -234,65 +224,78 @@ extern KB *kba[];
 extern uchar Bufferlist[];
 extern int screenwidth;
 
-BUFFER  *bfind(uchar *bname, unsigned int cflag, unsigned int bflag, int keybinds, uchar bmodec);               /* Lookup a buffer by name      */
-BUFFER	*nextbuffer(void);
-BUFFER	*setgulambp(int f);
-void setminibp(void);
-WINDOW	*wpopup(void);              /* Pop up window creation       */
-WINDOW	*popbuf(BUFFER *bp);
-WINDOW	*makewind(int top, int ntr);
-LINE	*lnlink(LINE *lx, uchar *q, int nb);
-LINE	*lalloc(int used);              /* Allocate a line              */
-uchar	*makelnstr(LINE *lp);
-void freeall(void);
+
+
+/* actually from gulam */
+void csexecbuf(BUFFER *bp);
+
+
+
+
+/*
+ * basic.c
+ */
 int igotoeob(void);
-void isetmark(void);
 int getgoal(LINE *dlp);
-void mlwrite(const char *fmt, ...);
-void vtinit(void);
-void uefreeall(void);
-void update(void);
-int mlyesno(uchar *prompt);
-int mlreply(uchar *prompt, uchar *buf, int nbuf);
-void mlmesg(uchar *p);
-void mlmesgne(uchar *p);
+void isetmark(void);
+
+
+/*
+ * buffer.c
+ */
+void wwdotmark(WINDOW *wp2, WINDOW *wp);
+void wbdotmark(WINDOW *wp, BUFFER *bp);
+void bwdotmark(BUFFER *bp, WINDOW *wp);
 int getbufname(uchar *fps, uchar *defnm, uchar *bnm);
+BUFFER *nextbuffer(void);
+int switchbuffer(BUFFER *bp);
 int bufinsert(uchar *bufn);
 int bufkill(BUFFER *bp);
+WINDOW *popbuf(BUFFER *bp);
+int addline(void *_bp, uchar *text);
 int anycb(void);
+BUFFER *bfind(uchar *bname, unsigned int cflag, unsigned int bflag, int keybinds, uchar bmodec);               /* Lookup a buffer by name      */
 int bclear(BUFFER *bp);
 void killcompletions(void);
 void showcompletions(uchar *text);
 void bufinit(void);
-int switchbuffer(BUFFER *bp);
-void mlerase(void);
-int insertborf(uchar *name, int flag);
-int addline(void *_bp, uchar *text);
-void killwindow(WINDOW *wp);
-LINE *lalloc(int used);
-void lfree(LINE *lp);
-LINE *lnlink(LINE *lx, uchar *q, int nb);
-void lbpchange(BUFFER *bp, int flag);
-void lchange(int flag);
-int linsert(int n, int c);
-int lnewline(void);
-int ldelete(RSIZE n, int kflag);
-int ldelnewline(void);
-void kdelete(void);
-int kinsert(int c, int dir);
-int kremove(int n);
-int flsave(BUFFER *bp);
-void wupdatemodeline(BUFFER *bp);
-void outofroom(void);
-void tominibuf(void);
-void userfeedback(uchar *s, int n);
-void outstr(uchar *text);
-BUFFER *opentempbuf(uchar *p);
-void closebuf(BUFFER *bp);
-void addcurbuf(uchar *p);
-int getccol(int bflg);
-void showgumem(void);
 
+
+/*
+ * display.c
+ */
+void vtinit(void);
+void uefreeall(void);
+void update(void);
+void mlerase(void);
+int mlyesno(uchar *prompt);
+int mlreply(uchar *prompt, uchar *buf, int nbuf);
+void mlwrite(const char *fmt, ...);
+void mlmesg(uchar *p);
+void mlmesgne(uchar *p);
+
+
+/*
+ * file.c
+ */
+int flvisit(uchar *f);
+int insertborf(uchar *name, int flag);
+int flsave(BUFFER *bp);
+unsigned int userfnminput(uchar **p, int sz, void (*fn)(uchar *r), int pexp);
+
+
+/*
+ * fio.c
+ */
+int ffwopen(char *fn);
+int ffclose(void);
+int ffputline(char *buf, int nb);
+int frdapply(char *fnm, void (*fn)(uchar *q, int n));
+
+
+/*
+ * gasmgnu.c
+ */
 short *lineA(void);
 void hi50(void);
 void hi40(void);
@@ -305,11 +308,15 @@ int font8(void);
 int font10(void);
 int font16(void);
 
+
+/*
+ * gioatari.c
+ */
 void tioinit(void);
 void storekeys(KEY *p);
 KEY inkey(void);
 void showinc(void);
-int usertyped(void);
+KEY usertyped(void);
 int useraborted(void);
 void gputs(const char *s);
 void vttidy(void);
@@ -322,29 +329,101 @@ void drawshadedrect(void);
 void mousecursor(void);
 void mouseregular(void);
 void keysetup(void);
-void cpymem(void *d, void *s, int n);
-int flvisit(uchar *f);
-int ffwopen(char *fn);
-int ffclose(void);
-int ffputline(char *buf, int nb);
-int frdapply(char *fnm, void (*fn)(uchar *q, int n));
-int switchwindow(WINDOW *wp);
-void wininit(void);
-int getregion(REGION *rp);
-void casesensitize(uchar *tpat);
-
-/* actually from gulam */
-void csexecbuf(BUFFER *bp);
 
 
+/*
+ * kb.c
+ */
+void bindkey(int n, uchar *keycode, uchar *cmdcode);
 
 
-int gfree(void *p);
-unsigned int userfnminput(uchar **p, int sz, void (*fn)(uchar *r), int pexp);
+/*
+ * line.c
+ */
+LINE *lalloc(int used);              /* Allocate a line              */
+LINE *lnlink(LINE *lx, uchar *q, int nb);
+void lfree(LINE *lp);
+void lbpchange(BUFFER *bp, int flag);
+void lchange(int flag);
+int lnewline(void);
+int ldelete(RSIZE n, int kflag);
+int ldelnewline(void);
+void kdelete(void);
+int kinsert(int c, int dir);
+int kremove(int n);
+
+
+/*
+ * misc.c
+ */
+BUFFER *setgulambp(int f);
+void setminibp(void);
+void tominibuf(void);
+void userfeedback(uchar *s, int n);
+void outstr(uchar *text);
+BUFFER *opentempbuf(uchar *p);
+void closebuf(BUFFER *bp);
+void addcurbuf(uchar *p);
+uchar *makelnstr(LINE *lp);
 uchar getuserinput(uchar *buf, int nbuf);
 
 
+/*
+ * random.c
+ */
+int getccol(int bflg);
 
+
+/*
+ * region.c
+ */
+int getregion(REGION *rp);
+
+
+/*
+ * rsearch.c
+ */
+void casesensitize(uchar *tpat);
+
+
+/*
+ * teb.c
+ */
+void teupdate(void);
+
+
+/*
+ * util.c
+ */
+void panic(const char *s);
+void cpymem(void *d, void *s, int n);
+uchar *sprintp(uchar *fmt, ...);
+
+
+/*
+ * window.c
+ */
+void wupdatemodeline(BUFFER *bp);
+int switchwindow(WINDOW *wp);
+void killwindow(WINDOW *wp);
+WINDOW *makewind(int top, int ntr);
+WINDOW *wpopup(void);              /* Pop up window creation       */
+void wininit(void);
+
+
+/*
+ * pmalloc.c
+ */
+void freeall(void);
+void showgumem(void);
+int gfree(void *p);
+void *gmalloc(unsigned int);
+
+
+
+/*
+ * functions that can be bound to keys
+ */
 
 /*
  * Defined by "ue.c".
@@ -403,6 +482,12 @@ int filevisit(int f, int n);				/* Get a file, read write   */
 int filewrite(int f, int n);				/* Write a file         */
 int filesave(int f, int n);					/* Save current file        */
 int fileinsert(int f, int n);				/* Insert file into buffer  */
+
+/*
+ * Defined by "line.c".
+ */
+int linsert(int n, int c);
+
 
 /*
  * Defined by "match.c"

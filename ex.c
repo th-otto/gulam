@@ -588,6 +588,7 @@ void pushws(WS *w)
 	spargws = tp;
 }
 
+
 void popargws(void)
 {
 	SE *tp;
@@ -599,6 +600,7 @@ void popargws(void)
 	freews(tp->ws);
 	gfree(tp);
 }
+
 
 #if 00
 /*

@@ -77,6 +77,78 @@ void storekeys(KEY *p)
 			charinc(*p++);
 }
 
+
+/*
+ * translate the input key to a uE key
+ */
+static KEY translatekey(long l)
+{
+	KEY i;
+	short s;
+
+	i = (KEY)l & 0xff;
+	switch ((int)(l >> 16) & 0xff)
+	{
+	case 0x3b: i = F1; break;
+	case 0x3c: i = F2; break;
+	case 0x3d: i = F3; break;
+	case 0x3e: i = F4; break;
+	case 0x3f: i = F5; break;
+	case 0x40: i = F6; break;
+	case 0x41: i = F7; break;
+	case 0x42: i = F8; break;
+	case 0x43: i = F9; break;
+	case 0x44: i = F10; break;
+	case 0x54: i = F1 | SHIFTED; break;
+	case 0x55: i = F2 | SHIFTED; break;
+	case 0x56: i = F3 | SHIFTED; break;
+	case 0x57: i = F4 | SHIFTED; break;
+	case 0x58: i = F5 | SHIFTED; break;
+	case 0x59: i = F6 | SHIFTED; break;
+	case 0x5a: i = F7 | SHIFTED; break;
+	case 0x5b: i = F8 | SHIFTED; break;
+	case 0x5c: i = F9 | SHIFTED; break;
+	case 0x5d: i = F10 | SHIFTED; break;
+	case 0x61: i = UNDO; break;
+	case 0x62: i = HELP; break;
+	case 0x52: i = INSERT; break;
+	case 0x53: i = DELETE; break;
+	case 0x47: i = HOME; break;
+	case 0x48: i = UPARRO; break;
+	case 0x4b: i = LTARRO; break;
+	case 0x4d: i = RTARRO; break;
+	case 0x50: i = DNARRO; break;
+	case 0x4a: i = KMINUS; break;
+	case 0x4e: i = KPLUS; break;
+	case 0x63: i = KLP; break;
+	case 0x64: i = KRP; break;
+	case 0x65: i = KSLASH; break;
+	case 0x66: i = KSTAR; break;
+	case 0x67: i = K7; break;
+	case 0x68: i = K8; break;
+	case 0x69: i = K9; break;
+	case 0x6a: i = K4; break;
+	case 0x6b: i = K5; break;
+	case 0x6c: i = K6; break;
+	case 0x6d: i = K1; break;
+	case 0x6e: i = K2; break;
+	case 0x6f: i = K3; break;
+	case 0x70: i = K0; break;
+	case 0x71: i = KDOT; break;
+	case 0x72: i = KENTER; break;
+	case 0x73: i = LTARRO | CTRL; break;
+	case 0x74: i = RTARRO | CTRL; break;
+	case 0x77: i = HOME | CTRL; break;
+	default:
+		return i;
+	}
+	s = Kbshift(-1);
+	if (s & 0x03)
+		i |= SHIFTED;
+	return i;
+}
+
+
 /* Return the next key pressed by the user; it is in inc if inx > 0 */
 
 KEY inkey(void)
@@ -91,7 +163,6 @@ KEY inkey(void)
 	} else
 	{
 		long l;
-		short s;
 		
 #ifndef	TEB
 		l = ggetchar();
@@ -105,65 +176,7 @@ KEY inkey(void)
 			goto checkagain;
 		}
 #endif
-		i = (KEY)l & 0xff;
-		switch ((int)(l >> 16) & 0xff)
-		{
-		case 0x3b: i = F1; break;
-		case 0x3c: i = F2; break;
-		case 0x3d: i = F3; break;
-		case 0x3e: i = F4; break;
-		case 0x3f: i = F5; break;
-		case 0x40: i = F6; break;
-		case 0x41: i = F7; break;
-		case 0x42: i = F8; break;
-		case 0x43: i = F9; break;
-		case 0x44: i = F10; break;
-		case 0x54: i = F1 | SHIFTED; break;
-		case 0x55: i = F2 | SHIFTED; break;
-		case 0x56: i = F3 | SHIFTED; break;
-		case 0x57: i = F4 | SHIFTED; break;
-		case 0x58: i = F5 | SHIFTED; break;
-		case 0x59: i = F6 | SHIFTED; break;
-		case 0x5a: i = F7 | SHIFTED; break;
-		case 0x5b: i = F8 | SHIFTED; break;
-		case 0x5c: i = F9 | SHIFTED; break;
-		case 0x5d: i = F10 | SHIFTED; break;
-		case 0x61: i = UNDO; break;
-		case 0x62: i = HELP; break;
-		case 0x52: i = INSERT; break;
-		case 0x53: i = DELETE; break;
-		case 0x47: i = HOME; break;
-		case 0x48: i = UPARRO; break;
-		case 0x4b: i = LTARRO; break;
-		case 0x4d: i = RTARRO; break;
-		case 0x50: i = DNARRO; break;
-		case 0x4a: i = KMINUS; break;
-		case 0x4e: i = KPLUS; break;
-		case 0x63: i = KLP; break;
-		case 0x64: i = KRP; break;
-		case 0x65: i = KSLASH; break;
-		case 0x66: i = KSTAR; break;
-		case 0x67: i = K7; break;
-		case 0x68: i = K8; break;
-		case 0x69: i = K9; break;
-		case 0x6a: i = K4; break;
-		case 0x6b: i = K5; break;
-		case 0x6c: i = K6; break;
-		case 0x6d: i = K1; break;
-		case 0x6e: i = K2; break;
-		case 0x6f: i = K3; break;
-		case 0x70: i = K0; break;
-		case 0x71: i = KDOT; break;
-		case 0x72: i = KENTER; break;
-		case 0x73: i = LTARRO | CTRL; break;
-		case 0x74: i = RTARRO | CTRL; break;
-		case 0x77: i = HOME | CTRL; break;
-		default:
-			return i;
-		}
-		s = Kbshift(-1);
-		if (s & 0x03)
-			i |= SHIFTED;
+		i = translatekey(l);
 	}
 	return i;
 }
@@ -181,14 +194,16 @@ void showinc(void)
 as ^C, ^G, ^S and ^Q.  So always do constat and conin.  Save the key
 if this is a typeahead.  */
 
-int usertyped(void)
+KEY usertyped(void)
 {
-	int c;
+	long l;
+	KEY c;
 
-	c = -1;
+	c = 0;
 	if (inkbdrdy())
 	{
-		c = (uint) ggetchar();
+		l = ggetchar();
+		c = translatekey(l);
 		if (c != CTRLC && c != CTRLG && c != CTRLS && c != CTRLQ)
 			charinc(c);
 	}
@@ -199,7 +214,7 @@ int usertyped(void)
 
 int useraborted(void)
 {
-	int c;
+	KEY c;
 
 	c = usertyped();
 	return c == CTRLC || c == CTRLG;
@@ -379,14 +394,14 @@ static struct r
 	int x1, y1;
 	int c0, c1;
 } rp[8] = {
-	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 },
-	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 },
-	{ 0xAAAA, 0x5555, 0, 16, 1, 1 },
+	{ 0xFFFF, 0xFFFF, 0,  8, 0, 1 }, /* ST-Low */
+	{ 0xFFFF, 0xFFFF, 0,  8, 0, 1 }, /* ST-Med */
+	{ 0xAAAA, 0x5555, 0, 16, 1, 1 }, /* ST-High */
+	{ 0, 0, 0, 0, 0, 0 },            /* Falcon modes */
+	{ 0xAAAA, 0x5555, 0, 16, 0, 1 }, /* TT-Med */
 	{ 0, 0, 0, 0, 0, 0 },
-	{ 0xAAAA, 0x5555, 0, 16, 0, 1 },
-	{ 0, 0, 0, 0, 0, 0 },
-	{ 0xAAAA, 0xFFFF, 0, 32, 1, 1 },
-	{ 0xFFFF, 0xFFFF, 0, 8, 0, 1 }
+	{ 0xAAAA, 0xFFFF, 0, 32, 1, 1 }, /* TT-High */
+	{ 0xFFFF, 0xFFFF, 0,  8, 0, 1 }  /* TT-Low */
 };
 
 /* This thing draws the gray-shaded rectangle that GEM-oriented programs
