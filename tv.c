@@ -242,7 +242,7 @@ uchar *ggetenv(uchar *p)
 }
 
 /* insert name p with string value q    */
-static void gputenv(uchar *p, uchar *q)
+void gputenv(const char *p, const char *q)
 {
 	if (envp == NULL)
 		envp = tblcreate();
@@ -335,7 +335,7 @@ uchar Mdmport[] = "mdmport";			/* extension by AKP */
 struct SETVAR
 {
 	void (*fun)(void);					/* execute after updating the setvar    */
-	int coupled;						/* ==1 iff coupled to  env var      */
+	const char *coupled;				/* iff coupled to  env var      */
 	uchar *varname;						/* name of the set variable     */
 };
 
@@ -345,18 +345,18 @@ static void rehashv(void)
 }
 
 static struct SETVAR stv[] = {
-	{ NULL, 1, Cwd },
-	{ rehashv, 1, Path },
-	{ histinit, 0, History },
-	{ NULL, 1, Home },
-	{ NULL, 1, Shell },
-	{ rdhelpfile, 0, GulamHelp },
+	{ NULL, "PWD", Cwd },
+	{ rehashv, "PATH", Path },
+	{ histinit, NULL, History },
+	{ NULL, "HOME", Home },
+	{ NULL, "SHELL", Shell },
+	{ rdhelpfile, NULL, GulamHelp },
 #if AtariST
-	{ pallete, 1, Rgb },
-	{ nrow2550, 1, Nrows },
-	{ font, 0, Font },					/* extension by AKP */
-	{ setmdmport, 0, Mdmport },			/* extension by AKP */
-	{ mousecursor, 0, Mscursor }
+	{ pallete, "RGB", Rgb },
+	{ nrow2550, "LINES", Nrows },
+	{ font, NULL, Font },					/* extension by AKP */
+	{ setmdmport, NULL, Mdmport },			/* extension by AKP */
+	{ mousecursor, NULL, Mscursor }
 #endif
 };
 
@@ -413,9 +413,7 @@ void insertvar(uchar *p, uchar *q)
 		{
 			if (stv[i].coupled)
 			{
-				p = gstrdup(p);
-				gputenv(uppercase(p), q);
-				gfree(p);
+				gputenv(stv[i].coupled, q);
 			}
 			if ((f = stv[i].fun) != 0)
 				(*f) ();

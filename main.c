@@ -74,6 +74,7 @@ beta-test version 1.03.04.05 890111 of\r\n\
 (non-profit redistribution is permitted)\r\n\r\n\
 some changes by ggf@js.uucp,\r\n\
 \t{akp,kbad}@atari.uucp (10/22/90)\r\n\
+more changes by tho (10/30/21)\r\n\
 \r\n";
 
 unsigned long masterdate;						/* AKP: extern exported to gmcatari.c */
@@ -356,6 +357,8 @@ int main(int argc, char **argv, char **envp)
 
 interactive:
 	tioinit();
+	gputenv("LINES", itoal(getnrow()));
+	gputenv("COLUMNS", itoal(getncol()));
 	exitue = -1;
 	update();
 	mlerase();

@@ -326,6 +326,7 @@ uchar *getalias(char *p);
  * env.c/tv.c
  */
 uchar *ggetenv(uchar *p);
+void gputenv(const char *p, const char *q);
 WS *dupenvws(int flag);
 void printenv(uchar *arg);
 void gsetenv(uchar *arg);
