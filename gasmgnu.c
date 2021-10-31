@@ -3,11 +3,23 @@
  *	  ++jrb
  */
 #include "ue.h"
+#include <mintbind.h>
 
 #ifdef __MINT__
 #include <sys/ioctl.h>
 extern int __mint;
 #endif
+
+#ifndef TIOCGWINSZ
+#define TIOCGWINSZ	(('T'<< 8) | 11)
+struct winsize {
+	short	ws_row;
+	short	ws_col;
+	short	ws_xpixel;
+	short	ws_ypixel;
+};
+#endif
+
 
 #ifdef __PUREC__
 #include <linea.h>
@@ -18,9 +30,6 @@ extern int __mint;
 #  define __FONT FONT_HDR
 #  define __fonts Fonts->font
 #  define __aline Linea
-#  define off_table ch_ofst
-#  define dat_table fnt_dta
-#  define form_height frm_hgt
 #  define V_OFF_AD Vdiesc->v_off_ad
 #  define V_FNT_AD Vdiesc->v_fnt_ad
 #  define V_CEL_HT Vdiesc->v_cel_ht
@@ -36,6 +45,40 @@ extern int __mint;
 #include <mint/linea.h>
 #endif
 
+
+static unsigned long fnt_8x10_data[640];
+struct _fonthdr {
+   short  font_id;
+   short  size;
+   char   name[32];
+   short  first_ade;
+   short  last_ade;
+   short  top;
+   short  ascent;
+   short  half;
+   short  descent;
+   short  bottom;
+   short max_char_width;
+   short max_cell_width;
+   short left_offset;
+   short right_offset;
+   short  thicken;
+   short  ul_size;
+   short  lighten;
+   short  skew;
+   short  flags;
+   char   *h_table;
+   short  *off_table;
+   char   *dat_table;
+   short  form_width;
+   short  form_height;
+   struct _fonthdr *next_font;
+};
+static struct _fonthdr fnt_8x10;
+static void *orig_fnt_ad;
+static void *orig_off_ad;
+static short orig_form_height;
+
 /*
  * return base addr of lineA vars
  */
@@ -46,6 +89,25 @@ short *lineA(void)
 }
 
 
+static void switch_font(struct _fonthdr *f)
+{
+	if (orig_fnt_ad == 0)
+	{
+		orig_fnt_ad = V_FNT_AD;
+		orig_off_ad = V_OFF_AD;
+		orig_form_height = V_CEL_HT;
+	}
+
+	V_OFF_AD = (void *) f->off_table;	/* v_off_ad <- 8x8 offset tab addr */
+	V_FNT_AD = (void *) f->dat_table;	/* v_fnt_ad <- 8x10 font data addr    */
+	V_CEL_HT = f->form_height;			/* v_cel_ht <- 10   8x10 cell height    */
+
+	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
+	V_CEL_MY = (V_Y_MAX / f->form_height) - 1;			/* v_cel_my <- 39   maximum cell "Y"    */
+	V_CEL_WR = V_BYTES_LIN * f->form_height;			/* v_cel_wr <- 800  offset to cell Y+1  */
+}
+
+
 /*
  * Make hi rez screen bios handle 50 lines of 8x8 characters.  Adapted
  * from original asm posting. look ma, no asm!
@@ -53,24 +115,17 @@ short *lineA(void)
 /* ++ers: if under MiNT, don't do this */
 void hi50(void)
 {
-	__FONT *f8x8;
+	struct _fonthdr *f8x8;
 
 #ifdef __MINT__
 	if (__mint)
 		return;
 #endif
 	lineA();
-	f8x8 = __fonts[1];					/* 8x8 font header          */
-	V_OFF_AD = (void *) f8x8->off_table;	/* v_off_ad <- 8x8 offset tab addr */
-	V_FNT_AD = (void *) f8x8->dat_table;			/* v_fnt_ad <- 8x8 font data addr   */
-	V_CEL_HT = 8;						/* v_cel_ht <- 8    8x8 cell height */
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-	V_CEL_MY = (V_Y_MAX / 8) - 1;		/* v_cel_my <- 49   maximum cell "Y"    */
-	V_CEL_WR = V_BYTES_LIN * 8;;		/* v_cel_wr <- 640  offset to cell Y+1  */
+	f8x8 = (struct _fonthdr *)__fonts[1];					/* 8x8 font header          */
+	switch_font(f8x8);
 }
 
-
-static unsigned long fnt_8x10[640];
 
 /*
  * Make hi rez screen bios handle 40 lines of 8x8 characters.  Adapted
@@ -78,7 +133,7 @@ static unsigned long fnt_8x10[640];
  */
 void hi40(void)
 {
-	__FONT *f8x8;
+	struct _fonthdr *f8x8;
 
 #ifdef __MINT__
 	if (__mint)
@@ -86,20 +141,16 @@ void hi40(void)
 #endif
 
 	/*  make 8x8 font into 8x10 font */
-	memset(fnt_8x10, 0, sizeof(fnt_8x10));	/* 640 = size of 8x10 fnt; longs */
+	memset(fnt_8x10_data, 0, sizeof(fnt_8x10_data));	/* 640 = size of 8x10 fnt; longs */
 
 	lineA();
-	f8x8 = __fonts[1];					/* 8x8 font header          */
-	memcpy(&fnt_8x10[64], f8x8->dat_table, 512 * 4L);	/* copy 8x8 fnt data
+	f8x8 = (struct _fonthdr *)__fonts[1];					/* 8x8 font header          */
+	fnt_8x10 = *f8x8;
+	memcpy(&fnt_8x10_data[64], f8x8->dat_table, 512 * 4L);	/* copy 8x8 fnt data
 														   starting at second line of 8x10 fnt */
-
-	V_OFF_AD = (void *) f8x8->off_table;	/* v_off_ad <- 8x8 offset tab addr */
-	V_FNT_AD = (void *) fnt_8x10;		/* v_fnt_ad <- 8x10 font data addr    */
-	V_CEL_HT = 10;						/* v_cel_ht <- 10   8x10 cell height    */
-
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-	V_CEL_MY = (V_Y_MAX / 10) - 1;						/* v_cel_my <- 39   maximum cell "Y"    */
-	V_CEL_WR = V_CEL_WR = V_BYTES_LIN * 10;;			/* v_cel_wr <- 800  offset to cell Y+1  */
+	fnt_8x10.dat_table = (void *)fnt_8x10_data;
+	fnt_8x10.form_height = 10;
+	switch_font(&fnt_8x10);
 }
 
 
@@ -108,7 +159,7 @@ void hi40(void)
  */
 void hi25(void)
 {
-	__FONT *f8x16;
+	struct _fonthdr *f8x16;
 
 #ifdef __MINT__
 	if (__mint)
@@ -116,13 +167,8 @@ void hi25(void)
 #endif
 
 	lineA();
-	f8x16 = __fonts[2];					/* 8x16 font header             */
-	V_OFF_AD = (void *) f8x16->off_table;	/* v_off_ad <- 8x16 offset tab addr */
-	V_FNT_AD = (void *) f8x16->dat_table;		/* v_fnt_ad <- 8x16 font data addr     */
-	V_CEL_HT = 16;						/* v_cel_ht <- 16    8x16 cell height   */
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-	V_CEL_MY = (V_Y_MAX / 16) - 1;		/* v_cel_my <- 24   maximum cell "Y"    */
-	V_CEL_WR = V_BYTES_LIN * 16;		/* v_cel_wr <- 1280  offset to cell Y+1 */
+	f8x16 = (struct _fonthdr *)__fonts[2];					/* 8x16 font header             */
+	switch_font(f8x16);
 }
 
 /*
@@ -162,18 +208,14 @@ void mouseoff(uchar *arg)
 /*
  * getnrow() -- get number of rows.
  */
-
 int getnrow(void)
 {
-#ifdef __MINT__
 	struct winsize ws;
 
-	ioctl(-1, TIOCGWINSZ, &ws);
-	return ws.ws_row;
-#else
+	if (Fcntl(0, (long)&ws, TIOCGWINSZ) >= 0)
+		return ws.ws_row;
 	lineA();
 	return V_CEL_MY + 1;
-#endif
 }
 
 /*
@@ -181,15 +223,12 @@ int getnrow(void)
  */
 int getncol(void)
 {
-#ifdef __MINT__
 	struct winsize ws;
 
-	ioctl(-1, TIOCGWINSZ, &ws);
-	return ws.ws_col;
-#else
+	if (Fcntl(0, (long)&ws, TIOCGWINSZ) >= 0)
+		return ws.ws_col;
 	lineA();
 	return V_CEL_MX + 1;
-#endif
 }
 
 
@@ -204,7 +243,7 @@ int getncol(void)
 
 int font8(void)
 {
-	__FONT *f8x8;
+	struct _fonthdr *f8x8;
 
 #ifdef __MINT__
 	if (__mint)
@@ -212,21 +251,8 @@ int font8(void)
 #endif
 
 	lineA();
-	f8x8 = __fonts[1];					/* 8x8 font header          */
-	V_OFF_AD = (void *) f8x8->off_table;	/* v_off_ad <- 8x8 offset tab addr */
-	V_FNT_AD = (void *) f8x8->dat_table;			/* v_fnt_ad <- 8x8 font data addr   */
-	V_CEL_HT = 8;						/* v_cel_ht <- 8    8x8 cell height */
-
-	/* new v_cel_wr (byte disp to next vertical alpha cell) =
-	 * bytes_lin * (v_cel_ht = v_bytes_lin * 8)
-	 */
-	V_CEL_WR = V_BYTES_LIN * 8;
-
-	/* new v_cel_mx = (bytes_lin / nplanes) - 1 */
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-
-	/* new v_cel_my = (v_rez_vt / 8) - 1 */
-	V_CEL_MY = (V_Y_MAX / 8) - 1;
+	f8x8 = (struct _fonthdr *)__fonts[1];					/* 8x8 font header          */
+	switch_font(f8x8);
 	return V_CEL_MY + 1;
 }
 
@@ -235,7 +261,7 @@ int font8(void)
  */
 int font10(void)
 {
-	__FONT *f8x8;
+	struct _fonthdr *f8x8;
 
 #ifdef __MINT__
 	if (__mint)
@@ -243,27 +269,17 @@ int font10(void)
 #endif
 
 	/*  make 8x8 font into 8x10 font */
-	memset(fnt_8x10, 0, sizeof(fnt_8x10));	/* 640 = size of 8x10 fnt; longs */
-
+	memset(fnt_8x10_data, 0, sizeof(fnt_8x10_data));	/* 640 = size of 8x10 fnt; longs */
+	
 	lineA();
-	f8x8 = __fonts[1];					/* 8x8 font header          */
-	memcpy(&fnt_8x10[64], f8x8->dat_table, 512 * 4L);	/* copy 8x8 fnt data
+	f8x8 = (struct _fonthdr *)__fonts[1];					/* 8x8 font header          */
+	memcpy(&fnt_8x10_data[64], f8x8->dat_table, 512 * 4L);	/* copy 8x8 fnt data
 														   starting at second line of 8x10 fnt */
-
-	V_OFF_AD = (void *) f8x8->off_table;	/* v_off_ad <- 8x8 offset tab addr */
-	V_FNT_AD = (void *) fnt_8x10;		/* v_fnt_ad <- 8x10 font data addr      */
-	V_CEL_HT = 10;						/* v_cel_ht <- 10   8x10 cell height    */
-
-	/* new v_cel_wr (byte disp to next vertical alpha cell) =
-	 * bytes_lin * (v_cel_ht = v_bytes_lin * 10)
-	 */
-	V_CEL_WR = V_BYTES_LIN * 10;
-
-	/* new v_cel_mx = (bytes_lin / nplanes) - 1 */
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-
-	/* new v_cel_my = (v_rez_vt / 10) - 1 */
-	V_CEL_MY = (V_Y_MAX / 10) - 1;
+	fnt_8x10 = *f8x8;
+	fnt_8x10.dat_table = (void *)fnt_8x10_data;
+	fnt_8x10.form_height = 10;
+	
+	switch_font(&fnt_8x10);
 	return V_CEL_MY + 1;
 }
 
@@ -273,7 +289,7 @@ int font10(void)
  */
 int font16(void)
 {
-	__FONT *f8x16;
+	struct _fonthdr *f8x16;
 
 #ifdef __MINT__
 	if (__mint)
@@ -281,23 +297,26 @@ int font16(void)
 #endif
 
 	lineA();
-	f8x16 = __fonts[2];					/* 8x16 font header             */
-	V_OFF_AD = (void *) f8x16->off_table;	/* v_off_ad <- 8x16 offset tab addr */
-	V_FNT_AD = (void *) f8x16->dat_table;		/* v_fnt_ad <- 8x16 font data addr     */
-	V_CEL_HT = 16;						/* v_cel_ht <- 16    8x16 cell height   */
-
-	/* new v_cel_wr (byte disp to next vertical alpha cell) =
-	 * bytes_lin * (v_cel_ht = v_bytes_lin * 16)
-	 */
-	V_CEL_WR = V_BYTES_LIN * 16;
-
-	/* new v_cel_mx = (bytes_lin / nplanes) - 1 */
-	V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
-
-	/* new v_cel_my = (v_rez_vt / 16) - 1 */
-	V_CEL_MY = (V_Y_MAX / 16) - 1;
+	f8x16 = (struct _fonthdr *)__fonts[2];					/* 8x16 font header             */
+	switch_font(f8x16);
 	return V_CEL_MY + 1;
 }
+
+
+void fontreset(void)
+{
+	if (orig_fnt_ad != 0)
+	{
+		V_OFF_AD = (void *) orig_off_ad;
+		V_FNT_AD = (void *) orig_fnt_ad;
+		V_CEL_HT = orig_form_height;
+		V_CEL_MX = (V_BYTES_LIN / VPLANES) - 1;
+		V_CEL_MY = (V_Y_MAX / orig_form_height) - 1;
+		V_CEL_WR = V_BYTES_LIN * orig_form_height;
+		orig_fnt_ad = 0;
+	}
+}
+
 
 #if 0
 /*

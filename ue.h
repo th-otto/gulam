@@ -307,6 +307,7 @@ int getncol(void);
 int font8(void);
 int font10(void);
 int font16(void);
+void fontreset(void);
 
 
 /*

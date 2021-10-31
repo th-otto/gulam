@@ -271,6 +271,7 @@ static void bexit(uchar *arg)
 		processcmd(gstrdup(Sgulamend), 0);
 	savehistory();
 	keyreset(FALSE, 1);
+	fontreset();
 	exit(n);
 }
 
