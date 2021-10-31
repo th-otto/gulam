@@ -112,7 +112,7 @@ static void run(uchar *g, uchar *cmdln, uchar *envp)
 static void mkcmdenv(int flag, char *pgm, char **cmdp, char **envp)
 {
 #if	TOS
-	static uchar ARGVVAL[] = "ARGV=CCCP????????????????????????????";
+	static uchar ARGVVAL[] = "ARGV=";
 #endif
 	uchar *p;
 	WS *ws;
@@ -125,7 +125,7 @@ static void mkcmdenv(int flag, char *pgm, char **cmdp, char **envp)
 		p = "gu";
 	if (flag == 0 && p[0] == 'm' && p[1] == 'w')	/* Mark Williams style */
 	{
-		strwcat(ws, ARGVVAL, 1);
+		strwcat(ws, ARGVVAL, 0);
 		strwcat(ws, pgm, 1);
 		appendlextail(ws);				/* all the args appended */
 		mwcflag = 1;

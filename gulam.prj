@@ -7,7 +7,7 @@ gulam.prg
 .C[-M]
 .C[-G]
 =
-cstartv.o
+cstartv.s
 
 ; MicroEMACS
 basic.c

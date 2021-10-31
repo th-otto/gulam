@@ -16,9 +16,9 @@ alias uc 'd:\bin\compress.ttp -vd'
 alias mwc e:\profile.g	#set up for mark williams
 cd c:\home
 set home $cwd
-set prompt '$ncmd#  $U'
+set prompt '$cwd '
+set prompt_tail	' # '
 set mscursor '0000'
-set prompt_tail	' '
 set baud_rate 9600
 set sz_rs232_buffer 4096
 set histfile c:\history.g
