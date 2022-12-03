@@ -479,7 +479,7 @@ static void copyfio(uchar *in, uchar *ou, int iscat)
 		if (posopts['t'])
 		{
 			gfdatime(&td, fi, 0);
-			tch(ou, &td);
+			tch(ou, &td, TRUE);
 		}
 		/* didn't work for ST: Fdatime(td,fo,1); Fclose(fo);    */
 

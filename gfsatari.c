@@ -221,7 +221,7 @@ void gchmod(uchar *p)
 }
 
 
-void tch(uchar *p, _DOSTIME *td)
+void tch(uchar *p, _DOSTIME *td, int dontcreate)
 {
 	int fd;
 
@@ -229,7 +229,7 @@ void tch(uchar *p, _DOSTIME *td)
 	if (fd < 0)
 	{
 		/* option -c means don't create a file */
-		if (negopts['c'])
+		if (dontcreate)
 			return;
 		fd = (int)Fcreate(p, 0);
 		if (fd < 0)
@@ -245,7 +245,8 @@ void touch(uchar *p)
 
 	td.time = Tgettime();
 	td.date = Tgetdate();
-	tch(p, &td);
+	/* option -c means don't create a file */
+	tch(p, &td, negopts['c']);
 }
 
 int outisredir(void)
