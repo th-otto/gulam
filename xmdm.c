@@ -8,6 +8,8 @@
 #include "ue.h"
 #include <setjmp.h>
 
+#if XMDM /* whole file */
+
 				/* Xmodem specific defines */
 #define	SECSIZ		0x80				/* Size of a xmodem sector/block */
 #define	ERRORMAX	20					/* MAX ERRORS BEFORE ABORT very conservative */
@@ -572,3 +574,5 @@ void sxmdm(uchar *p)
 {
 	xmdm('s', p);
 }
+
+#endif /* XMDM */

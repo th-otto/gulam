@@ -410,11 +410,13 @@ static void processargs(int builtin, int unqflag)
 }
 
 
+#if XMDM
 static void utemul(uchar *arg)
 {
 	UNUSED(arg);
 	temul(FALSE, 1);
 }
+#endif
 
 
 			/* b->type values */

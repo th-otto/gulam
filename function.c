@@ -31,7 +31,11 @@ FPFS fpfs[] = {
 	execbuf,							/* "execute-buffer", */
 	fileread,							/* "read-file", */
 	showkbdmacro,						/* "show-key-board-macro", */
+#if XMDM
 	temul,								/* "terminal-emulator", */
+#else
+	noop,								/* snoop, */
+#endif
 	mvupwind,							/* "move-window-up", */
 	mvdnwind,							/* "move-window-dn", */
 	quickexit,							/* "quick-exit", */

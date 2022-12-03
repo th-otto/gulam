@@ -87,14 +87,16 @@ typedef struct							/* screen record    */
 } SCR;
 
 static int firstentry = 1;
-static SCR scrn[2];						/* see switchscreens()      */
 static rs232REC savedrs232rec;
 static rs232REC *newrs232recp;
 static char *rsbuf;						/* ptr to large rs232 rcv buf   */
 static int szrsbuf;
 
+#if XMDM
+static SCR scrn[2];						/* see switchscreens()      */
 static char *tesmallocp;					/* ptr to mem occ by te screen      */
 static int screen_n = 0;					/* index into scrn[]    */
+#endif
 
 static int speed = -1;					/* baud rate of rs232 */
 static int flowctl = 1;
@@ -179,6 +181,7 @@ void setrs232speed(void)
 }
 
 
+#if XMDM
 static void switchscreens(void)
 {
 	short *lineAvars;					/* address of line A interface vars */
@@ -207,6 +210,8 @@ static void switchscreens(void)
 		mvcursor(scrn[screen_n].y, scrn[screen_n].x);
 	}
 }
+#endif
+
 
 /* Send a break:  Modifies Bit 3 in the TSR (reg 23) of the Mfp
 by bammi@cwru.edu  */
@@ -260,7 +265,7 @@ void sbreak(void)
 /* Set the alarm time.  This rtn is here because it is used primarily
 by xmdm.c before doing readmodem(). */
 
-static long alrm_time = 0L;				/* Time of next timeout (200 Hz) */
+static long alrm_time = 0;				/* Time of next timeout (200 Hz) */
 
 void alarm(uint n)
 {
@@ -275,6 +280,7 @@ void alarm(uint n)
 		alrm_time = 0L;
 }
 
+#if XMDM
 
 /* Read a character from the modem port.  Check for user abort (^C)
 and timeout at the same time */
@@ -371,6 +377,7 @@ static void terminit(void)
 		flushinput();
 	}
 }
+#endif
 
 
 /* Flush any characters in the modem port */
@@ -384,6 +391,7 @@ void flushinput(void)
 
 /* exit term emulator */
 
+#if XMDM
 void teexit(uchar *arg)
 {
 	UNUSED(arg);
@@ -407,6 +415,7 @@ void teexit(uchar *arg)
 emulation.  The statoc stoprecursion is there because we will be in
 >mini< while receiving input for baud-rate setting and it is possible
 the user invokes temul via Keypad-0 again.  */
+
 
 int temul(int f, int n)
 {
@@ -527,3 +536,4 @@ int temul(int f, int n)
 	stoprecursion = 0;
 	return TRUE;
 }
+#endif /* XMDM */

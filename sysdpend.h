@@ -23,7 +23,8 @@
 #define	PMMALLOC	1	/* pm's own malloc			*/
 				/* NB:	Reqd: In all versions, gfree(p)	*/
 				/* should just return -40 if p == NULL.	*/
-#define	XMDM		1
+/* disable terminal emulator */
+#define	XMDM		0
 #define	LPRINT		1
 #define	MINELM		0	/* used in array[MINELM]; make it 0	*/
 				/* preferrably, 2 otherwise		*/
