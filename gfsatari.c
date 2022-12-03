@@ -8,8 +8,9 @@
  * Revision: 1.7 90.10.24.12.13.46 apratt 
  * Added a feature to tch() which is called by touch() and other
  * places: if negopts['f'] and the file doesn't exist, it's created
- * and then touched.
- * 
+ * and then touched.   -- this is non standard:
+ * touch always creates a file, unless -c option, when it is not created.
+ *
  * Revision: 1.6 89.06.16.17.23.44 apratt 
  * Header style change.
  * 
@@ -227,15 +228,12 @@ void tch(uchar *p, _DOSTIME *td)
 	fd = (int)Fopen(p, 0);
 	if (fd < 0)
 	{
-		if (negopts['f'])
-		{
-			fd = (int)Fcreate(p, 0);
-			if (fd < 0)
-				return;					/* fail completely */
-			Fdatime(td, fd, 1);
-			Fclose(fd);
-		}
-		return;
+		/* option -c means don't create a file */
+		if (negopts['c'])
+			return;
+		fd = (int)Fcreate(p, 0);
+		if (fd < 0)
+			return;						/* fail completely */
 	}
 	Fdatime(td, fd, 1);
 	Fclose(fd);
