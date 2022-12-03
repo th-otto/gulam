@@ -196,7 +196,6 @@ typedef struct  VIDEO
 
 
 extern  uchar	pat[];                  /* Search pattern               */
-extern  uchar	msginit[];		/* my ego!			*/
 extern  int	exitue;			/* indicates where control is	*/
 extern  int	currow;                 /* Cursor row                   */
 extern  int	curcol;                 /* Cursor column                */

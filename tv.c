@@ -218,7 +218,7 @@ void unalias(uchar *arg)
 }
 
 /* return the alias'd string, if any, or itself */
-uchar *getalias(char *p)
+uchar *getalias(uchar *p)
 {
 	TBLE *a;
 

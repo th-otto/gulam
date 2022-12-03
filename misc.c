@@ -11,8 +11,6 @@
 #endif
 
 
-uchar msginit[] = "ue as adapted by pm@cwru.edu  03/04/86";
-
 BUFFER *setgulambp(int f)					/* gulambp := shell buffer   */
 {
 	return gulambp = bfind(GulamLogo, f, BFTEMP, GUKB, BMCGUL);

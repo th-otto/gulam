@@ -319,7 +319,7 @@ WS *tblws(TBLE *t, int style);
 uchar *tblstr(TBLE *t, int style);
 void alias(uchar *arg);
 void unalias(uchar *arg);
-uchar *getalias(char *p);
+uchar *getalias(uchar *p);
 
 
 /*

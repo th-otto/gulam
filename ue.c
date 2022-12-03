@@ -14,6 +14,8 @@ prabhaker mateti, 3-Jan-86, ported to Atari 520ST Steve Wilhite,
 #include        "ue.h"
 #include	"keynames.h"
 
+static uchar msginit[] = "\xe6\xee as adapted by tho  2022/12/02";		/* my ego!			*/
+
 int thisflag;							/* Flags, this command          */
 int lastflag;							/* Flags, last command          */
 KEY lastkey;
