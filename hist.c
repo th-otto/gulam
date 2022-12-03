@@ -143,9 +143,11 @@ uchar *prevhist(void)
 	return wnumhist(hcount - n, ES, ES);
 }
 
-/* Substitute every substring of the form !xx with matched hist string.
- Unless substitutions do occur, return s as is.  Otherwise, free s which
- does point to malloc'd area.
+/*************
+ Substitute every substring of the form !xx with matched hist string.
+ Unless substitutions do occur, return s as is.
+ Otherwise, free s which does point to malloc'd area.
+ `!!', `!number', `!string' => history
 */
 uchar *substhist(uchar *s)
 {
@@ -157,13 +159,14 @@ uchar *substhist(uchar *s)
 
 	if (histp == NULL)
 		return s;
+	/* BTRNQD is " \t\r\n'\"" - ie whitespace or quotes */
 	lex(s, BTRNQD, EMPTY2);
 	ws = initws();
 	nsubst = 0;
 	while ((p = lexgetword()) != NULL && *p && (p = gstrdup(p)) != NULL)
 	{
 		if (*p != '\'' && *p != '"')
-			while (p && (q = strchr(p, '!')) != NULL)
+			while (p && (q = strchr(p, '!')) != NULL && q[1] != '\0')  /* lonely '!' doesn't count */
 			{
 				nsubst++;
 				*q = '\0';
