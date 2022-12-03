@@ -72,18 +72,18 @@ struct linea_init la_init;
 typedef struct							/* Iorec() returns a ptr to this type */
 {
 	char *ibuf;
-	int ibufsiz;
-	int ibufhd;
-	int ibuftl;
-	int ibuflow;
-	int ibufhi;
+	short ibufsiz;
+	short ibufhd;
+	short ibuftl;
+	short ibuflow;
+	short ibufhi;
 } rs232REC;
 
 typedef struct							/* screen record    */
 {
 	char *logbasep;
-	int x;
-	int y;
+	short x;
+	short y;
 } SCR;
 
 static int firstentry = 1;
@@ -98,13 +98,12 @@ static char *tesmallocp;					/* ptr to mem occ by te screen      */
 static int screen_n = 0;					/* index into scrn[]    */
 #endif
 
-static int speed = -1;					/* baud rate of rs232 */
-static int flowctl = 1;
-static int ucr = -1;
-static int rsr = -1;
-static int tsr = -1;
-static int scr = -1;
-
+static short speed = -1;					/* baud rate of rs232 */
+static short flowctl = 1;
+static short ucr = -1;
+static short rsr = -1;
+static short tsr = -1;
+static short scr = -1;
 
 /* Reset the rs232 buffer to the savedrs232recd, if no one is using it;
 i.e., neither teemulator, nor xmdm() is using. */
@@ -149,7 +148,7 @@ void setrs232buf(void)
 
 static void setspeed(char *p)
 {
-	static int tbl[10] = { 0, 7, 4, 9, 2, 1, 1, 1, 1, 1 };
+	static short tbl[10] = { 0, 7, 4, 9, 2, 1, 1, 1, 1, 1 };
 	int i;
 
 	i = *p - '0';
@@ -185,7 +184,6 @@ void setrs232speed(void)
 static void switchscreens(void)
 {
 	short *lineAvars;					/* address of line A interface vars */
-
 	char *p;
 
 	if (!varnum("no_te_scr"))
@@ -204,8 +202,8 @@ static void switchscreens(void)
 #if 0
 		/* don't know if these are really nec */
 		/* they're not... AKP */
-	    Vsync();
-	    Vsync();
+		Vsync();
+		Vsync();
 #endif
 		mvcursor(scrn[screen_n].y, scrn[screen_n].x);
 	}
@@ -415,7 +413,6 @@ void teexit(uchar *arg)
 emulation.  The statoc stoprecursion is there because we will be in
 >mini< while receiving input for baud-rate setting and it is possible
 the user invokes temul via Keypad-0 again.  */
-
 
 int temul(int f, int n)
 {
