@@ -103,8 +103,8 @@ typedef	struct DTA 		/* TOS disk transfer area	*/
 {	char	dos[20];	/* 21 bytes actually, but we create */
 	uchar	user;		/* artificial 'user' for portability*/
 	uchar	attr;
-	int	time;
-	int	date;
+	short	time;
+	short	date;
 	long	size;
 	uchar	name[OSFNML+2];
 }	DTA;
