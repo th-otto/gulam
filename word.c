@@ -361,7 +361,7 @@ static WS *makeparastr(void)
 		{
 			strwcat(ws, makelnstr(curwp->w_dotp), 0);
 			strwcat(ws, " ", 0);
-			ukill(TRUE, 1);				/* kill changes the curwp->w_dotp */
+			killtext(TRUE, 1);				/* kill changes the curwp->w_dotp */
 			lastflag = thisflag;
 		}
 	}

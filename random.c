@@ -585,7 +585,7 @@ int lforwchar(int f, int n)
  f==TRUE && n <= 0 => kill any text before dot on the current line, then
                       kill back |n| lines.
 */
-int ukill(int f, int n)
+int killtext(int f, int n)
 {
 	RSIZE chunk;
 	LINE *nextp;
@@ -640,7 +640,7 @@ int killtobln(int f, int n)
 {
 	UNUSED(f);
 	UNUSED(n);
-	return ukill(TRUE, 0);
+	return killtext(TRUE, 0);
 }
 
 /*

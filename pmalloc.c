@@ -136,7 +136,8 @@ static void insert(HEAP *heap, MCB *q)
 	MCB *p;
 	MCB *r;
 
-	for (r = &heap->fmcb, p = r->next; p && p < q; r = p, p = p->next) ;
+	for (r = &heap->fmcb, p = r->next; p && p < q; r = p, p = p->next)
+		;
 	check(heap, "bef freeins", r);		/*dbg */
 	r->next = q;
 	q->next = p;
@@ -170,7 +171,8 @@ static HEAP *allocheap(UI x)
 		HEAP *h;
 		HEAP *g;
 
-		for (h = (gflag ? &gheaplist : &rheaplist), g = h->hlink; g > heap; h = g, g = g->hlink) ;
+		for (h = (gflag ? &gheaplist : &rheaplist), g = h->hlink; g > heap; h = g, g = g->hlink)
+			;
 		h->hlink = heap;
 		heap->hlink = g;
 	}
@@ -207,7 +209,8 @@ void *malloc(size_t x)
 	{
 	  getchunk:						/* below does this: 'return getchunk(heap, x))' */
 
-		for (m = &heap->fmcb, mcb = m->next; mcb && mcb->msize < x; m = mcb, mcb = mcb->next) ;
+		for (m = &heap->fmcb, mcb = m->next; mcb && mcb->msize < x; m = mcb, mcb = mcb->next)
+			;
 		if (mcb)						/* m->next == mcb */
 		{
 			check(heap, "bef getchunk", mcb);	/*dbg */
@@ -294,7 +297,6 @@ int gfree(void *p)
 
 /* Fast freeing of all rheaplist heaps.  Used by uE when exiting cleanly
 back to the single line oriented shell mode. */
-
 
 void freeall(void)
 {

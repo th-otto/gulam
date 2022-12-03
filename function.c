@@ -57,7 +57,7 @@ FPFS fpfs[] = {
 	forwdel,							/* "delete-char", */
 	gotobol,							/* "beginning-of-line", */
 	gotoeol,							/* "end-of-line", */
-	ukill,								/* "kill-line", */
+	killtext,							/* "kill-line", */
 	forwline,							/* "next-line", */
 	openline,							/* "open-line", */
 	backline,							/* "previous-line", */

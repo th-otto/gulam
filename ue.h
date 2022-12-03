@@ -515,7 +515,7 @@ int lbackdel(int f, int n);					/* line-backward-delete     */
 int lbackchar(int f, int n);				/* line-backward-character  */
 int lforwdel(int f, int n);					/* line-delete-next-character   */
 int lforwchar(int f, int n);				/* line-forward-character   */
-int ukill(int f, int n);					/* Kill forward         */
+int killtext(int f, int n);					/* Kill forward         */
 int yank(int f, int n);						/* Yank back from killbuffer.   */
 
 /*

@@ -368,7 +368,7 @@ int gforwline(int f, int n)
 			if (q)
 			{
 				curwp->w_doto = 0;
-				ukill(TRUE, 1);
+				killtext(TRUE, 1);
 				if (curbp == gulambp)
 				{
 					p = str3cat(r = getprompt(), q, ES);
