@@ -320,6 +320,7 @@ void setuekey(uchar *arg)
 }
 
 
+/* note redirected filename */
 static int noteredfnm(int r, char *fnm)
 {
 	char c;
@@ -355,11 +356,29 @@ static int noteredfnm(int r, char *fnm)
 }
 
 
-/* Unquote the arguments to cmd (ie., the ws->ps stringlets) in place.
-Also, note redirections and options (if builtin cmd).  As we handle
-the redirs, p will lag behind q; if there are no redirs, p will == q
-all the time.  */
+/*
+ Unquote the arguments to cmd (ie., the ws->ps stringlets) in place.
+ Also, note redirections and options (if builtin cmd).
+ As we handle the redirs, p will lag behind q;
+ if there are no redirs, p will == q all the time.
 
+  builtin commands have the form
+                               cmd options args
+
+  using /posopts arrays imply that options of all builtin commands
+  are +/- single letter only.
+  So we have, for example,
+                               chmod +w file
+  but we cannot have
+                               chmod -r reference +w files
+
+  we need to know which part of the command line a '+' or '-' appears so we can
+  interpret it as an option or part of an expression
+
+ input:  /cmd/ /-f/ /arg1/ ...
+ output: /cmd/ /arg1/ ...
+         & nopts[], popts[] set accordingly
+*/
 static void processargs(int builtin, int unqflag)
 {
 	WS *ws;
@@ -370,6 +389,7 @@ static void processargs(int builtin, int unqflag)
 	int n;
 	int redi;
 	int brl;
+	int finopt = -1;					/* -1 -> cmd part, 0 -> options, >0 -> args */
 
 	ws = useuplexws();
 	redi = 3;
@@ -385,14 +405,16 @@ static void processargs(int builtin, int unqflag)
 				brl--;
 			redi = (brl == 0 ? noteredfnm(redi, q) : 3);
 			if (redi < 3)
-				ws->ns--;
-			else
 			{
-				if (builtin && (k == '-' || k == '+'))
-				{
-					addoptions(q);
-					ws->ns--;
-				} else if (unqflag)
+				ws->ns--;
+			} else if (builtin && finopt == 0 && (k == '-' || k == '+'))
+			{
+				addoptions(q);
+				ws->ns--;
+			} else
+			{
+				finopt++;
+				if (unqflag)
 					p = unquote(p, q) + 1;
 				else
 				{
