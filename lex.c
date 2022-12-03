@@ -33,7 +33,7 @@ static int clxm;							/* # current lxm        */
 
 static uchar *lxnextp;					/* ptr to next word in the line being parsed  */
 static uchar *bgnp;
-static uchar prevc;
+static uchar prevc;						/* char that was overwritten by terminating null of previous lexeme */
 
 static uchar *delim;
 static uchar *lxm2b;
@@ -64,7 +64,8 @@ static uchar *quotedword(uchar *p)
 
 	sdq = *p;							/* single or double qoute   */
   matchsdq:
-	while ((c = *++p) != 0 && (c != sdq)) ;
+	while ((c = *++p) != 0 && (c != sdq))
+		;
 	if (c != sdq)
 		emsg = "unmatched quote";
 	else
@@ -122,11 +123,11 @@ static uchar *nextlexeme(void)
 */
 WS *lex(uchar *p, uchar *dlm, uchar *t2)
 {
-	static int lxnotinited = 1;
+	static int lxinited = 0;
 
-	if (lxnotinited)
+	if (!lxinited)
 	{
-		lxnotinited = 0;
+		lxinited = 1;
 		charset(WHITEC, " \t\r\n", 1);
 		charset(WHITEDELIMS, " \t\r\n", 1);
 		charset(DELIMS, "; \t\r\n`'\"", 1);
