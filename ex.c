@@ -725,24 +725,27 @@ WS *expand(uchar *p, int addremargs)
 	WS *ws3;
 	uchar *q;
 	uchar *lemsg;
-	int dqsflag;
 	int maxdn;
 	int ii;
 
 	lemsg = NULL;
-	maxdn = 0;							/* maxdn == max # of the dollar arg used    */
+	maxdn = 0;							/* maxdn == max # of the dollar arg used  */
 
+	/* tokenise the command line */
+	/* DELIMS is "; \t\r\n`'\"";  TKN2 is ">=<!/~" */
 	lex(p, DELIMS, TKN2);
 	gfree(p);
 	ws = initws();
+
+	/* expand $, ~ handle dbl quotes */
 	while ((p = lexgetword()) != NULL && *p && *p != '#')
 	{
 		lexpush();
+		/* SUBDELIMS is "!@#$%^&-=+`{}:;'\"\\|,.<>/" */
 		lex(p, SUBDELIMS, EMPTY2);
 		ws2 = initws();
 		while ((p = lexgetword()) != NULL && *p)
 		{
-			dqsflag = 0;				/* dbl quoted string flag */
 			switch (*p)
 			{
 			case '$':
@@ -751,7 +754,6 @@ WS *expand(uchar *p, int addremargs)
 					maxdn = ii;
 				break;
 			case '"':
-				dqsflag = 1;
 				q = gstrdup(p);
 				unquote(q, q);
 				lexpush();
@@ -760,6 +762,9 @@ WS *expand(uchar *p, int addremargs)
 				if (p == ES)
 					p = ws3->ps;
 				gfree(ws3);
+				q = p;
+				p = str3cat("\"", q, "\"");
+				gfree(q);
 				lexpop();
 				break;
 			case '~':
@@ -769,15 +774,11 @@ WS *expand(uchar *p, int addremargs)
 				p = gstrdup(p);
 				break;
 			}
-			if (dqsflag)
-			{
-				q = p;
-				p = str3cat("\"", q, "\"");
-				gfree(q);
-			}
 			strwcat(ws2, p, 0);
 			gfree(p);
 		}
+
+		/* now do wildcard expansions */
 		if (ws2 && (p = ws2->ps) != NULL)
 		{
 			lexpush();
@@ -803,6 +804,7 @@ WS *expand(uchar *p, int addremargs)
 		freews(ws2);
 		lexpop();
 	}
+
 	if (addremargs && spargws)
 		appendws(ws, spargws->ws, ++maxdn);
 	freews(useuplexws());
