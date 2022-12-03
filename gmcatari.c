@@ -545,16 +545,16 @@ void maxfree(uchar *p)
 }
 
 
-static int peekw(int *a)
+static short peekw(short *a)
 {
 	long ssp = Super(0L);
-	int ret = *a;
+	short ret = *a;
 
 	SuperToUser(ssp);
 	return ret;
 }
 
-static void pokew(int *a, int v)
+static void pokew(short *a, short v)
 {
 	long ssp = Super(0L);
 
@@ -565,14 +565,14 @@ static void pokew(int *a, int v)
 
 void lpeekw(uchar *arg)
 {
-	int *a, v;
+	short *a, v;
 	uchar *p;
 
 	UNUSED(arg);
 	p = lexgetword();
 	if (*p == '\0')
 		return;
-	a = (int *) (atoir(p, 16) & 0xFFFFFFFEL);
+	a = (short *) (atoir(p, 16) & 0xFFFFFFFEL);
 	v = peekw(a);						/* peekw() is in MWC lib */
 	strg = gstrdup(sprintp("word 0x%X has 0x%x", a, v));
 }
@@ -580,7 +580,7 @@ void lpeekw(uchar *arg)
 
 void lpokew(uchar *arg)
 {
-	int *a, v;
+	short *a, v;
 	uchar *p;
 	uchar *q;
 
@@ -589,8 +589,8 @@ void lpokew(uchar *arg)
 	q = lexgetword();
 	if (*p && *q)
 	{
-		a = (int *) (atoir(p, 16) & 0xFFFFFFFEL);
-		v = (int) atoir(q, 16);
+		a = (short *) (atoir(p, 16) & 0xFFFFFFFEL);
+		v = (short) atoir(q, 16);
 		pokew(a, v);					/* pokew() is in MWC lib */
 	}
 }
@@ -600,14 +600,14 @@ with 9 sectors/track. */
 
 void format(uchar *p)
 {
-	int nb;
-	int t;
-	int drive;
-	int ns;
-	int sides;
-	int disktype;
-	int *ip;
-	int *bf;
+	short nb;
+	short t;
+	short drive;
+	short ns;
+	short sides;
+	short disktype;
+	short *ip;
+	short *bf;
 	uchar c;
 
 	drive = 0;
@@ -620,7 +620,7 @@ void format(uchar *p)
 		drive = c - 'a';
 	}
 	disktype = 1 + sides;
-	bf = (int *) gmalloc(9 * 512 * 2);
+	bf = (short *) gmalloc(9 * 512 * 2);
 	if (bf == NULL)
 	{
 		valu = -39;
@@ -631,7 +631,7 @@ void format(uchar *p)
 		{
 			userfeedback(sprintp("\033f\rtrack %d, side %d, bad sectors %d, status %D\033K:", t, ns, nb, valu), 1);
 			valu = Flopfmt(bf, 0L, drive, 9, t, ns, 11, 0x87654321L, 0xE5E5);
-			for (ip = (int *) bf; *ip++;)
+			for (ip = bf; *ip++;)
 				nb++;
 			if (useraborted())
 			{
