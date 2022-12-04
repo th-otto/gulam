@@ -358,7 +358,13 @@ void font(void)
 
 void setmdmport(void)
 {
-	Bconmap(varnum(Mdmport));		/* 43 is Bconmap() */
+#ifdef Bconmap
+	Bconmap(varnum(Mdmport));
+#elif defined __GNUC__
+	(void)trap_14_ww((short)0x2c, (short)(varnum(Mdmport)));
+#else
+	xbios(44, varnum(Mdmport));	/* (was 43) Bconmap() */
+#endif
 }
 
 #ifdef DEBUG
