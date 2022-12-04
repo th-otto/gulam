@@ -107,7 +107,7 @@ int mvdnwind(int f, int n)
  */
 int mvupwind(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	UNUSED(f);
@@ -181,7 +181,7 @@ int onlywind(int f, int n)
 {
 	WINDOW *wp;
 	WINDOW *wp2;
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	UNUSED(f);
@@ -260,7 +260,7 @@ WINDOW *makewind(int top, int ntr)
  */
 static int lsplitwind(WINDOW *gwp)
 {
-	LINE *lp;
+	ELINE *lp;
 	int ntru;
 	int ntrl;
 	int ntrd;
@@ -338,7 +338,7 @@ int splitwind(int f, int n)
 int enlargewind(int f, int n)
 {
 	WINDOW *adjwp;
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	if (n < 0)
@@ -390,7 +390,7 @@ int enlargewind(int f, int n)
 int shrinkwind(int f, int n)
 {
 	WINDOW *adjwp;
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	if (n < 0)

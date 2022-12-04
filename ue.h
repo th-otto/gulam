@@ -60,7 +60,7 @@ typedef struct
 
 typedef	int	(*FPFS)(int f, int n);		/* ptr to function		*/
 
-/* All text is kept in circularly linked lists of LINE structures.
+/* All text is kept in circularly linked lists of ELINE structures.
 These begin at the header line (which is the blank line beyond the end
 of the buffer).  This line is pointed to by the BUFFER.  Each line
 contains a the number of bytes in the line (the "used" size), the size
@@ -69,15 +69,15 @@ byte; it's implied.  Future additions will include update hints, and a
 list of marks into the line.  */
 
 
-typedef struct  LINE
-{	struct	LINE *l_fp;		/* Link to the next line        */
-        struct	LINE *l_bp;		/* Link to the previous line    */
+typedef struct  ELINE
+{	struct	ELINE *l_fp;		/* Link to the next line        */
+        struct	ELINE *l_bp;		/* Link to the previous line    */
 #ifndef	PMMALLOC
  	int	l_zsize;		/* Allocated size               */
 #endif
         int	l_used;			/* Used size                    */
 	uchar	l_text[MINELM];		/* A bunch of characters.       */
-}       LINE;	
+}       ELINE;	
 
 #define lforw(lp)       ((lp)->l_fp)
 #define lback(lp)       ((lp)->l_bp)
@@ -86,7 +86,7 @@ typedef struct  LINE
 #define llength(lp)     ((lp)->l_used)
 
 #ifdef	PMMALLOC
-#define	lsize(lp) ((int)(((int *)lp)[-1]) - ((uint)sizeof(LINE)) - 3)
+#define	lsize(lp) ((int)(((int *)lp)[-1]) - ((uint)sizeof(ELINE)) - 3)
 #else
 #define	lsize(lp) (lp->l_zsize)
 #endif
@@ -101,13 +101,13 @@ too expensive to run for every input character.  */
 
 
 typedef struct  WINDOW
-{	LINE	*w_dotp;		/* Line containing "."          */
-	LINE	*w_markp;		/* Line containing "mark"       */
+{	ELINE	*w_dotp;		/* Line containing "."          */
+	ELINE	*w_markp;		/* Line containing "mark"       */
 	int	w_doto;			/* Byte offset for "."          */
 	int	w_marko;		/* Byte offset for "mark"       */
 	struct	WINDOW *w_wndp;		/* Next window                  */
 	struct	BUFFER *w_bufp;		/* Buffer displayed in window   */
-	LINE	*w_linep;		/* Top line in the window       */
+	ELINE	*w_linep;		/* Top line in the window       */
 	uchar	w_toprow;		/* Origin 0 top row of window   */
 	uchar	w_ntrows;		/* # of rows of text in window  */
 	uchar	w_force;		/* If NZ, forcing row.          */
@@ -130,12 +130,12 @@ linked list of lines, with a pointer to the header line in "b_linep".
 */
 
 typedef struct  BUFFER
-{	LINE	*b_dotp;		/* Link to "." LINE structure   */
-	LINE	*b_markp;		/* The same as the above two,   */
-	int	b_doto;			/* Offset of "." in above LINE  */
+{	ELINE	*b_dotp;		/* Link to "." ELINE structure   */
+	ELINE	*b_markp;		/* The same as the above two,   */
+	int	b_doto;			/* Offset of "." in above ELINE  */
 	int	b_marko;		/* but for the "mark"           */
 	struct	BUFFER *b_bufp;		/* Link to next BUFFER          */	
-	LINE	*b_linep;		/* Link to the header LINE      */
+	ELINE	*b_linep;		/* Link to the header ELINE      */
 	uchar	b_nwnd;			/* Count of windows on buffer   */
 	uchar	b_flag;			/* Flags                        */
 	uchar	b_fname[NFILEN];	/* File name                    */
@@ -158,8 +158,8 @@ commands.  */
 
 
 typedef struct
-{	LINE	*r_linep;		/* Origin LINE address.         */
-	RSIZE	r_offset;		/* Origin LINE offset.          */
+{	ELINE	*r_linep;		/* Origin ELINE address.         */
+	RSIZE	r_offset;		/* Origin ELINE offset.          */
 	RSIZE	r_size;			/* Length in characters.        */
 }       REGION;	
 
@@ -339,9 +339,9 @@ void bindkey(int n, uchar *keycode, uchar *cmdcode);
 /*
  * line.c
  */
-LINE *lalloc(int used);              /* Allocate a line              */
-LINE *lnlink(LINE *lx, uchar *q, int nb);
-void lfree(LINE *lp);
+ELINE *lalloc(int used);              /* Allocate a line              */
+ELINE *lnlink(ELINE *lx, uchar *q, int nb);
+void lfree(ELINE *lp);
 void lbpchange(BUFFER *bp, int flag);
 void lchange(int flag);
 int lnewline(void);
@@ -363,7 +363,7 @@ void outstr(uchar *text);
 BUFFER *opentempbuf(uchar *p);
 void closebuf(BUFFER *bp);
 void addcurbuf(uchar *p);
-uchar *makelnstr(LINE *lp);
+uchar *makelnstr(ELINE *lp);
 uchar getuserinput(uchar *buf, int nbuf);
 
 

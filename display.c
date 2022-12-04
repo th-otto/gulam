@@ -36,7 +36,7 @@ static int ttcol;						/* Column location of HW cursor */
 
 
 static uchar *mcp = NULL;
-static LINE *mdlp;						/* spare LINE for mode line */
+static ELINE *mdlp;						/* spare ELINE for mode line */
 static uchar *ms;						/* area used by mlwrite     */
 static uchar *mlstr;						/* holds the mesg line message  */
 static int mloff;						/* == strlen(mlstr)     */
@@ -67,12 +67,12 @@ void vtinit(void)								/* redone by pm */
 	term.t_nrow = nr = getnrow() - 1;
 	screenwidth = term.t_ncol = nc = getncol();
 	j = 2 * (1 + nr) * (((uint) sizeof(VIDEO *)) + ((uint) sizeof(VIDEO)) + nc);
-	p = mcp = malloc(((uint) sizeof(LINE)) + 6 * nc + 2 + 2 + nc + j);
+	p = mcp = malloc(((uint) sizeof(ELINE)) + 6 * nc + 2 + 2 + nc + j);
 	if (p == NULL)
 		outofroom();					/* which exits */
 
-	mdlp = (LINE *) (p);
-	p += ((uint) sizeof(LINE)) + 3 * nc + 2;
+	mdlp = (ELINE *) (p);
+	p += ((uint) sizeof(ELINE)) + 3 * nc + 2;
 	ms = p;
 	p += 3 * nc;
 	mlstr = p;
@@ -106,7 +106,7 @@ buffers.  Only column overflow is checked.  pm.  */
 
 /* row# on the virtual screen */
 /* show lp->l_text on the above row */
-static void vtputln(int n, LINE *lp)
+static void vtputln(int n, ELINE *lp)
 {
 	uchar *p;
 	uchar *q;
@@ -199,7 +199,7 @@ redraw.  */
 
 static void reframe(WINDOW *wp)
 {
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	i = wp->w_force;
@@ -228,7 +228,7 @@ static void reframe(WINDOW *wp)
 
 static void curlnupdate(WINDOW *wp)
 {
-	LINE *lp;
+	ELINE *lp;
 	int i;
 
 	i = wp->w_toprow;
@@ -242,7 +242,7 @@ static void curlnupdate(WINDOW *wp)
 
 static void hardupdate(WINDOW *wp)
 {
-	LINE *lp;
+	ELINE *lp;
 	int i, j;
 
 	lp = wp->w_linep;
@@ -268,7 +268,7 @@ This is the only update for simple moves.  */
 
 static void computerowcol(void)
 {
-	LINE *lp;
+	ELINE *lp;
 	uchar *p;
 	uchar *q;
 	int c;
@@ -488,13 +488,13 @@ static void modeline(WINDOW *wp)
 {
 	uchar *md;
 	int n;
-	LINE *lp;
-	uchar mdbuf[sizeof(LINE) + 2 * 150];
+	ELINE *lp;
+	uchar mdbuf[sizeof(ELINE) + 2 * 150];
 
 	if (wp == mlwp)
 		return;
 	/* tired of range checks!   */
-	lp = (LINE *) mdbuf;
+	lp = (ELINE *) mdbuf;
 	if (lp == NULL)
 		return;
 	md = lp->l_text;
@@ -515,7 +515,7 @@ virtual and physical screens the same.  */
 void update(void)
 {
 	WINDOW *wp;
-	LINE *lp;
+	ELINE *lp;
 	VIDEO *vp1;
 	VIDEO *vp2;
 	int i;

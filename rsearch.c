@@ -203,7 +203,7 @@ the window system is notified of the change, and TRUE is returned.  */
 
 static int fsearch(void)
 {
-	LINE *clp;
+	ELINE *clp;
 	int cbo;
 	char *s;
 
@@ -233,7 +233,7 @@ the string isn't found, FALSE is returned.  */
 
 static int rbsearch(void)
 {
-	LINE *clp;
+	ELINE *clp;
 	int cbo;
 	int i;
 	char *s;

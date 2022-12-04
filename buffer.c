@@ -153,8 +153,8 @@ int switchbuffer(BUFFER *bp)
 int bufinsert(uchar *bufn)
 {
 	BUFFER *bp;
-	LINE *clp;
-	LINE *lp;
+	ELINE *clp;
+	ELINE *lp;
 	int n;
 
 	bp = bfind(bufn, FALSE, 0, REGKB, 0);
@@ -363,7 +363,7 @@ static int makelist(void)
 	uchar *p;
 	uchar *q;
 	BUFFER *bp;
-	LINE *lp;
+	ELINE *lp;
 	long nbytes;
 	int c;
 	int s;
@@ -435,7 +435,7 @@ worked and FALSE if you ran out of room.  */
 int addline(void *_bp, uchar *text)
 {
 	BUFFER *bp = _bp;
-	LINE *lp;
+	ELINE *lp;
 
 	if (bp == NULL || text == NULL)
 		return FALSE;
@@ -467,7 +467,7 @@ create it.  */
 BUFFER *bfind(uchar *bname, unsigned int cflag, unsigned int bflag, int keybinds, uchar bmodec)
 {
 	BUFFER *bp;
-	LINE *lp;
+	ELINE *lp;
 
 	for (bp = bheadp; bp; bp = bp->b_bufp)
 		if (strcmp(bname, bp->b_bname) == 0)
@@ -510,7 +510,7 @@ not lfreed.  Return TRUE if everything looks good.  */
 
 int bclear(BUFFER *bp)
 {
-	LINE *lp;
+	ELINE *lp;
 	int s;
 
 	if ((bp->b_flag & BFTEMP) == 0		/* Not scratch buffer.  */

@@ -28,7 +28,7 @@ int gotobol(int f, int n)
 */
 int backchar(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 
 	if (n < 0)
 		return forwchar(f, -n);
@@ -66,7 +66,7 @@ int gotoeol(int f, int n)
 */
 int forwchar(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 
 	if (n < 0)
 		return backchar(f, -n);
@@ -122,11 +122,11 @@ int gotoeob(int f, int n)
 }
 
 /*
- This routine, given a pointer to a LINE, and the current cursor goal
+ This routine, given a pointer to a ELINE, and the current cursor goal
  column, return the best choice for the offset. The offset is returned.
  Used by "C-N" and "C-P".
  */
-static int getgoal(LINE *dlp)
+static int getgoal(ELINE *dlp)
 {
 	int c;
 	int col;
@@ -160,7 +160,7 @@ static int getgoal(LINE *dlp)
  */
 int forwline(int f, int n)
 {
-	LINE *dlp;
+	ELINE *dlp;
 
 	if (n < 0)
 		return backline(f, -n);
@@ -184,7 +184,7 @@ int forwline(int f, int n)
  */
 int backline(int f, int n)
 {
-	LINE *dlp;
+	ELINE *dlp;
 
 	if (n < 0)
 		return forwline(f, -n);
@@ -208,7 +208,7 @@ int backline(int f, int n)
  */
 int forwpage(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 
 	if (f == FALSE)
 	{
@@ -240,7 +240,7 @@ int forwpage(int f, int n)
  */
 int backpage(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 
 	if (f == FALSE)
 	{
@@ -291,7 +291,7 @@ int setmark(int f, int n)
  */
 int swapmark(int f, int n)
 {
-	LINE *odotp;
+	ELINE *odotp;
 	int odoto;
 
 	UNUSED(f);
@@ -318,7 +318,7 @@ int swapmark(int f, int n)
  */
 int gotoline(int f, int n)
 {
-	LINE *clp;
+	ELINE *clp;
 	char buf[32];
 
 	if (f == FALSE)

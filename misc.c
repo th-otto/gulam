@@ -174,10 +174,10 @@ void addcurbuf(uchar *p)
 	}
 }
 
-/* Make a string out of LINE lp.  There is an extra byte in our LINE
+/* Make a string out of ELINE lp.  There is an extra byte in our ELINE
 structs; see lalloc() in line.c.  Fails if user inserted a \0; but
 what the heck!  */
-uchar *makelnstr(LINE *lp)
+uchar *makelnstr(ELINE *lp)
 {
 	uchar *q;
 
@@ -189,7 +189,7 @@ uchar *makelnstr(LINE *lp)
 /* Make a string from the text of the line lp for use as a gulam cmd
 line.  Ignore the prompt prefix.  */
 
-static uchar *makecmdstr(LINE *lp)
+static uchar *makecmdstr(ELINE *lp)
 {
 	int n;
 	int i;
@@ -228,7 +228,7 @@ uchar getuserinput(uchar *buf, int nbuf)
 	BUFFER *bp;
 	int savedxue;
 	int n;
-	LINE *lp;
+	ELINE *lp;
 
 	setminibp();
 	wp = curwp;
@@ -292,7 +292,7 @@ static void gxp(int flag)
 	uchar *p;
 	uchar *q;
 	uchar *r;
-	LINE *lp;
+	ELINE *lp;
 
 	if (curbp != setgulambp(FALSE))
 		return;
@@ -351,8 +351,8 @@ int gforwline(int f, int n)
 {
 	if (curbp == setgulambp(FALSE) || curbp == minibp)
 	{
-		LINE *lp1;
-		LINE *lp2;
+		ELINE *lp1;
+		ELINE *lp2;
 
 		lp1 = curbp->b_linep;
 		lp2 = curwp->w_dotp;
@@ -496,7 +496,7 @@ int gulam(int f, int n)
 	uchar *p;
 	uchar *q;
 	uchar *r;
-	LINE *lp;
+	ELINE *lp;
 
 	UNUSED(f);
 	UNUSED(n);

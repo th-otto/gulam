@@ -7,7 +7,7 @@ disk are in "fileio.c".  */
 
 #include        "ue.h"
 
-static LINE *lineinp;					/* used only in lineinsert()    */
+static ELINE *lineinp;					/* used only in lineinsert()    */
 
 
 /* Take a file name, and from it fabricate a buffer name.  This
@@ -97,7 +97,7 @@ static void lineinsert(uchar *q, int nnb)				/* gets called via frdapply()   */
 
 /* Read file "name" into the current buffer.  If flag != 0, blow away
 any text found there.  Return the final status of the read.  */
-static int readin(uchar *name, LINE *lp)
+static int readin(uchar *name, ELINE *lp)
 {
 	WINDOW *wp;
 	BUFFER *bp;
@@ -140,7 +140,7 @@ int flvisit(uchar *f)
 	uchar bname[NBUFN];
 	BUFFER *bp;
 	WINDOW *wp;
-	LINE *lp;
+	ELINE *lp;
 	int i;
 	int s;
 
@@ -213,7 +213,7 @@ int insertborf(uchar *name, int flag)
 {
 	int s;
 	int odoto;
-	LINE *odotp;
+	ELINE *odotp;
 
 	odoto = curwp->w_doto;
 	odotp = curwp->w_dotp;
@@ -278,12 +278,12 @@ int filevisit(int f, int n)
 
 /* This function performs the details of file writing.  Uses the file
 management routines in fio.c.  The number of lines written is
-displayed.  Sadly, it looks inside a LINE; provide a macro for this.
+displayed.  Sadly, it looks inside a ELINE; provide a macro for this.
 Most of the grief is error checking of some sort.  */
 
 static int writeout(BUFFER *bp, uchar *fn)
 {
-	LINE *lp;
+	ELINE *lp;
 	long ntotal;
 	int nline;
 	int nb;

@@ -26,20 +26,20 @@ static RSIZE ksize = 0;					/* # of bytes allocated in KB.  */
 static RSIZE kstart = 0;					/* # of first used byte in KB.  */
 
 /* This routine allocates a block of memory large enough to hold a
-LINE containing "used" characters.  The block is always rounded up a
+ELINE containing "used" characters.  The block is always rounded up a
 bit.  Return a pointer to the new block, or NULL if there isn't any
 memory left.  Print a message in the message line if no space.  (pm:
 We allocate one more byte for the \0; see makelnstr() of misc.c.) */
 
-LINE *lalloc(int used)
+ELINE *lalloc(int used)
 {
-	LINE *lp;
+	ELINE *lp;
 	int size;
 
 	size = used;
 	if (size < 4)
 		size = 4;						/* Assume that an empty line is for type-in. */
-	if ((lp = (LINE *) malloc(1 + ((uint) sizeof(LINE)) + size)) != NULL)
+	if ((lp = (ELINE *) malloc(1 + ((uint) sizeof(ELINE)) + size)) != NULL)
 	{
 #ifndef PMMALLOC
 		lp->l_zsize = size;
@@ -52,10 +52,10 @@ LINE *lalloc(int used)
 
 /* Link a line at lx.  The content is given by nb bytes beginning at q.
 */
-LINE *lnlink(LINE *lx, uchar *q, int nb)
+ELINE *lnlink(ELINE *lx, uchar *q, int nb)
 {
-	LINE *ly;
-	LINE *lz;
+	ELINE *ly;
+	ELINE *lz;
 
 	if ((ly = lalloc(nb)) != NULL)
 	{
@@ -74,7 +74,7 @@ LINE *lnlink(LINE *lx, uchar *q, int nb)
 whatever buffer it might be in.  Release the memory.  The buffers are
 updated too.  */
 
-void lfree(LINE *lp)
+void lfree(ELINE *lp)
 {
 	BUFFER *bp;
 	WINDOW *wp;
@@ -155,10 +155,10 @@ insert.  Return TRUE if all is well, and FALSE on errors.  */
 
 int linsert(int n, int c)
 {
-	LINE *lp1;
-	LINE *lp2;
+	ELINE *lp1;
+	ELINE *lp2;
 	char *cp1;
-	LINE *lp3;
+	ELINE *lp3;
 	char *cp2;
 	int doto;
 	int i;
@@ -237,8 +237,8 @@ int lnewline(void)
 {
 	char *cp1;
 	char *cp2;
-	LINE *lp1;
-	LINE *lp2;
+	ELINE *lp1;
+	ELINE *lp2;
 	int doto;
 	WINDOW *wp;
 
@@ -322,7 +322,7 @@ int ldelete(RSIZE n, int kflag)
 {
 	char *cp1;
 	char *cp2;
-	LINE *dotp;
+	ELINE *dotp;
 	RSIZE doto;
 	RSIZE chunk;
 	WINDOW *wp;
@@ -404,9 +404,9 @@ int ldelnewline(void)
 {
 	char *cp1;
 	char *cp2;
-	LINE *lp1;
-	LINE *lp2;
-	LINE *lp3;
+	ELINE *lp1;
+	ELINE *lp2;
+	ELINE *lp3;
 	WINDOW *wp;
 
 	lp1 = curwp->w_dotp;

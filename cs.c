@@ -47,7 +47,7 @@ typedef struct STE
 	int op;
 	int tf;
 	int nn;
-	LINE *lp;
+	ELINE *lp;
 	WS *wp;
 	uchar *varp;						/* nn, wp, varp used only for FOREACH   */
 	struct STE *next;
@@ -55,7 +55,7 @@ typedef struct STE
 
 #define	MXsnl		25					/* dflt depth of batch file nesting */
 
-static LINE *curcmdlp;
+static ELINE *curcmdlp;
 static STE stbot = { BOT, TRUE, 0, NULL, NULL, NULL, NULL };
 
 static STE *stp = &stbot;
@@ -130,8 +130,8 @@ void csexecbuf(BUFFER *bp)
 {
 	uchar *q;
 	unsigned char i;
-	LINE *lp;
-	LINE *slp;
+	ELINE *lp;
+	ELINE *slp;
 	int sfda[4];
 
 	for (i = 0; i < 4; i++)

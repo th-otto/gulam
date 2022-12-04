@@ -42,7 +42,7 @@ static int inword(void)
 {
 	int c;
 	int n;
-	LINE *lp;
+	ELINE *lp;
 
 	lp = curwp->w_dotp;
 	n = curwp->w_doto;
@@ -179,7 +179,7 @@ issue the kill command for the right number of characters.  Bound to
 int delfword(int f, int n)
 {
 	RSIZE size;
-	LINE *dotp;
+	ELINE *dotp;
 	int doto;
 
 	UNUSED(f);
@@ -266,8 +266,8 @@ begining of a paragraph.  */
 
 int gotobop(int f, int n)
 {
-	LINE *lp;
-	LINE *lastp;
+	ELINE *lp;
+	ELINE *lastp;
 	int suc;
 	int c;
 
@@ -300,8 +300,8 @@ begining of a paragraph.  */
 
 int gotoeop(int f, int n)
 {
-	LINE *lp;
-	LINE *lastp;
+	ELINE *lp;
+	ELINE *lastp;
 	int suc;
 	int c;
 
@@ -345,8 +345,8 @@ Delete these lines.  curwp->dotp pts to the line below the para.  */
 
 static WS *makeparastr(void)
 {
-	LINE *lp;
-	LINE *eopg;
+	ELINE *lp;
+	ELINE *eopg;
 	WS *ws;
 	int n;
 

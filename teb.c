@@ -226,7 +226,7 @@ int tenewline(int f, int n)
 	uchar *q;
 	uchar *r;
 	uchar c;
-	LINE *lp;
+	ELINE *lp;
 	int m, n;
 
 	UNUSED(f);
@@ -247,7 +247,7 @@ int tenewline(int f, int n)
 
 int tesendtext(int f, int n)
 {
-	LINE *linep;
+	ELINE *linep;
 	int loffs;
 	int s;
 	char c;

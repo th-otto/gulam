@@ -27,9 +27,9 @@ static void gsleep(void)
  * window, move dot to the matching character, sit there a while, then move
  * back.
  */
-static int displaymatch(LINE *clp, int cbo)
+static int displaymatch(ELINE *clp, int cbo)
 {
-	LINE *tlp;
+	ELINE *tlp;
 	int tbo;
 	int inwindow;
 
@@ -76,7 +76,7 @@ static int displaymatch(LINE *clp, int cbo)
  */
 static int balance(KEY k)
 {
-	LINE *clp;
+	ELINE *clp;
 	int cbo;
 	char *p;
 	int c;
@@ -213,7 +213,7 @@ This is normally bound to "C-X =".  */
 
 int showcpos(int f, int n)
 {
-	LINE *clp;
+	ELINE *clp;
 	long nchar;
 	long cchar;
 	int nline;
@@ -270,7 +270,7 @@ line, so "WFEDIT" is good enough.  */
 
 int twiddle(int f, int n)
 {
-	LINE *dotp;
+	ELINE *dotp;
 	int doto;
 	int odoto;
 	int cl;
@@ -378,7 +378,7 @@ int openline(int f, int n)
  */
 int newline(int f, int n)
 {
-	LINE *lp;
+	ELINE *lp;
 	int s;
 
 	UNUSED(f);
@@ -408,7 +408,7 @@ int delwhite(int f, int n)
 	char *p;
 	char *q;
 	char *r;
-	LINE *lp;
+	ELINE *lp;
 
 	UNUSED(f);
 	UNUSED(n);
@@ -442,8 +442,8 @@ int delwhite(int f, int n)
  */
 int deblank(int f, int n)
 {
-	LINE *lp1;
-	LINE *lp2;
+	ELINE *lp1;
+	ELINE *lp2;
 	int nld;
 
 	UNUSED(f);
@@ -588,7 +588,7 @@ int lforwchar(int f, int n)
 int killtext(int f, int n)
 {
 	RSIZE chunk;
-	LINE *nextp;
+	ELINE *nextp;
 	int i;
 	int len;
 	int c;
@@ -657,7 +657,7 @@ int yank(int f, int n)
 {
 	int c;
 	int i;
-	LINE *lp;
+	ELINE *lp;
 	int nline;
 
 	UNUSED(f);

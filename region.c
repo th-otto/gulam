@@ -12,9 +12,9 @@ looking for mark.  This should save time.  Return a standard code.  */
 
 int getregion(REGION *rp)
 {
-	LINE *flp;
-	LINE *blp;
-	LINE *lastp;
+	ELINE *flp;
+	ELINE *blp;
+	ELINE *lastp;
 	int fsize;
 	int bsize;
 
@@ -100,7 +100,7 @@ Bound to "M-W".  */
 
 int copyregion(int f, int n)
 {
-	LINE *linep;
+	ELINE *linep;
 	int loffs;
 	int s;
 	REGION region;
