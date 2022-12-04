@@ -210,7 +210,7 @@ void grmdir(uchar *p);
 uchar *gfgetcwd(void);
 void cd(uchar *p);
 void gchmod(uchar *p);
-void tch(uchar *p, _DOSTIME *td, int dontcreate);
+void tch(uchar *p, DOSTIME *td, int dontcreate);
 void touch(uchar *p);
 int outisredir(void);
 int doout(void *dummy, uchar *p);

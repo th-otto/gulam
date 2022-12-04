@@ -17,7 +17,20 @@
 /* 	Gulam's #include file for sys dependencies (TOS version) */
 #endif
 
+#ifdef __PUREC__
+#include <tos.h>
+#else
 #include <osbind.h>
+#define DTA _DTA
+#define d_fname dta_name
+#define d_attrib dta_attribute
+#define d_date dta_date
+#define d_time dta_time
+#define d_length dta_size
+#define DOSTIME _DOSTIME
+#define DISKINFO _DISKINFO
+#define cdecl
+#endif
 
 #define	AtariST		1	/* => definite machine specificity	*/
 #define	PMMALLOC	1	/* pm's own malloc			*/
@@ -99,22 +112,13 @@
  drwx---... 1 useridxxx size0000 mon dd hh:mm filename.ext\r\n\0
 */
 
-typedef	struct DTA 		/* TOS disk transfer area	*/
-{	char	dos[20];	/* 21 bytes actually, but we create */
-	uchar	user;		/* artificial 'user' for portability*/
-	uchar	attr;
-	short	time;
-	short	date;
-	long	size;
-	uchar	name[OSFNML+2];
-}	DTA;
-				/* used in ls.c			*/
+/* used in ls.c			*/
 typedef	struct	GSTAT 		/*  similar to disk transfer area	*/
 {/*	char	dos[21];*/
 	char	dummy;		/*  jst for even-bdry alignment		*/
 	char	attr;
-	int	time;
-	int	date;
+	short	time;
+	short	date;
 	long	size;
 /*	char	name[14];*/
 }	GSTAT;

@@ -371,7 +371,7 @@ static void copyfio(uchar *in, uchar *ou, int iscat)
 	long m;
 	long n;
 	long lsz;
-	_DOSTIME td;
+	DOSTIME td;
 
 	in = mkfullname(in);
 	ou = mkfullname(ou);

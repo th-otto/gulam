@@ -218,7 +218,7 @@ uchar *fnmpred(uchar c, uchar *p)
 	else
 	{
 		dta = (DTA *) gfgetdta();
-		a = dta->attr;
+		a = dta->d_attrib;
 		if (c == 'd')
 			a &= 0x10;					/* dir      */
 		else if (c == 'f')

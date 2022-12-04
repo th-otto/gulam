@@ -3,9 +3,9 @@
  *	  ++jrb
  */
 #include "ue.h"
-#include <mintbind.h>
 
 #ifdef __MINT__
+#include <mintbind.h>
 #include <sys/ioctl.h>
 extern int __mint;
 #endif

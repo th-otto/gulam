@@ -221,7 +221,7 @@ void gchmod(uchar *p)
 }
 
 
-void tch(uchar *p, _DOSTIME *td, int dontcreate)
+void tch(uchar *p, DOSTIME *td, int dontcreate)
 {
 	int fd;
 
@@ -241,7 +241,7 @@ void tch(uchar *p, _DOSTIME *td, int dontcreate)
 
 void touch(uchar *p)
 {
-	_DOSTIME td;
+	DOSTIME td;
 
 	td.time = Tgettime();
 	td.date = Tgetdate();

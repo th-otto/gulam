@@ -225,7 +225,7 @@ void timestr(int t, uchar *p)
 }
 
 static uchar *new;						/* ptr to new time date string  */
-static unsigned long td;							/* time and date in internal TOS form       */
+static unsigned long td;				/* time and date in internal TOS form       */
 
 /* Assign bit field <i:j> of td with a computed value from new[p],
 new[p+1] which should be decimal digits, where j == i - 1 + #1's in
@@ -277,8 +277,8 @@ void gsdatetime(uchar *s)
 		sbf(15, (long) (0x0000001FL), 0);	/* sec */
 
 		Settime(td);					/* set ikbd clock */
-		Tsettime(ip[1]);
-		Tsetdate(ip[0]);
+		Tsettime((unsigned int)*ip);
+		Tsetdate((unsigned int)(*ip >> 16));
 		gfree(new);
 	} else
 	{
@@ -313,7 +313,7 @@ ue of Gulam.  Dont do a cr-lf after the line.  If caller so choses, he
 can.  Called only via (*_shell_p)(p); the p better be a ptr to a
 SZcmd-long byte area. */
 
-static void __CDECL getlineviaue(uchar *p)
+static void cdecl getlineviaue(uchar *p)
 {
 	uchar *q;
 
@@ -327,15 +327,15 @@ static void __CDECL getlineviaue(uchar *p)
 
 /* Called only via (*_shell_p)(p); returns the status of the cmd */
 
-static long __CDECL callgulam(uchar *p)
+static long cdecl callgulam(uchar *p)
 {
 	int e;
 	int sfda[4];
-	_DTA newdta;
-	_DTA *olddta;							/* AKP */
+	DTA newdta;
+	DTA *olddta;							/* AKP */
 
 	/* added saving of caller's DTA (AKP) */
-	olddta = (_DTA *) Fgetdta();
+	olddta = (DTA *) Fgetdta();
 	Fsetdta(&newdta);
 	/* added saving of fda's so redirection is undone properly (AKP) */
 	for (e = 0; e < 4; e++)
@@ -376,36 +376,20 @@ void setgulam(void)
 }
 
 
-typedef struct MDB						/* Memory Descriptor Block */
-{
-	struct MDB *next;					/* ptr to next descriptor */
-	uchar *base;						/* base of memory block */
-	long length;						/* length of memory block */
-	long owner;							/* owner's process id; meaning?? */
-} MDB;
-
-typedef struct							/* Memory Parameter Block */
-{
-	MDB *freelst;						/* free descriptor list head */
-	MDB *usedlst;						/* allocated descriptor list head */
-	MDB *roverp;						/* ptr of unknown use */
-} MPB;
-
-
 #ifdef NEVER
-static void showmemlst(MDB *p, WS *ws)
+static void showmemlst(MD *p, WS *ws)
 {
 	long total, n;
-	MDB md;
+	MD md;
 
-	for (total = 0L; p; p = md.next)
+	for (total = 0; p; p = md.m_link)
 	{
 		n = Super(0L);
 		md = *p;
 		SuperToUser(n);
-		n = md.length;
+		n = md.m_length;
 		total += n;
-		strwcat(ws, sprintp("%D \tbytes at %D  \towned by %D\r\n", n, md.base, md.owner), 0);
+		strwcat(ws, sprintp("%D \tbytes at %D  \towned by %D\r\n", n, md.m_start, md.m_own), 0);
 	}
 }
 #endif
@@ -432,12 +416,12 @@ void mem(uchar *arg)
 		if (*p != 'i')
 		{
 			strwcat(ws, "Malloc lst: \r\n", 0);
-			showmemlst(gdosmpb->usedlst, ws);
+			showmemlst(gdosmpb->mp_mal, ws);
 		} else
 			showgumem();
 	}
 	strwcat(ws, "free   lst: \r\n", 0);
-	showmemlst(gdosmpb->freelst, ws);
+	showmemlst(gdosmpb->mp_mfl, ws);
 	if (ws)
 	{
 		strg = ws->ps;
@@ -680,7 +664,7 @@ uchar *drvmap(char *dmap)
 void df(uchar *p)
 {
 	int c;
-	_DISKINFO v;
+	DISKINFO v;
 	unsigned long nb;
 	unsigned long total;
 	uchar s[2];

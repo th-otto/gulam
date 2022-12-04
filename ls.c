@@ -230,7 +230,7 @@ static WLSR *lwlswr(void)
 	wa = initga(((uint) sizeof(GSTAT)), 10);
 
 	dta = (DTA *) gfgetdta();
-	p = dta->name;
+	p = dta->d_fname;
 	if (opencwdandread(curattr))
 		do
 		{								/*   *p == '\0'  *is* possible  */
@@ -438,9 +438,9 @@ static DTA *wlsdta(uchar *pp)
 			&& (pp[1] == ':') && ((pp[2] == DSC) || (pp[2] == '\0')) && (strchr(drvmap(buf), drivec) != NULL))
 		{
 			dta = (DTA *) gfgetdta();
-			dta->attr = 0x10;			/* can, eg., be "a:\" */
-			dta->date = dta->time = 0;
-			dta->size = 0;
+			dta->d_attrib = 0x10;			/* can, eg., be "a:\" */
+			dta->d_date = dta->d_time = 0;
+			dta->d_length = 0;
 		}
 	} else
 	{
@@ -459,7 +459,7 @@ int isdir(char *p)							/* determine if p is pathname of a dir      */
 	DTA *dta;
 
 	dta = wlsdta(p);
-	return dta ? (filetp(p, dta->attr) == DSC) : 0;
+	return dta ? (filetp(p, dta->d_attrib) == DSC) : 0;
 }
 
 /* format of ls -l line:
@@ -504,15 +504,15 @@ static void lsl(char *p)
 		if (dta == NULL)
 			continue;
 		ga = addelga(ga, (char *)dta + bgnGSTAT);
-		attrstr(dta->attr, lsln);
+		attrstr(dta->d_attrib, lsln);
 		userid(dta->user, &lsln[13]);
-		sizestr(dta->size, &lsln[23]);
-		datestr(dta->date, &lsln[32]);
+		sizestr(dta->d_length, &lsln[23]);
+		datestr(dta->d_date, &lsln[32]);
 		/* if date older than some amount, write year, not time AKP */
-		if (tooold(dta->date))
-			yearstr(dta->date, &lsln[39]);
+		if (tooold(dta->d_date))
+			yearstr(dta->d_date, &lsln[39]);
 		else
-			timestr(dta->time, &lsln[39]);
+			timestr(dta->d_time, &lsln[39]);
 		lsln[FNMPOS - 1] = ' ';
 		lsln[FNMPOS] = '\0';			/* dta->name == leaf name only */
 
@@ -521,7 +521,7 @@ static void lsl(char *p)
 
 		nc = 0;
 		if (fstyle)
-			temp[nc++] = filetp(p, dta->attr);
+			temp[nc++] = filetp(p, dta->d_attrib);
 		if (shouldsort == 0)
 		{
 			temp[nc++] = '\r';
@@ -584,7 +584,7 @@ static void lss(uchar *p)
 				strwcat(ws, r, 0);
 				if (flagf)
 				{
-					fi[0] = filetp(q, d->attr);
+					fi[0] = filetp(q, d->d_attrib);
 					if (fi[0] == ' ')
 						fi[0] = '\0';
 				}
