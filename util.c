@@ -100,10 +100,13 @@ GA *addelga(GA *ga, void *e)
 	return ga;
 }
 
-/* WS related functions.  ws->ns == #stringlets; ws->ps == pt to the
-beginning of the block of mem that contains these; ws->nc == length of
-this block; ws->sz == allocated size of mem for such use.  Stringlets
-are numbered 0 to ws->ns - 1.  */
+/******    WS related functions.
+ws->ns == #stringlets;
+ws->ps == pt to the beginning of the block of mem that contains these;
+ws->nc == length of this block;
+ws->sz == allocated size of mem for such use.
+Stringlets are numbered 0 to ws->ns - 1.
+*/
 
 WS *initws(void)
 {
@@ -373,7 +376,7 @@ void shiftws(WS *ws, int m)
 
 /* Show the wsps p */
 
-void showwsps(WSPS *p)
+void showwsps(WSPS p)
 {
 	uchar *q;
 
@@ -534,7 +537,7 @@ uchar *strsub(uchar *p, uchar *q)
 char *gstrdup(const char *p)
 {
 	char *q;
-	
+
 	q = p ? gmalloc(((uint)strlen(p)) + 1) : NULL;
 	if (q)
 		strcpy(q, p);
@@ -590,7 +593,7 @@ long atoir(const char *p, int r)
 	char c;
 	char sign;
 
-	x = 0L;
+	x = 0;
 	if (p == NULL)
 		return 0;
 	if (*p == '-')

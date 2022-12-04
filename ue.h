@@ -235,7 +235,6 @@ void csexecbuf(BUFFER *bp);
  * basic.c
  */
 int igotoeob(void);
-int getgoal(LINE *dlp);
 void isetmark(void);
 
 

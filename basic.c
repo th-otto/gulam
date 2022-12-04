@@ -122,6 +122,37 @@ int gotoeob(int f, int n)
 }
 
 /*
+ This routine, given a pointer to a LINE, and the current cursor goal
+ column, return the best choice for the offset. The offset is returned.
+ Used by "C-N" and "C-P".
+ */
+static int getgoal(LINE *dlp)
+{
+	int c;
+	int col;
+	int newcol;
+	int dbo;
+
+	col = 0;
+	dbo = 0;
+	while (dbo != llength(dlp))
+	{
+		c = lgetc(dlp, dbo);
+		newcol = col;
+		if (c == '\t')
+			newcol |= 0x07;
+		else if (c < 0x20 || c == 0x7F)
+			++newcol;
+		++newcol;
+		if (newcol > curgoal)
+			break;
+		col = newcol;
+		++dbo;
+	}
+	return dbo;
+}
+
+/*
  Move forward by full lines. If the number of lines to move is less than
  zero, call the backward line function to actually do it. The last command
  controls how the goal column is set. Bound to "C-N". No errors are
@@ -167,37 +198,6 @@ int backline(int f, int n)
 	curwp->w_doto = getgoal(dlp);
 	curwp->w_flag |= WFMOVE;
 	return TRUE;
-}
-
-/*
- This routine, given a pointer to a LINE, and the current cursor goal
- column, return the best choice for the offset. The offset is returned.
- Used by "C-N" and "C-P".
- */
-int getgoal(LINE *dlp)
-{
-	int c;
-	int col;
-	int newcol;
-	int dbo;
-
-	col = 0;
-	dbo = 0;
-	while (dbo != llength(dlp))
-	{
-		c = lgetc(dlp, dbo);
-		newcol = col;
-		if (c == '\t')
-			newcol |= 0x07;
-		else if (c < 0x20 || c == 0x7F)
-			++newcol;
-		++newcol;
-		if (newcol > curgoal)
-			break;
-		col = newcol;
-		++dbo;
-	}
-	return dbo;
 }
 
 /*

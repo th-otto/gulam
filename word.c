@@ -425,7 +425,7 @@ int fillpara(int f, int n)
 
 int setfillcol(int f, int n)
 {
-	fillcol = (f ? n : getccol(0));
+	fillcol = f ? n : getccol(0);
 	mlwrite("Fill column set to %d", fillcol);
 	return TRUE;
 }
