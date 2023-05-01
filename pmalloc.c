@@ -7,8 +7,11 @@
 
 #include "ue.h"
 
-
 #define max(a,b) ((a > b)? a : b)
+
+static int gflag = 0;
+
+#if PMMALLOC
 
 typedef unsigned int UI;
 typedef unsigned long UL;
@@ -33,7 +36,6 @@ typedef struct HEAP
 static HEAP rheaplist = { (HEAP *) NULL };
 static HEAP gheaplist = { (HEAP *) NULL };
 
-static int gflag = 0;
 
 /* The list of heaps is in descending order of their addresses */
 
@@ -277,6 +279,8 @@ fragmentation caused by the markedly different expected life times of
 the malloc'd areas: gheaplist for use in the shell part, and rheaplist
 in the uE part.  */
 
+#endif
+
 void *gmalloc(unsigned int n)
 {
 	char *p;
@@ -300,6 +304,7 @@ back to the single line oriented shell mode. */
 
 void freeall(void)
 {
+#if PMMALLOC
 	HEAP *heap;
 	HEAP *h;
 
@@ -308,4 +313,5 @@ void freeall(void)
 		heap->hlink = h->hlink;
 		Mfree(h);
 	}
+#endif
 }
